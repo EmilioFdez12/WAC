@@ -1,0 +1,164 @@
+{
+    "pilotos": [
+        {
+            "id": 1,
+            "name": "Max Verstappen",
+            "teamId": 1,
+            "team": "Red Bull Racing",
+            "number": 1,
+            "portrait": "/f1/images/drivers/MAXVER01.png"
+        },
+        {
+            "id": 2,
+            "name": "Liam Lawson",
+            "teamId": 1,
+            "team": "Red Bull Racing",
+            "number": 30,
+            "portrait": "/f1/images/drivers/LIALAW01.png"
+        },
+        {
+            "id": 3,
+            "name": "Charles Leclerc",
+            "teamId": 2,
+            "team": "Ferrari",
+            "number": 16,
+            "portrait": "/f1/images/drivers/CHALEC01.png"
+        },
+        {
+            "id": 4,
+            "name": "Lewis Hamilton",
+            "teamId": 2,
+            "team": "Ferrari",
+            "number": 44,
+            "portrait": "/f1/images/drivers/LEWHAM01.png"
+        },
+        {
+            "id": 5,
+            "name": "Lando Norris",
+            "teamId": 3,
+            "team": "McLaren",
+            "number": 4,
+            "portrait": "/f1/images/drivers/LANNOR01.png"
+        },
+        {
+            "id": 6,
+            "name": "Oscar Piastri",
+            "teamId": 3,
+            "team": "McLaren",
+            "number": 81,
+            "portrait": "/f1/images/drivers/OSCPIA01.png"
+        },
+        {
+            "id": 7,
+            "name": "George Russell",
+            "teamId": 4,
+            "team": "Mercedes",
+            "number": 63,
+            "portrait": "/f1/images/drivers/GEORUS01.png"
+        },
+        {
+            "id": 8,
+            "name": "Andrea Kimi Antonelli",
+            "teamId": 4,
+            "team": "Mercedes",
+            "number": 12,
+            "portrait": "/f1/images/drivers/ANDANT01.png"
+        },
+        {
+            "id": 9,
+            "name": "Fernando Alonso",
+            "teamId": 5,
+            "team": "Aston Martin",
+            "number": 14,
+            "portrait": "/f1/images/drivers/FERALO01.png"
+        },
+        {
+            "id": 10,
+            "name": "Lance Stroll",
+            "teamId": 5,
+            "team": "Aston Martin",
+            "number": 18,
+            "portrait": "/f1/images/drivers/LANSTR01.png"
+        },
+        {
+            "id": 11,
+            "name": "Pierre Gasly",
+            "teamId": 6,
+            "team": "Alpine",
+            "number": 10,
+            "portrait": "/f1/images/drivers/PIEGAS01.png"
+        },
+        {
+            "id": 12,
+            "name": "Jack Doohan",
+            "teamId": 6,
+            "team": "Alpine",
+            "number": 7,
+            "portrait": "/f1/images/drivers/JACDOO01.png"
+        },
+        {
+            "id": 13,
+            "name": "Yuki Tsunoda",
+            "teamId": 7,
+            "team": "Racing Bulls",
+            "number": 22,
+            "portrait": "/f1/images/drivers/YUKTSU01.png"
+        },
+        {
+            "id": 14,
+            "name": "Isack Hadjar",
+            "teamId": 7,
+            "team": "Racing Bulls",
+            "number": 6,
+            "portrait": "/f1/images/drivers/ISAHAD01.png"
+        },
+        { 
+            "id": 15,
+            "name": "Alex Albon",
+            "teamId": 8,
+            "team": "Williams",
+            "number": 23,
+            "portrait": "/f1/images/drivers/ALEALB01.png"
+        },
+        {
+            "id": 16,
+            "name": "Carlos Sainz",
+            "teamId": 8,
+            "team": "Williams",
+            "number": 55,
+            "portrait": "/f1/images/drivers/CARSAI01.png"
+        },
+        {
+            "id": 17,
+            "name": "Nio Hülkenberg",
+            "teamId": 9,
+            "team": "Sauber",
+            "number": 27,
+            "portrait": "/f1/images/drivers/NICHUL01.png"
+        },
+        {
+            "id": 20,
+            "name": "Gabriel Bortoleto",
+            "teamId": 9,
+            "team": "Sauber",
+            "number": 5,
+            "portrait": "/f1/images/drivers/GABBOR01.png"
+        },
+        {
+            "id": 18,
+            "name": "Esteban Ocon",
+            "teamId": 10,
+            "team": "Haas",
+            "number": 31,
+            "portrait": "/f1/images/drivers/ESTOC01.png"
+        },
+        {
+            "id": 19,
+            "name": "Oliver Bearman",
+            "teamId": 10,
+            "team": "Haas",
+            "number": 87,
+            "portrait": "/f1/images/drivers/OLIBEA01.png"
+        }
+    ]
+}

@@ -1,0 +1,244 @@
+{
+    "circuits": [
+        {
+            "id": 1,
+            "name": "Albert Park Circuit",
+            "gp": "Australian GP",
+            "image": "local/images/circuits/albert_park.webp",
+            "flag": "local/images/flags/australia.webp",
+            "lap_record": "1:17.125 (Charles Leclerc, Ferrari, 2024)",
+            "race_laps": 58,
+            "length_km": 5.278
+        },
+        {
+            "id": 2,
+            "name": "Shanghai International Circuit",
+            "gp": "Chinese GP",
+            "image": "local/images/circuits/shanghai_international.webp",
+            "flag": "local/images/flags/china.webp",
+            "lap_record": "1:32.238 (Michael Schumacher, Ferrari, 2004)",
+            "race_laps": 56,
+            "length_km": 5.451
+        },
+        {
+            "id": 3,
+            "name": "Suzuka International Racing Course",
+            "gp": "Japanese GP",
+            "image": "local/images/circuits/suzuka_international.webp",
+            "flag": "local/images/flags/japan.webp",
+            "lap_record": "1:30.983 (Lewis Hamilton, Mercedes, 2019)",
+            "race_laps": 53,
+            "length_km": 5.807
+        },
+        {
+            "id": 4,
+            "name": "Bahrain International Circuit",
+            "gp": "Bahrain GP",
+            "image": "local/images/circuits/bahrain_international.webp",
+            "flag": "local/images/flags/bahrain.webp",
+            "lap_record": "1:31.447 (Pedro de la Rosa, McLaren, 2005)",
+            "race_laps": 57,
+            "length_km": 5.412
+        },
+        {
+            "id": 5,
+            "name": "Jeddah Corniche Circuit",
+            "gp": "Saudi Arabian GP",
+            "image": "local/images/circuits/jeddah_corniche.webp",
+            "flag": "local/images/flags/saudi_arabia.webp",
+            "lap_record": "1:30.734 (Lewis Hamilton, Mercedes, 2021)",
+            "race_laps": 50,
+            "length_km": 6.174
+        },
+        {
+            "id": 6,
+            "name": "Miami International Autodrome",
+            "gp": "Miami GP",
+            "image": "local/images/circuits/miami_international.webp",
+            "flag": "local/images/flags/usa.webp",
+            "lap_record": "1:29.520 (Max Verstappen, Red Bull, 2022)",
+            "race_laps": 57,
+            "length_km": 5.412
+        },
+        {
+            "id": 7,
+            "name": "Autodromo Enzo e Dino Ferrari",
+            "gp": "Emilia-Romagna GP",
+            "image": "local/images/circuits/imola.webp",
+            "flag": "local/images/flags/italy.webp",
+            "lap_record": "1:15.484 (Lewis Hamilton, Mercedes, 2020)",
+            "race_laps": 63,
+            "length_km": 4.909
+        },
+        {
+            "id": 8,
+            "name": "Circuit de Monaco",
+            "gp": "Monaco GP",
+            "image": "local/images/circuits/monaco.webp",
+            "flag": "local/images/flags/monaco.webp",
+            "lap_record": "1:12.909 (Lewis Hamilton, Mercedes, 2021)",
+            "race_laps": 78,
+            "length_km": 3.337
+        },
+        {
+            "id": 9,
+            "name": "Circuit de Barcelona-Catalunya",
+            "gp": "Spanish GP",
+            "image": "local/images/circuits/barcelona_catalunya.webp",
+            "flag": "local/images/flags/spain.webp",
+            "lap_record": "1:16.305 (Lewis Hamilton, Mercedes, 2021)",
+            "race_laps": 66,
+            "length_km": 4.655
+        },
+        {
+            "id": 10,
+            "name": "Circuit Gilles Villeneuve",
+            "gp": "Canadian GP",
+            "image": "local/images/circuits/gilles_villeneuve.webp",
+            "flag": "local/images/flags/canada.webp",
+            "lap_record": "1:13.078 (Valtteri Bottas, Mercedes, 2019)",
+            "race_laps": 70,
+            "length_km": 4.361
+        },
+        {
+            "id": 11,
+            "name": "Red Bull Ring",
+            "gp": "Austrian GP",
+            "image": "local/images/circuits/red_bull_ring.webp",
+            "flag": "local/images/flags/austria.webp",
+            "lap_record": "1:05.619 (Carlos Sainz, Ferrari, 2020)",
+            "race_laps": 71,
+            "length_km": 4.318
+        },
+        {
+            "id": 12,
+            "name": "Silverstone Circuit",
+            "gp": "British GP",
+            "image": "local/images/circuits/silverstone.webp",
+            "flag": "local/images/flags/uk.webp",
+            "lap_record": "1:27.097 (Lewis Hamilton, Mercedes, 2020)",
+            "race_laps": 52,
+            "length_km": 5.891
+        },
+        {
+            "id": 13,
+            "name": "Hungaroring",
+            "gp": "Hungarian GP",
+            "image": "local/images/circuits/hungaroring.webp",
+            "flag": "local/images/flags/hungary.webp",
+            "lap_record": "1:16.627 (Lewis Hamilton, Mercedes, 2020)",
+            "race_laps": 70,
+            "length_km": 4.381
+        },
+        {
+            "id": 14,
+            "name": "Circuit de Spa-Francorchamps",
+            "gp": "Belgian GP",
+            "image": "local/images/circuits/spa_francorchamps.webp",
+            "flag": "local/images/flags/belgium.webp",
+            "lap_record": "1:41.252 (Valtteri Bottas, Mercedes, 2018)",
+            "race_laps": 44,
+            "length_km": 7.004
+        },
+        {
+            "id": 15,
+            "name": "Circuit Zandvoort",
+            "gp": "Dutch GP",
+            "image": "local/images/circuits/zandvoort.webp",
+            "flag": "local/images/flags/netherlands.webp",
+            "lap_record": "1:09.756 (George Russell, Mercedes, 2021)",
+            "race_laps": 72,
+            "length_km": 4.259
+        },
+        {
+            "id": 16,
+            "name": "Autodromo Nazionale Monza",
+            "gp": "Italian GP",
+            "image": "local/images/circuits/monza.webp",
+            "flag": "local/images/flags/italy.webp",
+            "lap_record": "1:21.046 (Rubens Barrichello, Ferrari, 2004)",
+            "race_laps": 53,
+            "length_km": 5.793
+        },
+        {
+            "id": 17,
+            "name": "Baku City Circuit",
+            "gp": "Azerbaijan GP",
+            "image": "local/images/circuits/baku_city.webp",
+            "flag": "local/images/flags/azerbaijan.webp",
+            "lap_record": "1:43.009 (Charles Leclerc, Ferrari, 2019)",
+            "race_laps": 51,
+            "length_km": 6.003
+        },
+        {
+            "id": 18,
+            "name": "Marina Bay Street Circuit",
+            "gp": "Singapore GP",
+            "image": "local/images/circuits/marina_bay.webp",
+            "flag": "local/images/flags/singapore.webp",
+            "lap_record": "1:41.905 (Kevin Magnussen, Haas, 2018)",
+            "race_laps": 62,
+            "length_km": 4.940
+        },
+        {
+            "id": 19,
+            "name": "Circuit of the Americas",
+            "gp": "United States GP",
+            "image": "local/images/circuits/cota.webp",
+            "flag": "local/images/flags/usa.webp",
+            "lap_record": "1:36.169 (Charles Leclerc, Ferrari, 2019)",
+            "race_laps": 56,
+            "length_km": 5.513
+        },
+        {
+            "id": 20,
+            "name": "Autódromo Hermanos Rodríguez",
+            "gp": "Mexico City GP",
+            "image": "local/images/circuits/hermanos_rodriguez.webp",
+            "flag": "local/images/flags/mexico.webp",
+            "lap_record": "1:18.741 (Valtteri Bottas, Mercedes, 2021)",
+            "race_laps": 71,
+            "length_km": 4.304
+        },
+        {
+            "id": 21,
+            "name": "Autódromo José Carlos Pace",
+            "gp": "São Paulo GP",
+            "image": "local/images/circuits/interlagos.webp",
+            "flag": "local/images/flags/brazil.webp",
+            "lap_record": "1:10.540 (Valtteri Bottas, Mercedes, 2018)",
+            "race_laps": 71,
+            "length_km": 4.309
+        },
+        {
+            "id": 22,
+            "name": "Las Vegas Strip Circuit",
+            "gp": "Las Vegas GP",
+            "image": "local/images/circuits/las_vegas_strip.webp",
+            "flag": "local/images/flags/usa.webp",
+            "lap_record": "1:33.570 (Max Verstappen, Red Bull, 2023)",
+            "race_laps": 50,
+            "length_km": 6.201
+        },
+        {
+            "id": 23,
+            "name": "Lusail International Circuit",
+            "gp": "Qatar GP",
+            "image": "local/images/circuits/lusail_international.webp",
+            "flag": "local/images/flags/qatar.webp",
+            "lap_record": "1:21.217 (Max Verstappen, Red Bull, 2023)",
+            "race_laps": 57,
+            "length_km": 5.418
+        },
+        {
+            "id": 24,
+            "name": "Yas Marina Circuit",
+            "gp": "Abu Dhabi GP",
+            "image": "local/images/circuits/yas_marina.webp",
+            "flag": "local/images/flags/uae.webp",
+            "lap_record": "1:26.103 (Lewis Hamilton, Mercedes, 2020)",
+            "race_laps": 58,
+            "length_km": 5.281
+        }
+    ]
+}

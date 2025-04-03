@@ -1,0 +1,598 @@
+{
+    "schedule": [
+        {
+            "gp": "Thai GP",
+            "dates": "28 Feb-02 Mar",
+            "flag": "/flags/thailand.webp",
+            "sessions": {
+                "practice1": {
+                    "day": "28 Feb",
+                    "time": "09:00"
+                },
+                "practice2": {
+                    "day": "28 Feb",
+                    "time": "13:00"
+                },
+                "practice3": {
+                    "day": "01 Mar",
+                    "time": "09:00"
+                },
+                "qualifying": {
+                    "day": "01 Mar",
+                    "time": "13:00"
+                },
+                "race": {
+                    "day": "02 Mar",
+                    "time": "14:00"
+                }
+            }
+        },
+        {
+            "gp": "Argentine GP",
+            "dates": "14-16 Mar",
+            "flag": "/flags/argentina.webp",
+            "sessions": {
+                "practice1": {
+                    "day": "14 Mar",
+                    "time": "10:00"
+                },
+                "practice2": {
+                    "day": "14 Mar",
+                    "time": "14:00"
+                },
+                "practice3": {
+                    "day": "15 Mar",
+                    "time": "10:00"
+                },
+                "qualifying": {
+                    "day": "15 Mar",
+                    "time": "14:00"
+                },
+                "race": {
+                    "day": "16 Mar",
+                    "time": "15:00"
+                }
+            }
+        },
+        {
+            "gp": "Americas GP",
+            "dates": "28-30 Mar",
+            "flag": "/flags/usa.webp",
+            "sessions": {
+                "practice1": {
+                    "day": "28 Mar",
+                    "time": "10:00"
+                },
+                "practice2": {
+                    "day": "28 Mar",
+                    "time": "14:00"
+                },
+                "practice3": {
+                    "day": "29 Mar",
+                    "time": "10:00"
+                },
+                "qualifying": {
+                    "day": "29 Mar",
+                    "time": "14:00"
+                },
+                "race": {
+                    "day": "30 Mar",
+                    "time": "14:00"
+                }
+            }
+        },
+        {
+            "gp": "Qatar GP",
+            "dates": "11-13 Apr",
+            "flag": "/flags/qatar.webp",
+            "sessions": {
+                "practice1": {
+                    "day": "11 Apr",
+                    "time": "15:00"
+                },
+                "practice2": {
+                    "day": "11 Apr",
+                    "time": "19:00"
+                },
+                "practice3": {
+                    "day": "12 Apr",
+                    "time": "15:00"
+                },
+                "qualifying": {
+                    "day": "12 Apr",
+                    "time": "19:00"
+                },
+                "race": {
+                    "day": "13 Apr",
+                    "time": "18:00"
+                }
+            }
+        },
+        {
+            "gp": "Spanish GP",
+            "dates": "25-27 Apr",
+            "flag": "/flags/spain.webp",
+            "sessions": {
+                "practice1": {
+                    "day": "25 Apr",
+                    "time": "10:00"
+                },
+                "practice2": {
+                    "day": "25 Apr",
+                    "time": "14:00"
+                },
+                "practice3": {
+                    "day": "26 Apr",
+                    "time": "10:00"
+                },
+                "qualifying": {
+                    "day": "26 Apr",
+                    "time": "14:00"
+                },
+                "race": {
+                    "day": "27 Apr",
+                    "time": "14:00"
+                }
+            }
+        },
+        {
+            "gp": "French GP",
+            "dates": "09-11 May",
+            "flag": "/flags/france.webp",
+            "sessions": {
+                "practice1": {
+                    "day": "09 May",
+                    "time": "10:00"
+                },
+                "practice2": {
+                    "day": "09 May",
+                    "time": "14:00"
+                },
+                "practice3": {
+                    "day": "10 May",
+                    "time": "10:00"
+                },
+                "qualifying": {
+                    "day": "10 May",
+                    "time": "14:00"
+                },
+                "race": {
+                    "day": "11 May",
+                    "time": "14:00"
+                }
+            }
+        },
+        {
+            "gp": "British GP",
+            "dates": "23-25 May",
+            "flag": "/flags/uk.webp",
+            "sessions": {
+                "practice1": {
+                    "day": "23 May",
+                    "time": "10:00"
+                },
+                "practice2": {
+                    "day": "23 May",
+                    "time": "14:00"
+                },
+                "practice3": {
+                    "day": "24 May",
+                    "time": "10:00"
+                },
+                "qualifying": {
+                    "day": "24 May",
+                    "time": "14:00"
+                },
+                "race": {
+                    "day": "25 May",
+                    "time": "14:00"
+                }
+            }
+        },
+        {
+            "gp": "Aragón GP",
+            "dates": "06-08 Jun",
+            "flag": "/flags/spain.webp",
+            "sessions": {
+                "practice1": {
+                    "day": "06 Jun",
+                    "time": "10:00"
+                },
+                "practice2": {
+                    "day": "06 Jun",
+                    "time": "14:00"
+                },
+                "practice3": {
+                    "day": "07 Jun",
+                    "time": "10:00"
+                },
+                "qualifying": {
+                    "day": "07 Jun",
+                    "time": "14:00"
+                },
+                "race": {
+                    "day": "08 Jun",
+                    "time": "14:00"
+                }
+            }
+        },
+        {
+            "gp": "Italian GP",
+            "dates": "20-22 Jun",
+            "flag": "/flags/italy.webp",
+            "sessions": {
+                "practice1": {
+                    "day": "20 Jun",
+                    "time": "10:00"
+                },
+                "practice2": {
+                    "day": "20 Jun",
+                    "time": "14:00"
+                },
+                "practice3": {
+                    "day": "21 Jun",
+                    "time": "10:00"
+                },
+                "qualifying": {
+                    "day": "21 Jun",
+                    "time": "14:00"
+                },
+                "race": {
+                    "day": "22 Jun",
+                    "time": "14:00"
+                }
+            }
+        },
+        {
+            "gp": "Dutch GP",
+            "dates": "27-29 Jun",
+            "flag": "/flags/netherlands.webp",
+            "sessions": {
+                "practice1": {
+                    "day": "27 Jun",
+                    "time": "10:00"
+                },
+                "practice2": {
+                    "day": "27 Jun",
+                    "time": "14:00"
+                },
+                "practice3": {
+                    "day": "28 Jun",
+                    "time": "10:00"
+                },
+                "qualifying": {
+                    "day": "28 Jun",
+                    "time": "14:00"
+                },
+                "race": {
+                    "day": "29 Jun",
+                    "time": "14:00"
+                }
+            }
+        },
+        {
+            "gp": "German GP",
+            "dates": "11-13 Jul",
+            "flag": "/flags/germany.webp",
+            "sessions": {
+                "practice1": {
+                    "day": "11 Jul",
+                    "time": "10:00"
+                },
+                "practice2": {
+                    "day": "11 Jul",
+                    "time": "14:00"
+                },
+                "practice3": {
+                    "day": "12 Jul",
+                    "time": "10:00"
+                },
+                "qualifying": {
+                    "day": "12 Jul",
+                    "time": "14:00"
+                },
+                "race": {
+                    "day": "13 Jul",
+                    "time": "14:00"
+                }
+            }
+        },
+        {
+            "gp": "Czech GP",
+            "dates": "18-20 Jul",
+            "flag": "/flags/czech_republic.webp",
+            "sessions": {
+                "practice1": {
+                    "day": "18 Jul",
+                    "time": "10:00"
+                },
+                "practice2": {
+                    "day": "18 Jul",
+                    "time": "14:00"
+                },
+                "practice3": {
+                    "day": "19 Jul",
+                    "time": "10:00"
+                },
+                "qualifying": {
+                    "day": "19 Jul",
+                    "time": "14:00"
+                },
+                "race": {
+                    "day": "20 Jul",
+                    "time": "14:00"
+                }
+            }
+        },
+        {
+            "gp": "Austrian GP",
+            "dates": "01-03 Aug",
+            "flag": "/flags/austria.webp",
+            "sessions": {
+                "practice1": {
+                    "day": "01 Aug",
+                    "time": "10:00"
+                },
+                "practice2": {
+                    "day": "01 Aug",
+                    "time": "14:00"
+                },
+                "practice3": {
+                    "day": "02 Aug",
+                    "time": "10:00"
+                },
+                "qualifying": {
+                    "day": "02 Aug",
+                    "time": "14:00"
+                },
+                "race": {
+                    "day": "03 Aug",
+                    "time": "14:00"
+                }
+            }
+        },
+        {
+            "gp": "Hungarian GP",
+            "dates": "15-17 Aug",
+            "flag": "/flags/hungary.webp",
+            "sessions": {
+                "practice1": {
+                    "day": "15 Aug",
+                    "time": "10:00"
+                },
+                "practice2": {
+                    "day": "15 Aug",
+                    "time": "14:00"
+                },
+                "practice3": {
+                    "day": "16 Aug",
+                    "time": "10:00"
+                },
+                "qualifying": {
+                    "day": "16 Aug",
+                    "time": "14:00"
+                },
+                "race": {
+                    "day": "17 Aug",
+                    "time": "14:00"
+                }
+            }
+        },
+        {
+            "gp": "Catalan GP",
+            "dates": "05-07 Sep",
+            "flag": "/flags/spain.webp",
+            "sessions": {
+                "practice1": {
+                    "day": "05 Sep",
+                    "time": "10:00"
+                },
+                "practice2": {
+                    "day": "05 Sep",
+                    "time": "14:00"
+                },
+                "practice3": {
+                    "day": "06 Sep",
+                    "time": "10:00"
+                },
+                "qualifying": {
+                    "day": "06 Sep",
+                    "time": "14:00"
+                },
+                "race": {
+                    "day": "07 Sep",
+                    "time": "14:00"
+                }
+            }
+        },
+        {
+            "gp": "San Marino GP",
+            "dates": "19-21 Sep",
+            "flag": "/flags/italy.webp",
+            "sessions": {
+                "practice1": {
+                    "day": "19 Sep",
+                    "time": "10:00"
+                },
+                "practice2": {
+                    "day": "19 Sep",
+                    "time": "14:00"
+                },
+                "practice3": {
+                    "day": "20 Sep",
+                    "time": "10:00"
+                },
+                "qualifying": {
+                    "day": "20 Sep",
+                    "time": "14:00"
+                },
+                "race": {
+                    "day": "21 Sep",
+                    "time": "14:00"
+                }
+            }
+        },
+        {
+            "gp": "Japanese GP",
+            "dates": "03-05 Oct",
+            "flag": "/flags/japan.webp",
+            "sessions": {
+                "practice1": {
+                    "day": "03 Oct",
+                    "time": "10:00"
+                },
+                "practice2": {
+                    "day": "03 Oct",
+                    "time": "14:00"
+                },
+                "practice3": {
+                    "day": "04 Oct",
+                    "time": "10:00"
+                },
+                "qualifying": {
+                    "day": "04 Oct",
+                    "time": "14:00"
+                },
+                "race": {
+                    "day": "05 Oct",
+                    "time": "14:00"
+                }
+            }
+        },
+        {
+            "gp": "Indonesian GP",
+            "dates": "10-12 Oct",
+            "flag": "/flags/indonesia.webp",
+            "sessions": {
+                "practice1": {
+                    "day": "10 Oct",
+                    "time": "09:00"
+                },
+                "practice2": {
+                    "day": "10 Oct",
+                    "time": "13:00"
+                },
+                "practice3": {
+                    "day": "11 Oct",
+                    "time": "09:00"
+                },
+                "qualifying": {
+                    "day": "11 Oct",
+                    "time": "13:00"
+                },
+                "race": {
+                    "day": "12 Oct",
+                    "time": "14:00"
+                }
+            }
+        },
+        {
+            "gp": "Australian GP",
+            "dates": "17-19 Oct",
+            "flag": "/flags/australia.webp",
+            "sessions": {
+                "practice1": {
+                    "day": "17 Oct",
+                    "time": "11:00"
+                },
+                "practice2": {
+                    "day": "17 Oct",
+                    "time": "15:00"
+                },
+                "practice3": {
+                    "day": "18 Oct",
+                    "time": "11:00"
+                },
+                "qualifying": {
+                    "day": "18 Oct",
+                    "time": "15:00"
+                },
+                "race": {
+                    "day": "19 Oct",
+                    "time": "15:00"
+                }
+            }
+        },
+        {
+            "gp": "Malaysian GP",
+            "dates": "24-26 Oct",
+            "flag": "/flags/malaysia.webp",
+            "sessions": {
+                "practice1": {
+                    "day": "24 Oct",
+                    "time": "10:00"
+                },
+                "practice2": {
+                    "day": "24 Oct",
+                    "time": "14:00"
+                },
+                "practice3": {
+                    "day": "25 Oct",
+                    "time": "10:00"
+                },
+                "qualifying": {
+                    "day": "25 Oct",
+                    "time": "14:00"
+                },
+                "race": {
+                    "day": "26 Oct",
+                    "time": "15:00"
+                }
+            }
+        },
+        {
+            "gp": "Portuguese GP",
+            "dates": "07-09 Nov",
+            "flag": "/flags/portugal.webp",
+            "sessions": {
+                "practice1": {
+                    "day": "07 Nov",
+                    "time": "10:00"
+                },
+                "practice2": {
+                    "day": "07 Nov",
+                    "time": "14:00"
+                },
+                "practice3": {
+                    "day": "08 Nov",
+                    "time": "10:00"
+                },
+                "qualifying": {
+                    "day": "08 Nov",
+                    "time": "14:00"
+                },
+                "race": {
+                    "day": "09 Nov",
+                    "time": "14:00"
+                }
+            }
+        },
+        {
+            "gp": "Valencian GP",
+            "dates": "14-16 Nov",
+            "flag": "/flags/spain.webp",
+            "sessions": {
+                "practice1": {
+                    "day": "14 Nov",
+                    "time": "10:00"
+                },
+                "practice2": {
+                    "day": "14 Nov",
+                    "time": "14:00"
+                },
+                "practice3": {
+                    "day": "15 Nov",
+                    "time": "10:00"
+                },
+                "qualifying": {
+                    "day": "15 Nov",
+                    "time": "14:00"
+                },
+                "race": {
+                    "day": "16 Nov",
+                    "time": "14:00"
+                }
+            }
+        }
+    ]
+}
