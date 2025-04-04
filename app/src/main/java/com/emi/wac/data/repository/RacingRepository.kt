@@ -82,6 +82,20 @@ class RacingRepository(private val context: Context) {
         } ?: Constants.LOADING_RACE_INFO
     }
 
+    fun getDrivers(category: String): Drivers? {
+        return try {
+            val jsonString = context.assets
+                .open("$category/drivers.json")
+                .bufferedReader()
+                .use { it.readText() }
+    
+            moshi.adapter(Drivers::class.java).fromJson(jsonString)
+        } catch (e: Exception) {
+            Log.e(tag, "Error loading drivers", e)
+            null
+        }
+    }
+
     // Retrieves the portrait image path for a specific driver.
     private fun getDriverPortrait(category: String, driverName: String): String {
         if (driverName.isEmpty()) return ""
