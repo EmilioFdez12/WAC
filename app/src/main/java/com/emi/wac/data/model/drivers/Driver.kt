@@ -1,15 +1,14 @@
 package com.emi.wac.data.model.drivers
 
 /**
- * Clase que representa un piloto de cualquier categoría
+ * Class representing a driver from any category
  *
- * @property id El identificador único del piloto.
- * @property name El nombre del piloto.
- * @property teamId El identificador único del equipo al que pertenece el piloto.
- * @property team El nombre del equipo al que pertenece el piloto.
- * @property number El número del piloto.
- * @property portrait La ruta de la imagen del piloto.
- *
+ * @property id The unique identifier of the driver
+ * @property name The name of the driver
+ * @property teamId The unique identifier of the driver's team
+ * @property team The name of the driver's team
+ * @property number The driver's number
+ * @property portrait The path to the driver's portrait image
  */
 data class Driver(
     val id: Int,
@@ -21,5 +20,5 @@ data class Driver(
 )
 
 data class Drivers(
-    val pilotos: List<Driver>
+    val drivers: List<Driver>
 )

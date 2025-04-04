@@ -64,11 +64,17 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
      * Updates the state with the latest race information for both F1 and MotoGP.
      */
     private suspend fun updateRaces() {
-        val f1Leader = getLeaderDriver("f1")
-        val motoGPLeader = getLeaderDriver("motogp")
+        val f1LeaderName = getLeaderDriverName("f1")
+        val motoGPLeaderName= getLeaderDriverName("motogp")
 
-        _nextF1Race.value = repository.getNextGrandPrix("f1", f1Leader)
-        _nextMotoGPRace.value = repository.getNextGrandPrix("motogp", motoGPLeader)
+        try {
+            _nextF1Race.value = repository.getNextGrandPrix("f1", f1LeaderName)
+            _nextMotoGPRace.value = repository.getNextGrandPrix("motogp", motoGPLeaderName)
+        } catch (_: Exception) {
+            _nextF1Race.value = Constants.LOADING_RACE_INFO
+            _nextMotoGPRace.value = Constants.LOADING_RACE_INFO
+        }
+
     }
 
     /**
@@ -77,7 +83,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
      * @param category The racing category (e.g., "f1", "motogp")
      * @return The driver's name or empty string if not found
      */
-    private suspend fun getLeaderDriver(category: String): String {
+    private suspend fun getLeaderDriverName(category: String): String {
         return standingsRepository.getLeaderDriver(category)
             .getOrNull()
             ?.driver ?: ""

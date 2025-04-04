@@ -51,13 +51,13 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
-    // Import the Firebase BoM
+    // FireBase
     implementation(platform("com.google.firebase:firebase-bom:33.12.0"))
     // Add the dependency for the Firebase SDK for Google Analytics
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore")
 
-    // Dependencias
+    // Otras Dependencias
     implementation("com.squareup.moshi:moshi:1.15.0")
     implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")

@@ -25,7 +25,23 @@ fun CategoryDetailsScreen(
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
-    }
+
+        // Three button component  Overview, Standings, Schedule
+
+        // Card with the info of the leader driver -- portrait
+        // Position 1º display and points
+
+        // Same with the first contructor
+
+        // Race weekend card with the schedule of the next grand prix
+        // practice 1, 2, 3, sprint, qualifying, race day and time
+
+        // Weather
+
+        // Circuit img 
+        
+        // Info about the circuit 
+    } 
 }
 
 @Preview(showBackground = true)

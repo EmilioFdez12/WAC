@@ -1,16 +1,16 @@
 package com.emi.wac.data.model.circuit
 
 /**
- * Clase que representa un circuito de Fórmula 1.
- * @property id El identificador único del circuito.
- * @property name El nombre del circuito.
- * @property gp El nombre del Grand Prix del campeonato.
- * @property image La ruta de la imagen del circuito.
- * @property flag La ruta de la bandera del país del circuito.
- * @property lapRecord El record del circuito.
- * @property raceLaps El número de vueltas de la carrera.
- * @property length La longitud del circuito en kilómetros.
- *
+ * Class representing a Formula 1 circuit.
+ * 
+ * @property id The unique identifier of the circuit
+ * @property name The name of the circuit
+ * @property gp The name of the championship Grand Prix
+ * @property image The path to the circuit image
+ * @property flag The path to the country flag of the circuit
+ * @property lapRecord The circuit lap record
+ * @property raceLaps The number of laps in the race
+ * @property length The length of the circuit in kilometers
  */
 data class Circuit(
     val id: Int,

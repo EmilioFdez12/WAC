@@ -1,12 +1,12 @@
 {
-    "pilotos": [
+    "drivers": [
         {
             "id": 1,
             "name": "Max Verstappen",
             "teamId": 1,
             "team": "Red Bull Racing",
             "number": 1,
-            "portrait": "/f1/images/drivers/MAXVER01.png"
+            "portrait": "/f1/images/drivers/MAXVER01.webp"
         },
         {
             "id": 2,
@@ -14,7 +14,7 @@
             "teamId": 1,
             "team": "Red Bull Racing",
             "number": 30,
-            "portrait": "/f1/images/drivers/LIALAW01.png"
+            "portrait": "/f1/images/drivers/LIALAW01.webp"
         },
         {
             "id": 3,
@@ -22,7 +22,7 @@
             "teamId": 2,
             "team": "Ferrari",
             "number": 16,
-            "portrait": "/f1/images/drivers/CHALEC01.png"
+            "portrait": "/f1/images/drivers/CHALEC01.webp"
         },
         {
             "id": 4,
@@ -30,7 +30,7 @@
             "teamId": 2,
             "team": "Ferrari",
             "number": 44,
-            "portrait": "/f1/images/drivers/LEWHAM01.png"
+            "portrait": "/f1/images/drivers/LEWHAM01.webp"
         },
         {
             "id": 5,
@@ -38,7 +38,7 @@
             "teamId": 3,
             "team": "McLaren",
             "number": 4,
-            "portrait": "/f1/images/drivers/LANNOR01.png"
+            "portrait": "/f1/images/drivers/LANNOR01.webp"
         },
         {
             "id": 6,
@@ -46,7 +46,7 @@
             "teamId": 3,
             "team": "McLaren",
             "number": 81,
-            "portrait": "/f1/images/drivers/OSCPIA01.png"
+            "portrait": "/f1/images/drivers/OSCPIA01.webp"
         },
         {
             "id": 7,
@@ -54,7 +54,7 @@
             "teamId": 4,
             "team": "Mercedes",
             "number": 63,
-            "portrait": "/f1/images/drivers/GEORUS01.png"
+            "portrait": "/f1/images/drivers/GEORUS01.webp"
         },
         {
             "id": 8,
@@ -62,7 +62,7 @@
             "teamId": 4,
             "team": "Mercedes",
             "number": 12,
-            "portrait": "/f1/images/drivers/ANDANT01.png"
+            "portrait": "/f1/images/drivers/ANDANT01.webp"
         },
         {
             "id": 9,
@@ -70,7 +70,7 @@
             "teamId": 5,
             "team": "Aston Martin",
             "number": 14,
-            "portrait": "/f1/images/drivers/FERALO01.png"
+            "portrait": "/f1/images/drivers/FERALO01.webp"
         },
         {
             "id": 10,
@@ -78,7 +78,7 @@
             "teamId": 5,
             "team": "Aston Martin",
             "number": 18,
-            "portrait": "/f1/images/drivers/LANSTR01.png"
+            "portrait": "/f1/images/drivers/LANSTR01.webp"
         },
         {
             "id": 11,
@@ -86,7 +86,7 @@
             "teamId": 6,
             "team": "Alpine",
             "number": 10,
-            "portrait": "/f1/images/drivers/PIEGAS01.png"
+            "portrait": "/f1/images/drivers/PIEGAS01.webp"
         },
         {
             "id": 12,
@@ -94,7 +94,7 @@
             "teamId": 6,
             "team": "Alpine",
             "number": 7,
-            "portrait": "/f1/images/drivers/JACDOO01.png"
+            "portrait": "/f1/images/drivers/JACDOO01.webp"
         },
         {
             "id": 13,
@@ -102,7 +102,7 @@
             "teamId": 7,
             "team": "Racing Bulls",
             "number": 22,
-            "portrait": "/f1/images/drivers/YUKTSU01.png"
+            "portrait": "/f1/images/drivers/YUKTSU01.webp"
         },
         {
             "id": 14,
@@ -110,7 +110,7 @@
             "teamId": 7,
             "team": "Racing Bulls",
             "number": 6,
-            "portrait": "/f1/images/drivers/ISAHAD01.png"
+            "portrait": "/f1/images/drivers/ISAHAD01.webp"
         },
         { 
             "id": 15,
@@ -118,7 +118,7 @@
             "teamId": 8,
             "team": "Williams",
             "number": 23,
-            "portrait": "/f1/images/drivers/ALEALB01.png"
+            "portrait": "/f1/images/drivers/ALEALB01.webp"
         },
         {
             "id": 16,
@@ -126,7 +126,7 @@
             "teamId": 8,
             "team": "Williams",
             "number": 55,
-            "portrait": "/f1/images/drivers/CARSAI01.png"
+            "portrait": "/f1/images/drivers/CARSAI01.webp"
         },
         {
             "id": 17,
@@ -134,7 +134,7 @@
             "teamId": 9,
             "team": "Sauber",
             "number": 27,
-            "portrait": "/f1/images/drivers/NICHUL01.png"
+            "portrait": "/f1/images/drivers/NICHUL01.webp"
         },
         {
             "id": 20,
@@ -142,7 +142,7 @@
             "teamId": 9,
             "team": "Sauber",
             "number": 5,
-            "portrait": "/f1/images/drivers/GABBOR01.png"
+            "portrait": "/f1/images/drivers/GABBOR01.webp"
         },
         {
             "id": 18,
@@ -150,7 +150,7 @@
             "teamId": 10,
             "team": "Haas",
             "number": 31,
-            "portrait": "/f1/images/drivers/ESTOC01.png"
+            "portrait": "/f1/images/drivers/ESTOC01.webp"
         },
         {
             "id": 19,
@@ -158,7 +158,7 @@
             "teamId": 10,
             "team": "Haas",
             "number": 87,
-            "portrait": "/f1/images/drivers/OLIBEA01.png"
+            "portrait": "/f1/images/drivers/OLIBEA01.webp"
         }
     ]
 }

@@ -1,9 +1,9 @@
 package com.emi.wac.data.model.sessions
 
 /**
- * Clase que representa un Calendario
+ * Class representing a Championship Schedule.
  *
- * @property schedule La lista de Grand Prix del calendario.
+ * @property schedule The list of Grand Prix in the schedule
  */
 data class Schedule(
     val schedule: List<GrandPrix>

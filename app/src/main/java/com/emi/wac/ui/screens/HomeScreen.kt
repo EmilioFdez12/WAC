@@ -19,6 +19,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil3.compose.rememberAsyncImagePainter
+import com.emi.wac.common.Constants.CAT_DETAILS
 import com.emi.wac.ui.components.RaceCard
 import com.emi.wac.ui.theme.PrimaryYellow
 import com.emi.wac.ui.theme.WACTheme
@@ -56,7 +57,7 @@ fun HomeScreen(
             RaceCard(
                 logo = "f1",
                 raceInfo = nextF1Race,
-                onCardClick = { navController.navigate("category_details/f1") }
+                onCardClick = { navController.navigate("$CAT_DETAILS/f1") }
             )
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -67,7 +68,7 @@ fun HomeScreen(
                 countdownColor = PrimaryYellow,
                 imageOffset = Offset(0f, 36f),
                 imageScale = 1.6f,
-                onCardClick = { navController.navigate("category_details/motogp") }
+                onCardClick = { navController.navigate("$CAT_DETAILS/motogp") }
             )
         }
     }

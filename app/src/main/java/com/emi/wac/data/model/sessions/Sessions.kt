@@ -1,14 +1,13 @@
 package com.emi.wac.data.model.sessions
 
 /**
- * Clase que representa las sesiones de un Grand Prix.
+ * Class representing the sessions of a Grand Prix.
  *
- * @property practice1 La primera sesión de la carrera.
- * @property practice2 La segunda sesión de la carrera.
- * @property practice3 La tercera sesión de la carrera.
- * @property qualifying La sesión de clasificación.
- * @property race La sesión de carrera.
- *
+ * @property practice1 The first practice session
+ * @property practice2 The second practice session
+ * @property practice3 The third practice session
+ * @property qualifying The qualifying session
+ * @property race The race session
  */
 data class Sessions(
     val practice1: Session,
@@ -19,10 +18,10 @@ data class Sessions(
 )
 
 /**
- * Clase que representa una sesión de un Grand Prix.
+ * Class representing a Grand Prix session.
  *
- * @property day El día de la sesión.
- * @property time El horario de la sesión.
+ * @property day The day of the session
+ * @property time The time of the session
  */
 data class Session(
     val day: String,

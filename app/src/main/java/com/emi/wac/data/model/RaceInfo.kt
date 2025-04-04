@@ -1,14 +1,13 @@
 package com.emi.wac.data.model
 
 /**
- * Clase con la informacion general del siguiente GrandPrix.
+ * Class containing general information about the next Grand Prix.
  *
- * @property gpName Nombre del gp
- * @property flagPath Ruta de la imagen de la bandera del siguiente GrandPrix
- * @property timeRemaining Tiempo restante para el siguiente GrandPrix
- * @property leaderImagePath Ruta de la imagen del piloto lider del siguiente GrandPrix
- * @property leaderName Nombre del piloto lider del siguiente GrandPrix
- *
+ * @property gpName Name of the Grand Prix
+ * @property flagPath Path to the flag image of the next Grand Prix
+ * @property timeRemaining Time remaining until the next Grand Prix
+ * @property leaderImagePath Path to the image of the championship leader
+ * @property leaderName Name of the championship leader
  */
 data class RaceInfo(
     val gpName: String,

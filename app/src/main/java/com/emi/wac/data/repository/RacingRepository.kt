@@ -54,7 +54,7 @@ class RacingRepository(private val context: Context) {
      */
     fun getNextGrandPrix(category: String, leaderName: String = ""): RaceInfo {
         // Get schedule or return default "no races" info if loading fails
-        val categorySchedule = getSchedule(category) ?: return createNoRaceInfo(category)
+        val categorySchedule = getSchedule(category) ?: return Constants.LOADING_RACE_INFO
         val currentDate = Calendar.getInstance()
         val currentYear = currentDate.get(Calendar.YEAR)
 
@@ -70,7 +70,7 @@ class RacingRepository(private val context: Context) {
             // Parse race date/time or return default if parsing fails
             val raceDateTime =
                 dateFormat.parse("${race.sessions.race.day} $currentYear ${race.sessions.race.time}")
-                    ?: return createNoRaceInfo(category)
+                    ?: return Constants.LOADING_RACE_INFO
 
             RaceInfo(
                 gpName = race.gp,
@@ -79,16 +79,10 @@ class RacingRepository(private val context: Context) {
                 leaderImagePath = getDriverPortrait(category, leaderName),
                 leaderName = leaderName
             )
-        } ?: createNoRaceInfo(category)
+        } ?: Constants.LOADING_RACE_INFO
     }
 
-    /**
-     * Retrieves the portrait image path for a specific driver.
-     *
-     * @param category The racing category the driver belongs to
-     * @param driverName The name of the driver to find
-     * @return Path to the driver's portrait image, or empty string if not found
-     */
+    // Retrieves the portrait image path for a specific driver.
     private fun getDriverPortrait(category: String, driverName: String): String {
         if (driverName.isEmpty()) return ""
 
@@ -102,7 +96,7 @@ class RacingRepository(private val context: Context) {
             // Find driver by name and return portrait path
             moshi.adapter(Drivers::class.java)
                 .fromJson(jsonString)
-                ?.pilotos
+                ?.drivers
                 ?.find { it.name == driverName }
                 ?.portrait
                 ?: ""
@@ -112,13 +106,7 @@ class RacingRepository(private val context: Context) {
         }
     }
 
-    /**
-     * Calculates the remaining time until a race starts.
-     *
-     * @param raceDate The date/time of the race
-     * @param currentDate Current date/time for comparison
-     * @return Formatted string showing days, hours and minutes remaining
-     */
+    // Calculates the remaining time until a race starts.
     private fun calculateTimeRemaining(raceDate: Date, currentDate: Calendar): String {
         // Calculate time difference in milliseconds
         val diff = raceDate.time - currentDate.timeInMillis
@@ -133,21 +121,5 @@ class RacingRepository(private val context: Context) {
         } else {
             "${hours}h ${minutes}m ${seconds}s"
         }
-    }
-
-    /**
-     * Creates a default RaceInfo object when no upcoming races are found.
-     *
-     * @param category The racing category that was checked
-     * @return RaceInfo with default "no races" values
-     */
-    private fun createNoRaceInfo(category: String): RaceInfo {
-        return RaceInfo(
-            gpName = "No upcoming $category races",
-            flagPath = "",
-            timeRemaining = "",
-            leaderImagePath = "",
-            leaderName = ""
-        )
     }
 }
