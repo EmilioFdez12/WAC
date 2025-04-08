@@ -1,4 +1,4 @@
-/*import androidx.compose.foundation.background
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -10,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
@@ -21,8 +23,8 @@ import com.emi.wac.data.repository.RacingRepository
 import com.emi.wac.ui.components.category_details.schedule.SessionItem
 import com.emi.wac.ui.theme.AlataTypography
 import com.emi.wac.ui.theme.HardRed
+import com.emi.wac.ui.theme.PrimaryBlack
 import com.emi.wac.ui.theme.SoftRed
-
 
 @Composable
 fun RaceWeekendSchedule(
@@ -51,15 +53,7 @@ fun RaceWeekendSchedule(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(
-                        Brush.linearGradient(
-                            colors = listOf(
-                                Color(0xFF151515),
-                                Color(0xFF151515),
-                                Color(0xFF404040)
-                            )
-                        )
-                    )
+                    .background(Color(0xFF151515))
                     .clip(RoundedCornerShape(8.dp))
                     .padding(12.dp)
             ) {
@@ -142,4 +136,4 @@ fun RaceWeekendSchedule(
             }
         }
     }
-}*/
+}

@@ -69,8 +69,8 @@ fun SessionItem(
                     color = PrimaryWhite,
                     modifier = Modifier
                         .background(
-                            Color.White.copy(alpha = 0.15f),
-                            RoundedCornerShape(4.dp)
+                            Color.White.copy(alpha = 0.30f),
+                            RoundedCornerShape(50.dp)
                         )
                         .padding(horizontal = 8.dp, vertical = 2.dp)
                 )

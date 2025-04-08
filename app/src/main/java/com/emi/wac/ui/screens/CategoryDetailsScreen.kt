@@ -1,5 +1,6 @@
 package com.emi.wac.ui.screens
 
+import RaceWeekendSchedule
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -94,6 +95,12 @@ fun CategoryDetailsScreen(
                             rotation = constructorRotation,
                         )
                     }
+
+                    // Race Weekend Schedule
+                    RaceWeekendSchedule(
+                        modifier = Modifier.padding(top = 16.dp, start = 32.dp, end = 32.dp),
+                        category = category
+                    )
                 }
             }
         }
