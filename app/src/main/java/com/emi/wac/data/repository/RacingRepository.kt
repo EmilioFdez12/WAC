@@ -58,17 +58,9 @@ class RacingRepository(private val context: Context) {
      */
     fun getNextGrandPrix(category: String, leaderName: String = ""): RaceInfo {
         // Get schedule or return default "no races" info if loading fails
-        val categorySchedule = getSchedule(category) ?: return Constants.LOADING_RACE_INFO
         val currentDate = Calendar.getInstance()
         val currentYear = currentDate.get(Calendar.YEAR)
-
-        // Find the next race of the schedule
-        val nextRace = categorySchedule.schedule.find { grandPrix ->
-            val raceDay =
-                "${grandPrix.sessions.race.day} $currentYear ${grandPrix.sessions.race.time}"
-            // Checks if race date is after current date
-            dateFormat.parse(raceDay)?.after(currentDate.time) == true
-        }
+        val nextRace = getNextGrandPrixObject(category)
 
         return nextRace?.let { race ->
             // Parse race date/time or return default if parsing fails

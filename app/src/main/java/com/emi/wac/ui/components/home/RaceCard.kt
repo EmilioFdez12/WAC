@@ -1,10 +1,25 @@
-package com.emi.wac.ui.components
+package com.emi.wac.ui.components.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,14 +31,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.emi.wac.data.model.RaceInfo
-import com.emi.wac.ui.theme.PrimaryRed
 import com.emi.wac.ui.theme.PrimaryWhite
+import com.emi.wac.ui.theme.getPrimaryColorForCategory
 
 @Composable
 fun RaceCard(
@@ -36,7 +49,7 @@ fun RaceCard(
         Color(0xFF151515),
         Color(0xFF151515)
     ),
-    countdownColor: Color = PrimaryRed,
+    countdownColor: Color = getPrimaryColorForCategory(logo),
     imageAlignment: Alignment = Alignment.CenterEnd,
     imagePadding: PaddingValues = PaddingValues(start = 100.dp),
     imageOffset: Offset = Offset(0f, 0f),

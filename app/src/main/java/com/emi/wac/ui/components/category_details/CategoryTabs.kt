@@ -15,19 +15,24 @@ import androidx.compose.ui.unit.dp
 import com.emi.wac.ui.theme.AlataTypography
 import com.emi.wac.ui.theme.PrimaryBlack
 import com.emi.wac.ui.theme.PrimaryRed
+import com.emi.wac.ui.theme.getPrimaryColorForCategory
 
 @Composable
 fun CategoryTabs(
     selectedTab: Int,
     onTabSelected: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    category: String,
 ) {
+    val primaryColor = getPrimaryColorForCategory(category)
+
     Row(modifier = modifier) {
+
         listOf("OVERVIEW", "STANDINGS", "SCHEDULE").forEachIndexed { index, title ->
             Button(
                 onClick = { onTabSelected(index) },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (selectedTab == index) PrimaryRed else PrimaryBlack,
+                    containerColor = if (selectedTab == index) primaryColor else PrimaryBlack,
                     contentColor = Color.White
                 ),
                 shape = RoundedCornerShape(8.dp),
@@ -39,7 +44,6 @@ fun CategoryTabs(
                     style = AlataTypography.bodyLarge
                 )
             }
-
             if (index < 2) {
                 Spacer(modifier = Modifier.width(8.dp))
             }

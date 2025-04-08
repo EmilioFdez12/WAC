@@ -20,8 +20,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil3.compose.rememberAsyncImagePainter
 import com.emi.wac.common.Constants.CAT_DETAILS
-import com.emi.wac.ui.components.RaceCard
-import com.emi.wac.ui.theme.PrimaryYellow
+import com.emi.wac.ui.components.home.RaceCard
+import com.emi.wac.ui.theme.PrimaryOrange
 import com.emi.wac.ui.theme.WACTheme
 import com.emi.wac.viewmodel.HomeViewModel
 import com.emi.wac.viewmodel.HomeViewModelFactory
@@ -65,7 +65,7 @@ fun HomeScreen(
             RaceCard(
                 logo = "motogp",
                 raceInfo = nextMotoGPRace,
-                countdownColor = PrimaryYellow,
+                countdownColor = PrimaryOrange,
                 imageOffset = Offset(0f, 36f),
                 imageScale = 1.6f,
                 onCardClick = { navController.navigate("$CAT_DETAILS/motogp") }

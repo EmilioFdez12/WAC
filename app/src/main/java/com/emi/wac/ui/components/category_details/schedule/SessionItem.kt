@@ -19,18 +19,21 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.emi.wac.ui.theme.AlataTypography
 import com.emi.wac.ui.theme.PrimaryBlack
-import com.emi.wac.ui.theme.PrimaryRed
 import com.emi.wac.ui.theme.PrimaryWhite
+import com.emi.wac.ui.theme.getPrimaryColorForCategory
 
 @Composable
 fun SessionItem(
     day: String,
     name: String,
     time: String,
-    isPrimary: Boolean
+    isPrimary: Boolean,
+    category: String,
 ) {
+    val primaryColor = getPrimaryColorForCategory(category)
+
     val backgroundColor = if (isPrimary) {
-        PrimaryRed
+        primaryColor
     } else {
         PrimaryBlack
     }
@@ -38,6 +41,7 @@ fun SessionItem(
     val parts = day.split(" ")
     val dayNumber = parts[0]
     val monthName = parts[1].uppercase()
+
 
     Row(
         modifier = Modifier
@@ -59,7 +63,7 @@ fun SessionItem(
             ) {
                 Text(
                     text = dayNumber,
-                    style = AlataTypography.bodyLarge,
+                    style = AlataTypography.titleMedium,
                     color = Color.White
                 )
                 Spacer(modifier = Modifier.width(4.dp))
@@ -72,7 +76,7 @@ fun SessionItem(
                             Color.White.copy(alpha = 0.30f),
                             RoundedCornerShape(50.dp)
                         )
-                        .padding(horizontal = 8.dp, vertical = 2.dp)
+                        .padding(horizontal = 8.dp)
                 )
             }
         }

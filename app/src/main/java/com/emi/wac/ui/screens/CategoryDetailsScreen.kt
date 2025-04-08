@@ -1,6 +1,6 @@
 package com.emi.wac.ui.screens
 
-import RaceWeekendSchedule
+import com.emi.wac.ui.components.category_details.schedule.RaceWeekendSchedule
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -69,7 +69,8 @@ fun CategoryDetailsScreen(
                 onTabSelected = { selectedTab = it },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 32.dp, end = 32.dp, top = 24.dp)
+                    .padding(start = 32.dp, end = 32.dp, top = 24.dp),
+                category = category,
             )
 
             when (selectedTab) {
@@ -81,7 +82,8 @@ fun CategoryDetailsScreen(
                             driverLogo = driver?.portrait ?: "",
                             imageScale = scale,
                             offsetX = offsetX,
-                            offsetY = offsetY
+                            offsetY = offsetY,
+                            category = category,
                         )
                     }
                     constructorLeaderInfo?.let { (standing, constructor) ->
@@ -93,6 +95,7 @@ fun CategoryDetailsScreen(
                             offsetX = constructorOffsetX,
                             offsetY = constructorOffsetY,
                             rotation = constructorRotation,
+                            category = category,
                         )
                     }
 

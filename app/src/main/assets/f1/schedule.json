@@ -88,23 +88,23 @@
             "sessions": {
                 "practice1": {
                     "day": "11 Apr",
-                    "time": "3:30"
+                    "time": "13:30"
                 },
                 "practice2": {
                     "day": "11 Apr",
-                    "time": "7:30"
+                    "time": "17:00"
                 },
                 "practice3": {
                     "day": "12 Apr",
-                    "time": "3:30"
+                    "time": "14:30"
                 },
                 "qualifying": {
                     "day": "12 Apr",
-                    "time": "7:00"
+                    "time": "18:00"
                 },
                 "race": {
                     "day": "13 Apr",
-                    "time": "3:00"
+                    "time": "17:00"
                 }
             }
         },

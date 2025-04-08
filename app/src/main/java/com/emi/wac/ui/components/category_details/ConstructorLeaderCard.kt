@@ -24,7 +24,7 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.emi.wac.data.model.contructor.ConstructorStanding
 import com.emi.wac.ui.theme.AlataTypography
-import com.emi.wac.ui.theme.PrimaryRed
+import com.emi.wac.ui.theme.getPrimaryColorForCategory
 
 private const val TAG = "ConstructorLeaderCard"
 
@@ -37,9 +37,9 @@ fun ConstructorLeaderCard(
     offsetY: Dp = 0.dp,
     imageScale: Float = 1f,
     rotation: Float = 0f,
+    category: String,
 ) {
-    // Log para depuración
-    Log.d(TAG, "ConstructorLeaderCard called with team: ${constructorStanding.team}, car: $car")
+    val primaryColor = getPrimaryColorForCategory(category)
     
     Box(modifier = modifier.fillMaxWidth()) {
         Card(
@@ -98,7 +98,7 @@ fun ConstructorLeaderCard(
 
                         Box(
                             modifier = Modifier
-                                .background(PrimaryRed, RoundedCornerShape(4.dp))
+                                .background(primaryColor, RoundedCornerShape(4.dp))
                                 .padding(horizontal = 8.dp, vertical = 4.dp)
                         ) {
                             Text(

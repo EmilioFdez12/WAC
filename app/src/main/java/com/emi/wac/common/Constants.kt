@@ -21,4 +21,6 @@ object Constants {
 
         const val HOME = "home"
         const val CAT_DETAILS = "category_details"
+
+        const val CATEGORY_MOTOGP = "motogp"
 }
