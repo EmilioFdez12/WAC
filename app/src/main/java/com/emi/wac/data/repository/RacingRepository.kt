@@ -3,13 +3,17 @@ package com.emi.wac.data.repository
 import android.content.Context
 import android.util.Log
 import com.emi.wac.common.Constants
-import com.emi.wac.data.model.sessions.Schedule
 import com.emi.wac.data.model.RaceInfo
+import com.emi.wac.data.model.contructor.Constructors
 import com.emi.wac.data.model.drivers.Drivers
+import com.emi.wac.data.model.sessions.GrandPrix
+import com.emi.wac.data.model.sessions.Schedule
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 /**
  * Repository class responsible for fetching and processing racing-related data.
@@ -82,6 +86,28 @@ class RacingRepository(private val context: Context) {
         } ?: Constants.LOADING_RACE_INFO
     }
 
+
+    /**
+     * Gets the next upcoming Grand Prix for a category.
+     *
+     * @param category The racing category to check
+     * @return The next GrandPrix object or null if none found
+     */
+    fun getNextGrandPrixObject(category: String): GrandPrix? {
+        // Get schedule or return null if loading fails
+        val categorySchedule = getSchedule(category) ?: return null
+        val currentDate = Calendar.getInstance()
+        val currentYear = currentDate.get(Calendar.YEAR)
+
+        // Find the next race of the schedule
+        return categorySchedule.schedule.find { grandPrix ->
+            val raceDay =
+                "${grandPrix.sessions.race.day} $currentYear ${grandPrix.sessions.race.time}"
+            // Checks if race date is after current date
+            dateFormat.parse(raceDay)?.after(currentDate.time) == true
+        }
+    }
+
     fun getDrivers(category: String): Drivers? {
         return try {
             val jsonString = context.assets
@@ -90,6 +116,20 @@ class RacingRepository(private val context: Context) {
                 .use { it.readText() }
     
             moshi.adapter(Drivers::class.java).fromJson(jsonString)
+        } catch (e: Exception) {
+            Log.e(tag, "Error loading drivers", e)
+            null
+        }
+    }
+
+    fun getConstructors(category: String): Constructors? {
+        return try {
+            val jsonString = context.assets
+                .open("$category/constructors.json")
+                .bufferedReader()
+                .use { it.readText() }
+
+            moshi.adapter(Constructors::class.java).fromJson(jsonString)
         } catch (e: Exception) {
             Log.e(tag, "Error loading drivers", e)
             null

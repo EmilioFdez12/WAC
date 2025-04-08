@@ -1,0 +1,54 @@
+{
+  "constructors": [
+    {
+      "teamId": 1,
+      "team": "Red Bull Racing",
+      "car": "/f1/images/cars/red-bull-racing.webp"
+    },
+    {
+      "teamId": 2,
+      "team": "Ferrari",
+      "car": "/f1/images/cars/ferrari.webp"
+    },
+    {
+      "teamId": 3,
+      "team": "McLaren",
+      "car": "/f1/images/cars/mclaren.webp"
+    },
+    {
+      "teamId": 4,
+      "team": "Mercedes",
+      "car": "/f1/images/cars/mercedes.webp"
+    },
+    {
+      "teamId": 5,
+      "team": "Aston Martin",
+      "car": "/f1/images/cars/aston-martin.webp"
+    },
+    {
+      "teamId": 6,
+      "team": "Alpine",
+      "car": "/f1/images/cars/alpine.webp"
+    },
+    {
+      "teamId": 7,
+      "team": "Racing Bulls",
+      "car": "/f1/images/cars/racing-bulls.webp"
+    },
+    {
+      "teamId": 8,
+      "team": "Williams",
+      "car": "/f1/images/cars/williams.webp"
+    },
+    {
+      "teamId": 9,
+      "team": "Sauber",
+      "car": "/f1/images/cars/kick-sauber.webp"
+    },
+    {
+      "teamId": 10,
+      "team": "Haas",
+      "car": "/f1/images/cars/haas.webp"
+    }
+  ]
+}

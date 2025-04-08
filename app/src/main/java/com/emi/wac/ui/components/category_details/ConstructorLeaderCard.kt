@@ -1,5 +1,6 @@
 package com.emi.wac.ui.components.category_details
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,23 +21,25 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import com.emi.wac.data.model.drivers.DriverStanding
+import com.emi.wac.data.model.contructor.ConstructorStanding
 import com.emi.wac.ui.theme.AlataTypography
 import com.emi.wac.ui.theme.PrimaryRed
-import kotlin.Float
+
+private const val TAG = "ConstructorLeaderCard"
 
 @Composable
-fun LeaderDriverCard(
+fun ConstructorLeaderCard(
     modifier: Modifier = Modifier,
-    driverStanding: DriverStanding,
-    driverLogo: String,
+    constructorStanding: ConstructorStanding,
+    car: String,
     offsetX: Dp = 60.dp,
-    offsetY: Dp = 0.dp ,
+    offsetY: Dp = 0.dp,
     imageScale: Float = 1f,
-
 ) {
+    // Log para depuración
+    Log.d(TAG, "ConstructorLeaderCard called with team: ${constructorStanding.team}, car: $car")
+    
     Box(modifier = modifier.fillMaxWidth()) {
-        // Card principal
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -63,21 +66,18 @@ fun LeaderDriverCard(
                     )
                     .clip(RoundedCornerShape(8.dp))
             ) {
-                // Contenido de la tarjeta
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(16.dp),
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    // Nombre del piloto arriba a la izquierda
                     Text(
-                        text = driverStanding.driver,
+                        text = constructorStanding.team,
                         style = AlataTypography.titleLarge,
                         color = Color.White
                     )
                     
-                    // Posición y puntos abajo a la izquierda
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -88,7 +88,7 @@ fun LeaderDriverCard(
                                 .padding(horizontal = 8.dp, vertical = 4.dp)
                         ) {
                             Text(
-                                text = "${driverStanding.position}º",
+                                text = "${constructorStanding.position}º",
                                 style = AlataTypography.bodyLarge,
                                 color = Color.Black
                             )
@@ -100,7 +100,7 @@ fun LeaderDriverCard(
                                 .padding(horizontal = 8.dp, vertical = 4.dp)
                         ) {
                             Text(
-                                text = "${driverStanding.points} pts",
+                                text = "${constructorStanding.points} pts",
                                 style = AlataTypography.bodyLarge,
                                 color = Color.White
                             )
@@ -108,19 +108,30 @@ fun LeaderDriverCard(
                     }
                 }
                 
-                // Imagen del piloto dentro de la card (con recorte)
+                // Log para depuración de la ruta de la imagen
+                Log.d(TAG, "Loading car image from: file:///android_asset$car")
+                
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data("file:///android_asset$driverLogo")
+                        .data("file:///android_asset$car")
                         .crossfade(true)
                         .build(),
-                    contentDescription = "Driver Portrait",
+                    contentDescription = "Constructor Car",
+                    contentScale = ContentScale.Fit,
                     modifier = Modifier
-                        .size(120.dp)
-                        .align(Alignment.BottomCenter)
+                        .scale(imageScale)
+                        .size(200.dp)
                         .offset(x = offsetX, y = offsetY)
-                        .scale(imageScale),
-                    contentScale = ContentScale.Fit
+                        .align(Alignment.CenterEnd),
+                    onLoading = {
+                        Log.d(TAG, "Loading car image...")
+                    },
+                    onError = { error ->
+                        Log.e(TAG, "Error loading car image:")
+                    },
+                    onSuccess = {
+                        Log.d(TAG, "Car image loaded successfully")
+                    }
                 )
             }
         }

@@ -6,7 +6,7 @@
             "teamId": 1,
             "team": "Ducati Lenovo Team",
             "number": 63,
-            "portrait": "motogp/images/drivers/FRABAG01.png"
+            "portrait": "/motogp/images/drivers/FRABAG01.png"
         },
         {
             "id": 2,

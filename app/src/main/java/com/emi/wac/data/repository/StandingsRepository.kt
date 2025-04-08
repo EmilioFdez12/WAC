@@ -1,5 +1,6 @@
 package com.emi.wac.data.repository
 
+import com.emi.wac.data.model.contructor.ConstructorStanding
 import com.emi.wac.data.model.drivers.DriverStanding
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
@@ -47,6 +48,39 @@ class StandingsRepository(private val db: FirebaseFirestore) {
                 )
             } else {
                 Result.failure(Exception("No driver data found for $category"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    /**
+     * Retrieves the current championship leader for a specific racing category.
+     *
+     * @param category The racing category (e.g., "f1", "motogp")
+     * @return Result containing DriverStanding if successful, or failure with exception
+     */
+    suspend fun getLeaderConstructor(category: String): Result<ConstructorStanding> {
+        return try {
+            val document = db.collection("${category}_constructors_standings").document("latest").get().await()
+
+            val data = when (val rawData = document.get("data")) {
+                is List<*> -> rawData.filterIsInstance<Map<String, String>>()
+                else -> null
+            }
+
+            val firstTeam = data?.firstOrNull()
+
+            if (firstTeam != null) {
+                Result.success(
+                    ConstructorStanding(
+                        team = firstTeam["team"] ?: "",
+                        points = firstTeam["points"] ?: "",
+                        position = firstTeam["position"] ?: ""
+                    )
+                )
+            } else {
+                Result.failure(Exception("No constructor data found for $category"))
             }
         } catch (e: Exception) {
             Result.failure(e)

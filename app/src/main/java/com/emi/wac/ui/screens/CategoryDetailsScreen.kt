@@ -10,19 +10,20 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil3.compose.rememberAsyncImagePainter
-import com.emi.wac.ui.components.CategoryTabs
-import com.emi.wac.ui.theme.WACTheme
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.emi.wac.ui.components.LeaderDriverCard
+import coil3.compose.rememberAsyncImagePainter
+import com.emi.wac.ui.components.category_details.CategoryTabs
+import com.emi.wac.ui.components.category_details.ConstructorLeaderCard
+import com.emi.wac.ui.components.category_details.LeaderDriverCard
+import com.emi.wac.ui.theme.WACTheme
 import com.emi.wac.viewmodel.CategoryDetailsViewModel
 
 @Composable
@@ -31,18 +32,25 @@ fun CategoryDetailsScreen(
     category: String,
     viewModel: CategoryDetailsViewModel = viewModel()
 ) {
-    val backgroundPainter = rememberAsyncImagePainter(model = "file:///android_asset/background.webp")
+    val backgroundPainter =
+        rememberAsyncImagePainter(model = "file:///android_asset/background.webp")
     var selectedTab by remember { mutableIntStateOf(0) }
     val leaderInfo by viewModel.leaderInfo.collectAsState()
+    val constructorLeaderInfo by viewModel.constructorLeaderInfo.collectAsState()
 
     // Configuración específica para cada categoría
     val offsetX = if (category == "f1") 60.dp else 60.dp
     val offsetY = if (category == "f1") 0.dp else (24).dp
     val scale = if (category == "f1") 1f else 2f
 
+    val constructorOffsetX = if (category == "f1") (-20).dp else 60.dp
+    val constructorOffsetY = if (category == "f1") (20).dp else (24).dp
+    val constructorScale = if (category == "f1") 1f else 2f
+
     // Load leader info when screen is created
     LaunchedEffect(category) {
         viewModel.loadLeaderInfo(category)
+        viewModel.loadConstructorLeaderInfo(category)
     }
 
     Box(modifier = modifier.fillMaxSize()) {
@@ -59,7 +67,7 @@ fun CategoryDetailsScreen(
                 onTabSelected = { selectedTab = it },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 32.dp, end = 32.dp, top = 64.dp)
+                    .padding(start = 32.dp, end = 32.dp, top = 24.dp)
             )
 
             when (selectedTab) {
@@ -74,6 +82,16 @@ fun CategoryDetailsScreen(
                             offsetY = offsetY
                         )
                     }
+                    constructorLeaderInfo?.let { (standing, constructor) ->
+                        ConstructorLeaderCard(
+                            modifier = Modifier.padding(top = 16.dp),
+                            constructorStanding = standing,
+                            car = constructor?.car ?: "",
+                            imageScale = scale,
+                            offsetX = constructorOffsetX,
+                            offsetY = constructorOffsetY,
+                        )
+                    }
                 }
             }
         }
@@ -85,7 +103,7 @@ fun CategoryDetailsScreen(
 fun CategoryDetailsPreview() {
     WACTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            CategoryDetailsScreen(category = "motogp")
+            CategoryDetailsScreen(category = "f1")
         }
     }
 }
