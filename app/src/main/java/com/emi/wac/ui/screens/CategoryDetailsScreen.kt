@@ -43,9 +43,10 @@ fun CategoryDetailsScreen(
     val offsetY = if (category == "f1") 0.dp else (24).dp
     val scale = if (category == "f1") 1f else 2f
 
-    val constructorOffsetX = if (category == "f1") (-20).dp else 60.dp
-    val constructorOffsetY = if (category == "f1") (20).dp else (24).dp
-    val constructorScale = if (category == "f1") 1f else 2f
+    val constructorOffsetX = if (category == "f1") (-20).dp else 20.dp
+    val constructorOffsetY = if (category == "f1") (20).dp else 20.dp
+    val constructorScale = if (category == "f1") 1f else 1.2f
+    val constructorRotation = if (category == "f1") 0f else 25f
 
     // Load leader info when screen is created
     LaunchedEffect(category) {
@@ -87,9 +88,10 @@ fun CategoryDetailsScreen(
                             modifier = Modifier.padding(top = 16.dp),
                             constructorStanding = standing,
                             car = constructor?.car ?: "",
-                            imageScale = scale,
+                            imageScale = constructorScale,
                             offsetX = constructorOffsetX,
                             offsetY = constructorOffsetY,
+                            rotation = constructorRotation,
                         )
                     }
                 }

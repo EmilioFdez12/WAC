@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -35,6 +36,7 @@ fun ConstructorLeaderCard(
     offsetX: Dp = 60.dp,
     offsetY: Dp = 0.dp,
     imageScale: Float = 1f,
+    rotation: Float = 0f,
 ) {
     // Log para depuración
     Log.d(TAG, "ConstructorLeaderCard called with team: ${constructorStanding.team}, car: $car")
@@ -121,17 +123,9 @@ fun ConstructorLeaderCard(
                     modifier = Modifier
                         .scale(imageScale)
                         .size(200.dp)
+                        .rotate(rotation)
                         .offset(x = offsetX, y = offsetY)
                         .align(Alignment.CenterEnd),
-                    onLoading = {
-                        Log.d(TAG, "Loading car image...")
-                    },
-                    onError = { error ->
-                        Log.e(TAG, "Error loading car image:")
-                    },
-                    onSuccess = {
-                        Log.d(TAG, "Car image loaded successfully")
-                    }
                 )
             }
         }
