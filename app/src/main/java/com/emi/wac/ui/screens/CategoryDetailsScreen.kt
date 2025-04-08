@@ -1,12 +1,13 @@
 package com.emi.wac.ui.screens
 
-import com.emi.wac.ui.components.category_details.schedule.RaceWeekendSchedule
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,8 +23,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.rememberAsyncImagePainter
 import com.emi.wac.ui.components.category_details.CategoryTabs
+import com.emi.wac.ui.components.category_details.CircuitInfo
 import com.emi.wac.ui.components.category_details.ConstructorLeaderCard
 import com.emi.wac.ui.components.category_details.LeaderDriverCard
+import com.emi.wac.ui.components.category_details.schedule.RaceWeekendSchedule
 import com.emi.wac.ui.theme.WACTheme
 import com.emi.wac.viewmodel.CategoryDetailsViewModel
 
@@ -38,8 +41,12 @@ fun CategoryDetailsScreen(
     var selectedTab by remember { mutableIntStateOf(0) }
     val leaderInfo by viewModel.leaderInfo.collectAsState()
     val constructorLeaderInfo by viewModel.constructorLeaderInfo.collectAsState()
+    val circuitInfo by viewModel.circuitInfo.collectAsState()
 
-    // Configuración específica para cada categoría
+    // Create a scroll state to track scrolling
+    val scrollState = rememberScrollState()
+
+    // Specific configuration for each category
     val offsetX = if (category == "f1") 60.dp else 60.dp
     val offsetY = if (category == "f1") 0.dp else (24).dp
     val scale = if (category == "f1") 1f else 2f
@@ -53,6 +60,7 @@ fun CategoryDetailsScreen(
     LaunchedEffect(category) {
         viewModel.loadLeaderInfo(category)
         viewModel.loadConstructorLeaderInfo(category)
+        viewModel.loadNextCircuitInfo(category)
     }
 
     Box(modifier = modifier.fillMaxSize()) {
@@ -63,7 +71,13 @@ fun CategoryDetailsScreen(
             contentScale = ContentScale.Crop
         )
 
-        Column(modifier = Modifier.fillMaxSize()) {
+        // Make the entire content scrollable, including tabs
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(scrollState)
+        ) {
+            // Category tabs now inside the scrollable column
             CategoryTabs(
                 selectedTab = selectedTab,
                 onTabSelected = { selectedTab = it },
@@ -75,36 +89,48 @@ fun CategoryDetailsScreen(
 
             when (selectedTab) {
                 0 -> {
-                    leaderInfo?.let { (standing, driver) ->
-                        LeaderDriverCard(
-                            modifier = Modifier.padding(top = 16.dp),
-                            driverStanding = standing,
-                            driverLogo = driver?.portrait ?: "",
-                            imageScale = scale,
-                            offsetX = offsetX,
-                            offsetY = offsetY,
-                            category = category,
-                        )
-                    }
-                    constructorLeaderInfo?.let { (standing, constructor) ->
-                        ConstructorLeaderCard(
-                            modifier = Modifier.padding(top = 16.dp),
-                            constructorStanding = standing,
-                            car = constructor?.car ?: "",
-                            imageScale = constructorScale,
-                            offsetX = constructorOffsetX,
-                            offsetY = constructorOffsetY,
-                            rotation = constructorRotation,
-                            category = category,
-                        )
-                    }
+                    // Content for Overview tab
+                    Column(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        leaderInfo?.let { (standing, driver) ->
+                            LeaderDriverCard(
+                                modifier = Modifier.padding(top = 16.dp),
+                                driverStanding = standing,
+                                driverLogo = driver?.portrait ?: "",
+                                imageScale = scale,
+                                offsetX = offsetX,
+                                offsetY = offsetY,
+                                category = category,
+                            )
+                        }
+                        constructorLeaderInfo?.let { (standing, constructor) ->
+                            ConstructorLeaderCard(
+                                modifier = Modifier.padding(top = 16.dp),
+                                constructorStanding = standing,
+                                car = constructor?.car ?: "",
+                                imageScale = constructorScale,
+                                offsetX = constructorOffsetX,
+                                offsetY = constructorOffsetY,
+                                rotation = constructorRotation,
+                                category = category,
+                            )
+                        }
 
-                    // Race Weekend Schedule
-                    RaceWeekendSchedule(
-                        modifier = Modifier.padding(top = 16.dp, start = 32.dp, end = 32.dp),
-                        category = category
-                    )
+                        // Race Weekend Schedule
+                        RaceWeekendSchedule(
+                            modifier = Modifier.padding(top = 16.dp, start = 32.dp, end = 32.dp),
+                            category = category
+                        )
+
+                        CircuitInfo(
+                            modifier = Modifier.padding(top = 16.dp, start = 32.dp, end = 32.dp, bottom = 24.dp),
+                            category = category,
+                            circuit = circuitInfo
+                        )
+                    }
                 }
+                // Add other tabs as needed
             }
         }
     }
@@ -112,7 +138,7 @@ fun CategoryDetailsScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun CategoryDetailsPreview() {
+fun CategoryDetailsScreenPreview() {
     WACTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             CategoryDetailsScreen(category = "f1")

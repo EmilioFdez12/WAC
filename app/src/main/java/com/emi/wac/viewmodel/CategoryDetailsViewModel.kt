@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.emi.wac.data.model.circuit.Circuit
 import com.emi.wac.data.model.contructor.Constructor
 import com.emi.wac.data.model.contructor.ConstructorStanding
 import com.emi.wac.data.model.drivers.Driver
@@ -26,6 +27,9 @@ class CategoryDetailsViewModel(application: Application) : AndroidViewModel(appl
     private val _constructorLeaderInfo =
         MutableStateFlow<Pair<ConstructorStanding, Constructor?>?>(null)
     val constructorLeaderInfo = _constructorLeaderInfo.asStateFlow()
+
+    private val _circuitInfo = MutableStateFlow<Circuit?>(null)
+    val circuitInfo = _circuitInfo.asStateFlow()
 
     fun loadLeaderInfo(category: String) {
         viewModelScope.launch {
@@ -81,6 +85,30 @@ class CategoryDetailsViewModel(application: Application) : AndroidViewModel(appl
             } catch (e: Exception) {
                 Log.e("CategoryDetailsViewModel", "Error loading constructor leader", e)
                 _constructorLeaderInfo.value = null
+            }
+        }
+    }
+
+    fun loadNextCircuitInfo(category: String) {
+        viewModelScope.launch {
+            try {
+                // Get the next race
+                val nextRace = racingRepository.getNextGrandPrixObject(category)
+
+                if (nextRace != null) {
+                    // Get all circuits
+                    val circuits = racingRepository.getCircuits(category)
+
+                    // Find the circuit for the next race
+                    val nextCircuit = circuits?.circuits?.find {
+                        it.gp == nextRace.gp
+                    }
+
+                    _circuitInfo.value = nextCircuit
+                }
+            } catch (e: Exception) {
+                Log.e("CategoryDetailsViewModel", "Error loading circuit info", e)
+                _circuitInfo.value = null
             }
         }
     }

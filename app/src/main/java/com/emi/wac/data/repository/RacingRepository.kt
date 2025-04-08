@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.emi.wac.common.Constants
 import com.emi.wac.data.model.RaceInfo
+import com.emi.wac.data.model.circuit.Circuits
 import com.emi.wac.data.model.contructor.Constructors
 import com.emi.wac.data.model.drivers.Drivers
 import com.emi.wac.data.model.sessions.GrandPrix
@@ -122,6 +123,20 @@ class RacingRepository(private val context: Context) {
                 .use { it.readText() }
 
             moshi.adapter(Constructors::class.java).fromJson(jsonString)
+        } catch (e: Exception) {
+            Log.e(tag, "Error loading drivers", e)
+            null
+        }
+    }
+
+    fun getCircuits(category: String): Circuits? {
+        return try {
+            val jsonString = context.assets
+                .open("$category/circuits.json")
+                .bufferedReader()
+                .use { it.readText() }
+
+            moshi.adapter(Circuits::class.java).fromJson(jsonString)
         } catch (e: Exception) {
             Log.e(tag, "Error loading drivers", e)
             null

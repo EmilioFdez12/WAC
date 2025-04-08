@@ -1,5 +1,7 @@
 package com.emi.wac.data.model.circuit
 
+import com.squareup.moshi.Json
+
 /**
  * Class representing a Formula 1 circuit.
  * 

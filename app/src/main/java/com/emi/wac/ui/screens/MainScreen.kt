@@ -36,7 +36,10 @@ fun MainScreen() {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             containerColor = Color.Transparent,
-            bottomBar = { BottomBar() }
+            bottomBar = {
+                // Always show the bottom bar without animation
+                BottomBar()
+            }
         ) { innerPadding ->
             NavHost(
                 navController = navController,
