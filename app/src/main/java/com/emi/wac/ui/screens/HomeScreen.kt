@@ -2,8 +2,14 @@ package com.emi.wac.ui.screens
 
 import android.app.Application
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -24,15 +30,12 @@ import com.emi.wac.ui.components.home.RaceCard
 import com.emi.wac.ui.theme.PrimaryOrange
 import com.emi.wac.ui.theme.WACTheme
 import com.emi.wac.viewmodel.HomeViewModel
-import com.emi.wac.viewmodel.HomeViewModelFactory
 
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = viewModel(
-        factory = HomeViewModelFactory(LocalContext.current.applicationContext as Application)
-    ),
+    viewModel: HomeViewModel = viewModel(),
     navController: NavHostController
 ) {
     val nextF1Race by viewModel.nextF1Race.collectAsState()

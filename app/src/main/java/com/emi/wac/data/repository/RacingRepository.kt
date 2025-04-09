@@ -2,19 +2,16 @@ package com.emi.wac.data.repository
 
 import android.content.Context
 import android.util.Log
-import com.emi.wac.common.Constants
+import com.emi.wac.common.Constants.LOADING_RACE_INFO
 import com.emi.wac.data.model.RaceInfo
 import com.emi.wac.data.model.circuit.Circuits
 import com.emi.wac.data.model.contructor.Constructors
 import com.emi.wac.data.model.drivers.Drivers
 import com.emi.wac.data.model.sessions.GrandPrix
 import com.emi.wac.data.model.sessions.Schedule
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import java.text.SimpleDateFormat
+import com.emi.wac.data.utils.DateUtils
+import com.emi.wac.data.utils.JsonParser
 import java.util.Calendar
-import java.util.Date
-import java.util.Locale
 
 /**
  * Repository class responsible for fetching and processing racing-related data.
@@ -23,10 +20,13 @@ import java.util.Locale
  */
 class RacingRepository(private val context: Context) {
     private val tag = "RacingRepository"
-    private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+    private val jsonParser = JsonParser(context)
 
-    // Date format used for parsing race dates from JSON
-    private val dateFormat = SimpleDateFormat("dd MMM yyyy HH:mm", Locale.ENGLISH)
+    // Class objects used for parsing JSON
+    private val schedule = Schedule::class.java
+    private val circuits = Circuits::class.java
+    private val drivers = Drivers::class.java
+    private val constructors = Constructors::class.java
 
     /**
      * Retrieves the racing schedule for a specific category.
@@ -35,18 +35,55 @@ class RacingRepository(private val context: Context) {
      * @return Schedule object containing all races, null if fails
      */
     fun getSchedule(category: String): Schedule? {
-        return try {
-            // Read schedule JSON file from assets
-            val jsonString = context.assets
-                .open("$category/schedule.json")
-                .bufferedReader()
-                .use { it.readText() }
+        return jsonParser.parseJson("$category/schedule.json", schedule)
+            ?: run {
+                Log.e(tag, "Error loading schedule")
+                null
+            }
+    }
 
-            // Parse JSON into Schedule object using Moshi
-            moshi.adapter(Schedule::class.java).fromJson(jsonString)
-        } catch (e: Exception) {
-            Log.e(tag, "Error loading schedule", e)
-            null
+    fun getCircuits(category: String): Circuits? {
+        return jsonParser.parseJson("$category/circuits.json", circuits)
+            ?: run {
+                Log.e(tag, "Error loading circuits")
+                null
+            }
+    }
+
+    fun getDrivers(category: String): Drivers? {
+        return jsonParser.parseJson("$category/drivers.json", drivers)
+            ?: run {
+                Log.e(tag, "Error loading drivers")
+                null
+            }
+    }
+
+    fun getConstructors(category: String): Constructors? {
+        return jsonParser.parseJson("$category/drivers.json", constructors)
+            ?: run {
+                Log.e(tag, "Error loading drivers")
+                null
+            }
+    }
+
+    /**
+     * Gets the next upcoming Grand Prix for a category.
+     *
+     * @param category The racing category to check
+     * @return The next GrandPrix object or null if none found
+     */
+    fun getNextGrandPrixObject(category: String): GrandPrix? {
+        val categorySchedule = getSchedule(category) ?: return null
+        val currentDate = Calendar.getInstance()
+        val currentYear = DateUtils.getCurrentYear()
+
+        return categorySchedule.schedule.find { grandPrix ->
+            DateUtils.isDateAfter(
+                currentDate,
+                grandPrix.sessions.race.day,
+                grandPrix.sessions.race.time,
+                currentYear
+            )
         }
     }
 
@@ -58,129 +95,40 @@ class RacingRepository(private val context: Context) {
      * @return RaceInfo object containing details about the next race
      */
     fun getNextGrandPrix(category: String, leaderName: String = ""): RaceInfo {
-        // Get schedule or return default "no races" info if loading fails
         val currentDate = Calendar.getInstance()
-        val currentYear = currentDate.get(Calendar.YEAR)
+        val currentYear = DateUtils.getCurrentYear()
         val nextRace = getNextGrandPrixObject(category)
 
         return nextRace?.let { race ->
-            // Parse race date/time or return default if parsing fails
-            val raceDateTime =
-                dateFormat.parse("${race.sessions.race.day} $currentYear ${race.sessions.race.time}")
-                    ?: return Constants.LOADING_RACE_INFO
+            val raceDateTime = DateUtils.parseDate(
+                race.sessions.race.day,
+                race.sessions.race.time,
+                currentYear
+            ) ?: return LOADING_RACE_INFO
 
             RaceInfo(
                 gpName = race.gp,
                 flagPath = race.flag,
-                timeRemaining = calculateTimeRemaining(raceDateTime, currentDate),
+                timeRemaining = DateUtils.calculateTimeRemaining(raceDateTime, currentDate),
                 leaderImagePath = getDriverPortrait(category, leaderName),
                 leaderName = leaderName
             )
-        } ?: Constants.LOADING_RACE_INFO
+        } ?: LOADING_RACE_INFO
     }
-
 
     /**
-     * Gets the next upcoming Grand Prix for a category.
-     *
-     * @param category The racing category to check
-     * @return The next GrandPrix object or null if none found
+     * Retrieves the portrait of a driver for a specific category.
      */
-    fun getNextGrandPrixObject(category: String): GrandPrix? {
-        // Get schedule or return null if loading fails
-        val categorySchedule = getSchedule(category) ?: return null
-        val currentDate = Calendar.getInstance()
-        val currentYear = currentDate.get(Calendar.YEAR)
-
-        // Find the next race of the schedule
-        return categorySchedule.schedule.find { grandPrix ->
-            val raceDay =
-                "${grandPrix.sessions.race.day} $currentYear ${grandPrix.sessions.race.time}"
-            // Checks if race date is after current date
-            dateFormat.parse(raceDay)?.after(currentDate.time) == true
-        }
-    }
-
-    fun getDrivers(category: String): Drivers? {
-        return try {
-            val jsonString = context.assets
-                .open("$category/drivers.json")
-                .bufferedReader()
-                .use { it.readText() }
-    
-            moshi.adapter(Drivers::class.java).fromJson(jsonString)
-        } catch (e: Exception) {
-            Log.e(tag, "Error loading drivers", e)
-            null
-        }
-    }
-
-    fun getConstructors(category: String): Constructors? {
-        return try {
-            val jsonString = context.assets
-                .open("$category/constructors.json")
-                .bufferedReader()
-                .use { it.readText() }
-
-            moshi.adapter(Constructors::class.java).fromJson(jsonString)
-        } catch (e: Exception) {
-            Log.e(tag, "Error loading drivers", e)
-            null
-        }
-    }
-
-    fun getCircuits(category: String): Circuits? {
-        return try {
-            val jsonString = context.assets
-                .open("$category/circuits.json")
-                .bufferedReader()
-                .use { it.readText() }
-
-            moshi.adapter(Circuits::class.java).fromJson(jsonString)
-        } catch (e: Exception) {
-            Log.e(tag, "Error loading drivers", e)
-            null
-        }
-    }
-
-    // Retrieves the portrait image path for a specific driver.
     private fun getDriverPortrait(category: String, driverName: String): String {
-        if (driverName.isEmpty()) return ""
-
-        return try {
-            // Read drivers JSON file from assets
-            val jsonString = context.assets
-                .open("$category/drivers.json")
-                .bufferedReader()
-                .use { it.readText() }
-
-            // Find driver by name and return portrait path
-            moshi.adapter(Drivers::class.java)
-                .fromJson(jsonString)
-                ?.drivers
-                ?.find { it.name == driverName }
-                ?.portrait
-                ?: ""
+        try {
+            if (driverName.isEmpty()) return ""
+            val drivers = getDrivers(category)
+            // Find the driver in the list who matches the name
+            val driverPortrait = drivers?.drivers?.find { it.name == driverName }?.portrait ?: ""
+            return driverPortrait
         } catch (e: Exception) {
             Log.e(tag, "Error finding driver portrait", e)
-            ""
-        }
-    }
-
-    // Calculates the remaining time until a race starts.
-    private fun calculateTimeRemaining(raceDate: Date, currentDate: Calendar): String {
-        // Calculate time difference in milliseconds
-        val diff = raceDate.time - currentDate.timeInMillis
-
-        val days = diff / Constants.MILLISECONDS_PER_DAY
-        val hours = (diff % Constants.MILLISECONDS_PER_DAY) / Constants.MILLISECONDS_PER_HOUR
-        val minutes = (diff % Constants.MILLISECONDS_PER_HOUR) / Constants.MILLISECONDS_PER_MINUTE
-        val seconds = (diff % Constants.MILLISECONDS_PER_MINUTE) / 1000
-
-        return if (days > 0) {
-            "${days}d ${hours}h ${minutes}m"
-        } else {
-            "${hours}h ${minutes}m ${seconds}s"
+            return ""
         }
     }
 }
