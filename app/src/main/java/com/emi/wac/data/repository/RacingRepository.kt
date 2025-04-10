@@ -59,7 +59,7 @@ class RacingRepository(private val context: Context) {
     }
 
     fun getConstructors(category: String): Constructors? {
-        return jsonParser.parseJson("$category/drivers.json", constructors)
+        return jsonParser.parseJson("$category/constructors.json", constructors)
             ?: run {
                 Log.e(tag, "Error loading drivers")
                 null

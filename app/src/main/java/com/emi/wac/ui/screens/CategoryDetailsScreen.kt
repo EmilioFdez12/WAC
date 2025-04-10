@@ -11,7 +11,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -22,11 +21,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.rememberAsyncImagePainter
-import com.emi.wac.ui.components.category_details.CategoryTabs
-import com.emi.wac.ui.components.category_details.CircuitInfo
-import com.emi.wac.ui.components.category_details.ConstructorLeaderCard
-import com.emi.wac.ui.components.category_details.LeaderDriverCard
-import com.emi.wac.ui.components.category_details.schedule.RaceWeekendSchedule
+import com.emi.wac.ui.components.category_details.overview.CategoryTabs
+import com.emi.wac.ui.components.category_details.OverViewComponent
 import com.emi.wac.ui.theme.WACTheme
 import com.emi.wac.viewmodel.CategoryDetailsViewModel
 
@@ -39,28 +35,11 @@ fun CategoryDetailsScreen(
     val backgroundPainter =
         rememberAsyncImagePainter(model = "file:///android_asset/background.webp")
     var selectedTab by remember { mutableIntStateOf(0) }
-    val leaderInfo by viewModel.leaderInfo.collectAsState()
-    val constructorLeaderInfo by viewModel.constructorLeaderInfo.collectAsState()
-    val circuitInfo by viewModel.circuitInfo.collectAsState()
-
-    // Create a scroll state to track scrolling
     val scrollState = rememberScrollState()
 
-    // Specific configuration for each category
-    val offsetX = if (category == "f1") 60.dp else 60.dp
-    val offsetY = if (category == "f1") 0.dp else (24).dp
-    val scale = if (category == "f1") 1f else 2f
-
-    val constructorOffsetX = if (category == "f1") (-20).dp else 20.dp
-    val constructorOffsetY = if (category == "f1") (20).dp else 20.dp
-    val constructorScale = if (category == "f1") 1f else 1.2f
-    val constructorRotation = if (category == "f1") 0f else 25f
-
-    // Load leader info when screen is created
+    // Load all category details when the screen is created or category changes
     LaunchedEffect(category) {
-        viewModel.loadLeaderInfo(category)
-        viewModel.loadConstructorLeaderInfo(category)
-        viewModel.loadNextCircuitInfo(category)
+        viewModel.loadCategoryDetails(category)
     }
 
     Box(modifier = modifier.fillMaxSize()) {
@@ -70,67 +49,26 @@ fun CategoryDetailsScreen(
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
-
-        // Make the entire content scrollable, including tabs
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(scrollState)
         ) {
-            // Category tabs now inside the scrollable column
             CategoryTabs(
                 selectedTab = selectedTab,
                 onTabSelected = { selectedTab = it },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 32.dp, end = 32.dp, top = 24.dp),
-                category = category,
+                category = category
             )
 
             when (selectedTab) {
-                0 -> {
-                    // Content for Overview tab
-                    Column(
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        leaderInfo?.let { (standing, driver) ->
-                            LeaderDriverCard(
-                                modifier = Modifier.padding(top = 16.dp),
-                                driverStanding = standing,
-                                driverLogo = driver?.portrait ?: "",
-                                imageScale = scale,
-                                offsetX = offsetX,
-                                offsetY = offsetY,
-                                category = category,
-                            )
-                        }
-                        constructorLeaderInfo?.let { (standing, constructor) ->
-                            ConstructorLeaderCard(
-                                modifier = Modifier.padding(top = 16.dp),
-                                constructorStanding = standing,
-                                car = constructor?.car ?: "",
-                                imageScale = constructorScale,
-                                offsetX = constructorOffsetX,
-                                offsetY = constructorOffsetY,
-                                rotation = constructorRotation,
-                                category = category,
-                            )
-                        }
-
-                        // Race Weekend Schedule
-                        RaceWeekendSchedule(
-                            modifier = Modifier.padding(top = 16.dp, start = 32.dp, end = 32.dp),
-                            category = category
-                        )
-
-                        CircuitInfo(
-                            modifier = Modifier.padding(top = 16.dp, start = 32.dp, end = 32.dp, bottom = 24.dp),
-                            category = category,
-                            circuit = circuitInfo
-                        )
-                    }
-                }
-                // Add other tabs as needed
+                0 -> OverViewComponent(
+                    category = category,
+                    viewModel = viewModel,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         }
     }

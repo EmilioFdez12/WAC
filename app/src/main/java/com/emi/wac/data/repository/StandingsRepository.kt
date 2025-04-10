@@ -6,84 +6,82 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 
 /**
- * Repository for accessing and managing racing standings data. Uses Firebase Firestore as the data
- * source.
+ * Repository for accessing and managing racing standings data using Firebase Firestore as the data source.
  *
- * @property db FirebaseFirestore instance for database operations
+ * @param db FirebaseFirestore instance for database operations.
  */
 class StandingsRepository(private val db: FirebaseFirestore) {
 
     /**
-     * Retrieves the current championship leader for a specific racing category.
+     * Fetches raw data from the "latest" document in a Firestore collection.
      *
-     * @param category The racing category (e.g., "f1", "motogp")
-     * @return Result containing DriverStanding if successful, or failure with exception
+     * @param collectionName Name of the collection (e.g., "f1_standings").
+     * @return The first map of data if available, null if it fails or no data is found.
      */
-    suspend fun getLeaderDriver(category: String): Result<DriverStanding> {
-        return try {
-            // Fetch latest standings document from Firestore
-            val document = db.collection("${category}_standings").document("latest").get().await()
-
-            // Verify if data is a list of maps <String, String>
-            val data =
-                when (val rawData = document.get("data")) {
-                    is List<*> -> rawData.filterIsInstance<Map<String, String>>()
-                    else -> null
-                }
-
-            // Extract first driver's data
-            val firstDriver = data?.firstOrNull()
-
-            if (firstDriver != null) {
-                // Extract driver name from "driver" or "name" field
-                val driverName = (firstDriver["driver"] ?: firstDriver["name"] ?: "").trim()
-                // Create DriverStanding object and return success result
-                Result.success(
-                    DriverStanding(
-                        driver = driverName,
-                        points = firstDriver["points"] ?: "",
-                        position = firstDriver["position"] ?: "",
-                        team = firstDriver["team"] ?: ""
-                    )
-                )
-            } else {
-                Result.failure(Exception("No driver data found for $category"))
+    private suspend fun getFirstStandingFromFirestore(collectionName: String): Map<String, String>? {
+        try {
+            val document = db.collection(collectionName).document("latest").get().await()
+            // Get the "data" field from the document
+            val rawData = document.get("data")
+            // Check if the data is a list and filter it to ensure it's a list of maps
+            if (rawData is List<*>) {
+                val data = rawData.filterIsInstance<Map<String, String>>()
+                return data.firstOrNull()
             }
-        } catch (e: Exception) {
-            Result.failure(e)
+            return null
+        } catch (_: Exception) {
+            return null
         }
     }
 
     /**
-     * Retrieves the current championship leader for a specific racing category.
+     * Retrieves the current championship leader for a specific racing category (drivers).
      *
-     * @param category The racing category (e.g., "f1", "motogp")
-     * @return Result containing DriverStanding if successful, or failure with exception
+     * @param category The racing category (e.g., "f1", "motogp").
+     * @return Result containing DriverStanding if successful, or failure with an exception.
+     */
+    suspend fun getLeaderDriver(category: String): Result<DriverStanding> {
+        // Fetch the first driver's data from Firestore
+        val firstDriver = getFirstStandingFromFirestore("${category}_standings")
+        // Check if data was retrieved successfully
+        return if (firstDriver != null) {
+            // Extract the driver name, trying "driver" first, then "name" as fallback
+            val driverName = firstDriver["driver"] ?: firstDriver["name"] ?: ""
+            // Create a DriverStanding object
+            Result.success(
+                DriverStanding(
+                    driver = driverName.trim(),
+                    points = firstDriver["points"] ?: "",
+                    position = firstDriver["position"] ?: "",
+                    team = firstDriver["team"] ?: ""
+                )
+            )
+        } else {
+            Result.failure(Exception("No driver data found for $category"))
+        }
+    }
+
+    /**
+     * Retrieves the current championship leader for a specific racing category (constructors).
+     *
+     * @param category The racing category (e.g., "f1", "motogp").
+     * @return Result containing ConstructorStanding if successful, or failure with an exception.
      */
     suspend fun getLeaderConstructor(category: String): Result<ConstructorStanding> {
-        return try {
-            val document = db.collection("${category}_constructors_standings").document("latest").get().await()
-
-            val data = when (val rawData = document.get("data")) {
-                is List<*> -> rawData.filterIsInstance<Map<String, String>>()
-                else -> null
-            }
-
-            val firstTeam = data?.firstOrNull()
-
-            if (firstTeam != null) {
-                Result.success(
-                    ConstructorStanding(
-                        team = firstTeam["team"] ?: "",
-                        points = firstTeam["points"] ?: "",
-                        position = firstTeam["position"] ?: ""
-                    )
+        // Fetch the first constructors data from Firestore
+        val firstTeam = getFirstStandingFromFirestore("${category}_constructors_standings")
+        // Check if data was retrieved successfully
+        return if (firstTeam != null) {
+            // Create a ConstructorStanding object
+            Result.success(
+                ConstructorStanding(
+                    team = firstTeam["team"] ?: "",
+                    points = firstTeam["points"] ?: "",
+                    position = firstTeam["position"] ?: ""
                 )
-            } else {
-                Result.failure(Exception("No constructor data found for $category"))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
+            )
+        } else {
+            Result.failure(Exception("No constructor data found for $category"))
         }
     }
 }

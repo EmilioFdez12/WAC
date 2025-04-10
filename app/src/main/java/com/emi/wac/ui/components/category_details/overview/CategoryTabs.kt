@@ -1,4 +1,4 @@
-package com.emi.wac.ui.components.category_details
+package com.emi.wac.ui.components.category_details.overview
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -14,7 +14,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.emi.wac.ui.theme.AlataTypography
 import com.emi.wac.ui.theme.PrimaryBlack
-import com.emi.wac.ui.theme.PrimaryRed
 import com.emi.wac.ui.theme.getPrimaryColorForCategory
 
 @Composable

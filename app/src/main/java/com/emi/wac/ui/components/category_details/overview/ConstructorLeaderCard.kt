@@ -1,4 +1,4 @@
-package com.emi.wac.ui.components.category_details
+package com.emi.wac.ui.components.category_details.overview
 
 import android.util.Log
 import androidx.compose.foundation.background
