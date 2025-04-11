@@ -25,6 +25,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil3.compose.rememberAsyncImagePainter
+import com.emi.wac.common.Constants.BCKG_IMG
 import com.emi.wac.common.Constants.CAT_DETAILS
 import com.emi.wac.ui.components.home.RaceCard
 import com.emi.wac.ui.theme.PrimaryOrange
@@ -41,7 +42,7 @@ fun HomeScreen(
     val nextF1Race by viewModel.nextF1Race.collectAsState()
     val nextMotoGPRace by viewModel.nextMotoGPRace.collectAsState()
     val backgroundPainter: Painter =
-        rememberAsyncImagePainter(model = "file:///android_asset/background.webp")
+        rememberAsyncImagePainter(model = BCKG_IMG)
 
     Box(modifier = modifier.fillMaxSize()) {
         Image(

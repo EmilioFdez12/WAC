@@ -42,7 +42,6 @@ fun SessionItem(
     val dayNumber = parts[0]
     val monthName = parts[1].uppercase()
 
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -51,7 +50,6 @@ fun SessionItem(
             .background(backgroundColor, RoundedCornerShape(4.dp)),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Day column - now horizontal layout
         Box(
             modifier = Modifier
                 .width(100.dp)
@@ -80,7 +78,6 @@ fun SessionItem(
                 )
             }
         }
-
         // Session name
         Text(
             text = name,

@@ -1,13 +1,5 @@
 package com.emi.wac.data.model.circuit
 
-import android.content.Context
-import android.util.Log
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-
-private const val tag = "Circuit"
-private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
-
 /**
  * Class representing a Formula 1 circuit.
  * 
@@ -31,6 +23,10 @@ data class Circuit(
     val length: Double
 )
 
+
+/**
+ * Class that represents a list of circuits.
+ */
 data class Circuits(
     val circuits: List<Circuit>
 )

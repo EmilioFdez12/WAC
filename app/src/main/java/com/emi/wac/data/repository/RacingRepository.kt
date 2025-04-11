@@ -42,6 +42,12 @@ class RacingRepository(private val context: Context) {
             }
     }
 
+    /**
+     * Retrieves the racing circuits for a specific category.
+     *
+     * @param category The racing category (e.g., "f1", "motogp")
+     * @return List of Circuits, null if fails
+     */
     fun getCircuits(category: String): Circuits? {
         return jsonParser.parseJson("$category/circuits.json", circuits)
             ?: run {
@@ -50,6 +56,12 @@ class RacingRepository(private val context: Context) {
             }
     }
 
+    /**
+     * Retrieves the drivers for a specific category.
+     *
+     * @param category The racing category (e.g., "f1", "motogp")
+     * @return List of drivers containing all races, null if fails
+     */
     fun getDrivers(category: String): Drivers? {
         return jsonParser.parseJson("$category/drivers.json", drivers)
             ?: run {
@@ -58,6 +70,12 @@ class RacingRepository(private val context: Context) {
             }
     }
 
+    /**
+     * Retrieves the constructors for a specific category.
+     *
+     * @param category The racing category (e.g., "f1", "motogp")
+     * @return List of constructors containing all races, null if fails
+     */
     fun getConstructors(category: String): Constructors? {
         return jsonParser.parseJson("$category/constructors.json", constructors)
             ?: run {
@@ -70,7 +88,7 @@ class RacingRepository(private val context: Context) {
      * Gets the next upcoming Grand Prix for a category.
      *
      * @param category The racing category to check
-     * @return The next GrandPrix object or null if none found
+     * @return The next GrandPrix object, null if none found
      */
     fun getNextGrandPrixObject(category: String): GrandPrix? {
         val categorySchedule = getSchedule(category) ?: return null

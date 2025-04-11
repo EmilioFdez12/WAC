@@ -14,13 +14,9 @@ object Constants {
         leaderName = "Fernando Alonso"
     )
 
-        // Time constants in milliseconds
-        const val MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000L
-        const val MILLISECONDS_PER_HOUR = 60 * 60 * 1000L
-        const val MILLISECONDS_PER_MINUTE = 60 * 1000L
+    const val HOME = "home"
+    const val CAT_DETAILS = "category_details"
 
-        const val HOME = "home"
-        const val CAT_DETAILS = "category_details"
-
-        const val CATEGORY_MOTOGP = "motogp"
+    const val CATEGORY_MOTOGP = "motogp"
+    const val BCKG_IMG = "file:///android_asset/background.webp"
 }

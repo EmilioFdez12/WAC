@@ -19,6 +19,9 @@ data class Driver(
     val portrait: String
 )
 
+/**
+ * Class that represents a list of drivers from a category
+ */
 data class Drivers(
     val drivers: List<Driver>
 )

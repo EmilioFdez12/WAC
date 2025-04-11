@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import com.emi.wac.ui.theme.PrimaryBlack
 import com.emi.wac.ui.theme.PrimaryRed
 
-
 private data class NavigationItem(
     val title: String,
     val icon: ImageVector
@@ -39,12 +38,12 @@ fun BottomBar() {
 
     NavigationBar(
         containerColor = Color.Transparent,
-        modifier = Modifier.padding(top = 8.dp)
+        modifier = Modifier.padding(bottom = 0.dp),
     ) {
         items.forEachIndexed { index, item ->
             NavigationBarItem(
                 icon = { Icon(item.icon, contentDescription = item.title) },
-                label = { Text(item.title, modifier = Modifier.padding(top = 2.dp)) },
+                label = { Text(item.title) },
                 selected = selectedItem == index,
                 onClick = { selectedItem = index },
                 colors = NavigationBarItemDefaults.colors(

@@ -5,8 +5,12 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
+/**
+ * Object containing utility functions for date-related operations.
+ */
 object DateUtils {
     private val dateFormat = SimpleDateFormat("dd MMM yyyy HH:mm", Locale.ENGLISH)
+
 
     fun parseDate(day: String, time: String, year: Int): Date? {
         val formattedTime = formatTime(time)

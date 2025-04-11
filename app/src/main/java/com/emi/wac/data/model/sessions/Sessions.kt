@@ -6,7 +6,7 @@ package com.emi.wac.data.model.sessions
  * @property practice1 The first practice session
  * @property practice2 The second practice session (may not exist in sprint weekends)
  * @property practice3 The third practice session (may not exist in sprint weekends)
- * @property sprint_qualifying The sprint qualifying session (only exists in sprint weekends)
+ * @property sprintQualifying The sprint qualifying session (only exists in sprint weekends)
  * @property sprint The sprint race (only exists in sprint weekends)
  * @property qualifying The qualifying session
  * @property race The main race
@@ -15,7 +15,7 @@ data class Sessions(
     val practice1: Session,
     val practice2: Session? = null,
     val practice3: Session? = null,
-    val sprint_qualifying: Session? = null,
+    val sprintQualifying: Session? = null,
     val sprint: Session? = null,
     val qualifying: Session? = null,
     val race: Session

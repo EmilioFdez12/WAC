@@ -60,7 +60,7 @@ fun RaceCard(
             .fillMaxWidth()
             .height(200.dp)
             .padding(horizontal = 16.dp)
-            .clickable{ onCardClick() },
+            .clickable { onCardClick() },
         colors = CardDefaults.cardColors(
             containerColor = Color.Transparent
         ),
@@ -101,11 +101,11 @@ fun RaceCard(
                 contentDescription = "Arrow Forward",
                 tint = PrimaryWhite,
                 modifier = Modifier
-                   .align(Alignment.CenterEnd)
-                   .padding(end = 16.dp)
-                   .size(24.dp),
+                    .align(Alignment.CenterEnd)
+                    .padding(end = 16.dp)
+                    .size(24.dp),
             )
-            
+
             Column(
                 modifier = Modifier
                     .align(Alignment.TopStart)

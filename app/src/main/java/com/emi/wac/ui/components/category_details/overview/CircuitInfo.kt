@@ -69,7 +69,7 @@ fun CircuitInfo(
                     .padding(horizontal = 12.dp, vertical = 6.dp)
             )
 
-            // Large circuit image - removed padding and extended to full width
+            // Large circuit image
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data("file:///android_asset${circuit.image}")
@@ -101,7 +101,6 @@ fun CircuitInfo(
                         .fillMaxWidth()
                         .padding(16.dp)
                 ) {
-                    // Circuit details in a single column
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween

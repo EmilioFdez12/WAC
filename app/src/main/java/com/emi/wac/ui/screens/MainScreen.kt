@@ -15,6 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import coil3.compose.rememberAsyncImagePainter
+import com.emi.wac.common.Constants.BCKG_IMG
 import com.emi.wac.common.Constants.CAT_DETAILS
 import com.emi.wac.common.Constants.HOME
 import com.emi.wac.ui.components.BottomBar
@@ -23,7 +24,7 @@ import com.emi.wac.ui.components.BottomBar
 fun MainScreen() {
     val navController = rememberNavController()
     val backgroundPainter =
-        rememberAsyncImagePainter(model = "file:///android_asset/background.webp")
+        rememberAsyncImagePainter(model = BCKG_IMG)
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -37,7 +38,6 @@ fun MainScreen() {
             modifier = Modifier.fillMaxSize(),
             containerColor = Color.Transparent,
             bottomBar = {
-                // Always show the bottom bar without animation
                 BottomBar()
             }
         ) { innerPadding ->

@@ -37,7 +37,6 @@ fun RaceWeekendSchedule(
     val hardColor = getHardColorForCategory(category)
     
     LaunchedEffect(category) {
-        // Use the new method to get the next race directly
         nextRace = racingRepository.getNextGrandPrixObject(category)
     }
     
@@ -100,7 +99,7 @@ fun RaceWeekendSchedule(
                 }
                 
                 // Sprint Qualifying session (if present)
-                race.sessions.sprint_qualifying?.let {
+                race.sessions.sprintQualifying?.let {
                     SessionItem(
                         day = it.day,
                         name = "SPRINT QUALIFYING",

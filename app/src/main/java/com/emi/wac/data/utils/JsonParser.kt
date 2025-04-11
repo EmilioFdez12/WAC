@@ -6,6 +6,9 @@ import android.content.Context
 import android.util.Log
 import java.io.IOException
 
+/**
+ * Class for parsing JSON files into Kotlin objects.
+ */
 class JsonParser(private val context: Context) {
     private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 

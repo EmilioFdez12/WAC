@@ -1,8 +1,16 @@
 package com.emi.wac.ui.components.category_details.overview
 
-import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -25,8 +33,6 @@ import coil3.request.crossfade
 import com.emi.wac.data.model.contructor.ConstructorStanding
 import com.emi.wac.ui.theme.AlataTypography
 import com.emi.wac.ui.theme.getPrimaryColorForCategory
-
-private const val TAG = "ConstructorLeaderCard"
 
 @Composable
 fun ConstructorLeaderCard(
@@ -109,10 +115,7 @@ fun ConstructorLeaderCard(
                         }
                     }
                 }
-                
-                // Log para depuración de la ruta de la imagen
-                Log.d(TAG, "Loading car image from: file:///android_asset$car")
-                
+
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data("file:///android_asset$car")

@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.rememberAsyncImagePainter
+import com.emi.wac.common.Constants.BCKG_IMG
 import com.emi.wac.ui.components.category_details.overview.CategoryTabs
 import com.emi.wac.ui.components.category_details.OverViewComponent
 import com.emi.wac.ui.theme.WACTheme
@@ -33,7 +34,7 @@ fun CategoryDetailsScreen(
     viewModel: CategoryDetailsViewModel = viewModel()
 ) {
     val backgroundPainter =
-        rememberAsyncImagePainter(model = "file:///android_asset/background.webp")
+        rememberAsyncImagePainter(model = BCKG_IMG)
     var selectedTab by remember { mutableIntStateOf(0) }
     val scrollState = rememberScrollState()
 

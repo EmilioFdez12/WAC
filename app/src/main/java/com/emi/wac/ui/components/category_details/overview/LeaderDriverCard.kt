@@ -31,14 +31,13 @@ fun LeaderDriverCard(
     driverStanding: DriverStanding,
     driverLogo: String,
     offsetX: Dp = 60.dp,
-    offsetY: Dp = 0.dp ,
+    offsetY: Dp = 0.dp,
     imageScale: Float = 1f,
-    category:String,
+    category: String,
 ) {
     val primaryColor = getPrimaryColorForCategory(category)
 
     Box(modifier = modifier.fillMaxWidth()) {
-        // Card principal
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -65,21 +64,17 @@ fun LeaderDriverCard(
                     )
                     .clip(RoundedCornerShape(8.dp))
             ) {
-                // Contenido de la tarjeta
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(16.dp),
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    // Nombre del piloto arriba a la izquierda
                     Text(
                         text = driverStanding.driver,
                         style = AlataTypography.titleLarge,
                         color = Color.White
                     )
-                    
-                    // Posición y puntos abajo a la izquierda
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -109,8 +104,6 @@ fun LeaderDriverCard(
                         }
                     }
                 }
-                
-                // Imagen del piloto dentro de la card (con recorte)
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data("file:///android_asset$driverLogo")

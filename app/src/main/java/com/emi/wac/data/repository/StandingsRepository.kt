@@ -6,33 +6,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 
 /**
- * Repository for accessing and managing racing standings data using Firebase Firestore as the data source.
+ * Repository for accessing and managing racing standings data using Firebase Firestore.
  *
  * @param db FirebaseFirestore instance for database operations.
  */
 class StandingsRepository(private val db: FirebaseFirestore) {
-
-    /**
-     * Fetches raw data from the "latest" document in a Firestore collection.
-     *
-     * @param collectionName Name of the collection (e.g., "f1_standings").
-     * @return The first map of data if available, null if it fails or no data is found.
-     */
-    private suspend fun getFirstStandingFromFirestore(collectionName: String): Map<String, String>? {
-        try {
-            val document = db.collection(collectionName).document("latest").get().await()
-            // Get the "data" field from the document
-            val rawData = document.get("data")
-            // Check if the data is a list and filter it to ensure it's a list of maps
-            if (rawData is List<*>) {
-                val data = rawData.filterIsInstance<Map<String, String>>()
-                return data.firstOrNull()
-            }
-            return null
-        } catch (_: Exception) {
-            return null
-        }
-    }
 
     /**
      * Retrieves the current championship leader for a specific racing category (drivers).
@@ -82,6 +60,28 @@ class StandingsRepository(private val db: FirebaseFirestore) {
             )
         } else {
             Result.failure(Exception("No constructor data found for $category"))
+        }
+    }
+
+    /**
+     * Fetches raw data from the "latest" document in a Firestore collection.
+     *
+     * @param collectionName Name of the collection (e.g., "f1_standings").
+     * @return The first map of data if available, null if it fails or no data is found.
+     */
+    private suspend fun getFirstStandingFromFirestore(collectionName: String): Map<String, String>? {
+        try {
+            val document = db.collection(collectionName).document("latest").get().await()
+            // Get the "data" field from the document
+            val rawData = document.get("data")
+            // Check if the data is a list and filter it to ensure it's a list of maps
+            if (rawData is List<*>) {
+                val data = rawData.filterIsInstance<Map<String, String>>()
+                return data.firstOrNull()
+            }
+            return null
+        } catch (_: Exception) {
+            return null
         }
     }
 }
