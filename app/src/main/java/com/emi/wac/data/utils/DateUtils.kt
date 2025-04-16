@@ -31,9 +31,13 @@ object DateUtils {
         val seconds = (diff % (60 * 1000)) / 1000
 
         return if (days > 0) {
-            "${days}d ${hours}h ${minutes}m"
+            "${days.toString().padStart(2, '0')}d ${
+                hours.toString().padStart(2, '0')
+            }h ${minutes.toString().padStart(2, '0')}m"
         } else {
-            "${hours}h ${minutes}m ${seconds}s"
+            "${hours.toString().padStart(2, '0')}h ${
+                minutes.toString().padStart(2, '0')
+            }m ${seconds.toString().padStart(2, '0')}s"
         }
     }
 
@@ -44,5 +48,11 @@ object DateUtils {
         val hours = parts[0].padStart(2, '0')
         val minutes = parts[1]
         return "$hours:$minutes"
+    }
+
+
+    fun parseSessionDate(day: String, time: String): Date {
+        val year = getCurrentYear()
+        return parseDate(day, time, year) ?: Date(0)
     }
 }

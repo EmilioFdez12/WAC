@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.emi.wac.data.model.sessions.GrandPrix
 import com.emi.wac.data.repository.RacingRepository
+import com.emi.wac.data.utils.DateUtils
 import com.emi.wac.ui.theme.AlataTypography
 import com.emi.wac.ui.theme.getHardColorForCategory
 import com.emi.wac.ui.theme.getSoftColorForCategory
@@ -35,11 +36,11 @@ fun RaceWeekendSchedule(
     var nextRace by remember { mutableStateOf<GrandPrix?>(null) }
     val softColor = getSoftColorForCategory(category)
     val hardColor = getHardColorForCategory(category)
-    
+
     LaunchedEffect(category) {
         nextRace = racingRepository.getNextGrandPrixObject(category)
     }
-    
+
     nextRace?.let { race ->
         Card(
             modifier = modifier.fillMaxWidth(),
@@ -61,85 +62,70 @@ fun RaceWeekendSchedule(
                     text = "Race Weekend",
                     style = AlataTypography.titleLarge,
                     color = hardColor,
-                    modifier = Modifier.padding(bottom = 8.dp)
+                    modifier = Modifier
+                        .padding(bottom = 8.dp)
                         .background(softColor, shape = RoundedCornerShape(4.dp))
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                 )
-                
-                // Display sessions conditionally based on what's available
-                // Race session (always present)
-                SessionItem(
-                    day = race.sessions.race.day,
-                    name = "RACE",
-                    time = race.sessions.race.time,
-                    isPrimary = true,
-                    category = category,
-                )
-                
-                // Qualifying session (if present)
+
+                // List of all sessions with their information
+                val sessions = mutableListOf<SessionInfo>()
+
+                race.sessions.race.let {
+                    sessions.add(SessionInfo("RACE", it.day, it.time, true))
+                }
+
                 race.sessions.qualifying?.let {
-                    SessionItem(
-                        day = it.day,
-                        name = "QUALIFYING",
-                        time = it.time,
-                        isPrimary = false,
-                        category = category,
-                    )
+                    sessions.add(SessionInfo("QUALIFYING", it.day, it.time, false))
                 }
-                
-                // Sprint session (if present)
+
                 race.sessions.sprint?.let {
-                    SessionItem(
-                        day = it.day,
-                        name = "SPRINT",
-                        time = it.time,
-                        isPrimary = false,
-                        category = category,
-                    )
+                    sessions.add(SessionInfo("SPRINT", it.day, it.time, false))
                 }
-                
-                // Sprint Qualifying session (if present)
+
                 race.sessions.sprintQualifying?.let {
-                    SessionItem(
-                        day = it.day,
-                        name = "SPRINT QUALIFYING",
-                        time = it.time,
-                        isPrimary = false,
-                        category = category,
-                    )
+                    sessions.add(SessionInfo("SPRINT QUALIFYING", it.day, it.time, false))
                 }
-                
-                // Practice 3 session (if present)
+
                 race.sessions.practice3?.let {
-                    SessionItem(
-                        day = it.day,
-                        name = "PRACTICE 3",
-                        time = it.time,
-                        isPrimary = false,
-                        category = category,
-                    )
+                    sessions.add(SessionInfo("PRACTICE 3", it.day, it.time, false))
                 }
-                
-                // Practice 2 session (if present)
+
                 race.sessions.practice2?.let {
+                    sessions.add(SessionInfo("PRACTICE 2", it.day, it.time, false))
+                }
+
+                race.sessions.practice1.let {
+                    sessions.add(SessionInfo("PRACTICE 1", it.day, it.time, false))
+                }
+
+                // Order sessions by date and time
+                val sortedSessions = sessions.sortedWith(compareByDescending {
+                    DateUtils.parseSessionDate(
+                        it.day,
+                        it.time
+                    )
+                })
+
+                // Show ordered sessions
+                sortedSessions.forEach { session ->
                     SessionItem(
-                        day = it.day,
-                        name = "PRACTICE 2",
-                        time = it.time,
-                        isPrimary = false,
+                        day = session.day,
+                        name = session.name,
+                        time = session.time,
+                        isPrimary = session.isPrimary,
                         category = category,
                     )
                 }
-                
-                // Practice 1 session (always present)
-                SessionItem(
-                    day = race.sessions.practice1.day,
-                    name = "PRACTICE 1",
-                    time = race.sessions.practice1.time,
-                    isPrimary = false,
-                    category = category,
-                )
             }
         }
     }
 }
+
+// Private class to store session information
+private data class SessionInfo(
+    val name: String,
+    val day: String,
+    val time: String,
+    val isPrimary: Boolean
+)

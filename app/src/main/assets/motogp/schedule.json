@@ -100,11 +100,15 @@
                 },
                 "qualifying": {
                     "day": "12 Apr",
+                    "time": "15:00"
+                },
+                "sprint": {
+                    "day": "12 Apr",
                     "time": "19:00"
                 },
                 "race": {
                     "day": "13 Apr",
-                    "time": "18:00"
+                    "time": "19:00"
                 }
             }
         },
@@ -115,19 +119,23 @@
             "sessions": {
                 "practice1": {
                     "day": "25 Apr",
-                    "time": "10:00"
+                    "time": "10:45"
                 },
                 "practice2": {
                     "day": "25 Apr",
-                    "time": "14:00"
+                    "time": "15:00"
                 },
                 "practice3": {
                     "day": "26 Apr",
-                    "time": "10:00"
+                    "time": "10:10"
                 },
                 "qualifying": {
                     "day": "26 Apr",
-                    "time": "14:00"
+                    "time": "10:50"
+                },
+                "sprint": {
+                    "day": "26 Apr",
+                    "time": "15:00"
                 },
                 "race": {
                     "day": "27 Apr",
@@ -142,19 +150,23 @@
             "sessions": {
                 "practice1": {
                     "day": "09 May",
-                    "time": "10:00"
+                    "time": "10:45"
                 },
                 "practice2": {
                     "day": "09 May",
-                    "time": "14:00"
+                    "time": "15:00"
                 },
                 "practice3": {
                     "day": "10 May",
-                    "time": "10:00"
+                    "time": "10:10"
                 },
                 "qualifying": {
                     "day": "10 May",
-                    "time": "14:00"
+                    "time": "10:50"
+                },
+                "sprint": {
+                    "day": "10 May",
+                    "time": "15:00"
                 },
                 "race": {
                     "day": "11 May",
@@ -169,19 +181,23 @@
             "sessions": {
                 "practice1": {
                     "day": "23 May",
-                    "time": "10:00"
+                    "time": "12:45"
                 },
                 "practice2": {
                     "day": "23 May",
-                    "time": "14:00"
+                    "time": "17:00"
                 },
                 "practice3": {
                     "day": "24 May",
-                    "time": "10:00"
+                    "time": "12:10"
                 },
                 "qualifying": {
                     "day": "24 May",
-                    "time": "14:00"
+                    "time": "12:50"
+                },
+                "sprint": {
+                    "day": "24 May",
+                    "time": "17:00"
                 },
                 "race": {
                     "day": "25 May",
@@ -196,19 +212,23 @@
             "sessions": {
                 "practice1": {
                     "day": "06 Jun",
-                    "time": "10:00"
+                    "time": "10:45"
                 },
                 "practice2": {
                     "day": "06 Jun",
-                    "time": "14:00"
+                    "time": "15:00"
                 },
                 "practice3": {
                     "day": "07 Jun",
-                    "time": "10:00"
+                    "time": "10:10"
                 },
                 "qualifying": {
                     "day": "07 Jun",
-                    "time": "14:00"
+                    "time": "10:50"
+                },
+                "sprint": {
+                    "day": "07 Jun",
+                    "time": "15:00"
                 },
                 "race": {
                     "day": "08 Jun",
@@ -223,19 +243,23 @@
             "sessions": {
                 "practice1": {
                     "day": "20 Jun",
-                    "time": "10:00"
+                    "time": "10:45"
                 },
                 "practice2": {
                     "day": "20 Jun",
-                    "time": "14:00"
+                    "time": "15:00"
                 },
                 "practice3": {
                     "day": "21 Jun",
-                    "time": "10:00"
+                    "time": "10:10"
                 },
                 "qualifying": {
                     "day": "21 Jun",
-                    "time": "14:00"
+                    "time": "10:50"
+                },
+                "sprint": {
+                    "day": "21 Jun",
+                    "time": "15:00"
                 },
                 "race": {
                     "day": "22 Jun",
@@ -250,19 +274,23 @@
             "sessions": {
                 "practice1": {
                     "day": "27 Jun",
-                    "time": "10:00"
+                    "time": "10:45"
                 },
                 "practice2": {
                     "day": "27 Jun",
-                    "time": "14:00"
+                    "time": "15:00"
                 },
                 "practice3": {
                     "day": "28 Jun",
-                    "time": "10:00"
+                    "time": "10:10"
                 },
                 "qualifying": {
                     "day": "28 Jun",
-                    "time": "14:00"
+                    "time": "10:50"
+                },
+                "sprint": {
+                    "day": "28 Jun",
+                    "time": "15:00"
                 },
                 "race": {
                     "day": "29 Jun",
@@ -277,19 +305,23 @@
             "sessions": {
                 "practice1": {
                     "day": "11 Jul",
-                    "time": "10:00"
+                    "time": "10:45"
                 },
                 "practice2": {
                     "day": "11 Jul",
-                    "time": "14:00"
+                    "time": "15:00"
                 },
                 "practice3": {
                     "day": "12 Jul",
-                    "time": "10:00"
+                    "time": "10:10"
                 },
                 "qualifying": {
                     "day": "12 Jul",
-                    "time": "14:00"
+                    "time": "10:50"
+                },
+                "sprint": {
+                    "day": "12 Jul",
+                    "time": "15:00"
                 },
                 "race": {
                     "day": "13 Jul",
@@ -304,19 +336,23 @@
             "sessions": {
                 "practice1": {
                     "day": "18 Jul",
-                    "time": "10:00"
+                    "time": "10:45"
                 },
                 "practice2": {
                     "day": "18 Jul",
-                    "time": "14:00"
+                    "time": "15:00"
                 },
                 "practice3": {
                     "day": "19 Jul",
-                    "time": "10:00"
+                    "time": "10:10"
                 },
                 "qualifying": {
                     "day": "19 Jul",
-                    "time": "14:00"
+                    "time": "10:50"
+                },
+                "sprint": {
+                    "day": "19 Jul",
+                    "time": "15:00"
                 },
                 "race": {
                     "day": "20 Jul",
@@ -326,54 +362,62 @@
         },
         {
             "gp": "Austrian GP",
-            "dates": "01-03 Aug",
+            "dates": "15-17 Aug",
             "flag": "/flags/austria.webp",
             "sessions": {
                 "practice1": {
-                    "day": "01 Aug",
-                    "time": "10:00"
+                    "day": "15 Aug",
+                    "time": "10:45"
                 },
                 "practice2": {
-                    "day": "01 Aug",
-                    "time": "14:00"
+                    "day": "15 Aug",
+                    "time": "15:00"
                 },
                 "practice3": {
-                    "day": "02 Aug",
-                    "time": "10:00"
+                    "day": "16 Aug",
+                    "time": "10:10"
                 },
                 "qualifying": {
-                    "day": "02 Aug",
-                    "time": "14:00"
+                    "day": "16 Aug",
+                    "time": "10:50"
+                },
+                "sprint": {
+                    "day": "16 Aug",
+                    "time": "15:00"
                 },
                 "race": {
-                    "day": "03 Aug",
+                    "day": "17 Aug",
                     "time": "14:00"
                 }
             }
         },
         {
             "gp": "Hungarian GP",
-            "dates": "15-17 Aug",
+            "dates": "22-24 Aug",
             "flag": "/flags/hungary.webp",
             "sessions": {
                 "practice1": {
-                    "day": "15 Aug",
-                    "time": "10:00"
+                    "day": "22 Aug",
+                    "time": "10:45"
                 },
                 "practice2": {
-                    "day": "15 Aug",
-                    "time": "14:00"
+                    "day": "22 Aug",
+                    "time": "15:00"
                 },
                 "practice3": {
-                    "day": "16 Aug",
-                    "time": "10:00"
+                    "day": "23 Aug",
+                    "time": "10:10"
                 },
                 "qualifying": {
-                    "day": "16 Aug",
-                    "time": "14:00"
+                    "day": "23 Aug",
+                    "time": "10:50"
+                },
+                "sprint": {
+                    "day": "23 Aug",
+                    "time": "15:00"
                 },
                 "race": {
-                    "day": "17 Aug",
+                    "day": "24 Aug",
                     "time": "14:00"
                 }
             }
@@ -385,19 +429,23 @@
             "sessions": {
                 "practice1": {
                     "day": "05 Sep",
-                    "time": "10:00"
+                    "time": "10:45"
                 },
                 "practice2": {
                     "day": "05 Sep",
-                    "time": "14:00"
+                    "time": "15:00"
                 },
                 "practice3": {
                     "day": "06 Sep",
-                    "time": "10:00"
+                    "time": "10:10"
                 },
                 "qualifying": {
                     "day": "06 Sep",
-                    "time": "14:00"
+                    "time": "10:50"
+                },
+                "sprint": {
+                    "day": "06 Sep",
+                    "time": "15:00"
                 },
                 "race": {
                     "day": "07 Sep",
@@ -407,82 +455,94 @@
         },
         {
             "gp": "San Marino GP",
-            "dates": "19-21 Sep",
+            "dates": "12-14 Sep",
             "flag": "/flags/italy.webp",
             "sessions": {
                 "practice1": {
-                    "day": "19 Sep",
-                    "time": "10:00"
+                    "day": "12 Sep",
+                    "time": "10:45"
                 },
                 "practice2": {
-                    "day": "19 Sep",
-                    "time": "14:00"
+                    "day": "12 Sep",
+                    "time": "15:00"
                 },
                 "practice3": {
-                    "day": "20 Sep",
-                    "time": "10:00"
+                    "day": "13 Sep",
+                    "time": "10:10"
                 },
                 "qualifying": {
-                    "day": "20 Sep",
-                    "time": "14:00"
+                    "day": "13 Sep",
+                    "time": "10:50"
+                },
+                "sprint": {
+                    "day": "13 Sep",
+                    "time": "15:00"
                 },
                 "race": {
-                    "day": "21 Sep",
+                    "day": "14 Sep",
                     "time": "14:00"
                 }
             }
         },
         {
             "gp": "Japanese GP",
-            "dates": "03-05 Oct",
+            "dates": "26-28 Sep",
             "flag": "/flags/japan.webp",
             "sessions": {
                 "practice1": {
-                    "day": "03 Oct",
-                    "time": "10:00"
+                    "day": "26 Sep",
+                    "time": "03:45"
                 },
                 "practice2": {
-                    "day": "03 Oct",
-                    "time": "14:00"
+                    "day": "26 Sep",
+                    "time": "08:00"
                 },
                 "practice3": {
-                    "day": "04 Oct",
-                    "time": "10:00"
+                    "day": "27 Sep",
+                    "time": "03:10"
                 },
                 "qualifying": {
-                    "day": "04 Oct",
-                    "time": "14:00"
+                    "day": "27 Sep",
+                    "time": "03:50"
+                },
+                "sprint": {
+                    "day": "27 Sep",
+                    "time": "08:00"
                 },
                 "race": {
-                    "day": "05 Oct",
-                    "time": "14:00"
+                    "day": "28 Sep",
+                    "time": "07:00"
                 }
             }
         },
         {
             "gp": "Indonesian GP",
-            "dates": "10-12 Oct",
+            "dates": "03-05 Oct",
             "flag": "/flags/indonesia.webp",
             "sessions": {
                 "practice1": {
-                    "day": "10 Oct",
-                    "time": "09:00"
+                    "day": "03 Oct",
+                    "time": "04:45"
                 },
                 "practice2": {
-                    "day": "10 Oct",
-                    "time": "13:00"
-                },
-                "practice3": {
-                    "day": "11 Oct",
+                    "day": "03 Oct",
                     "time": "09:00"
                 },
+                "practice3": {
+                    "day": "04 Oct",
+                    "time": "04:10"
+                },
                 "qualifying": {
-                    "day": "11 Oct",
-                    "time": "13:00"
+                    "day": "04 Oct",
+                    "time": "04:50"
+                },
+                "sprint": {
+                    "day": "04 Oct",
+                    "time": "09:00"
                 },
                 "race": {
-                    "day": "12 Oct",
-                    "time": "14:00"
+                    "day": "05 Oct",
+                    "time": "08:00"
                 }
             }
         },
@@ -493,23 +553,27 @@
             "sessions": {
                 "practice1": {
                     "day": "17 Oct",
-                    "time": "11:00"
+                    "time": "01:45"
                 },
                 "practice2": {
                     "day": "17 Oct",
-                    "time": "15:00"
+                    "time": "06:00"
                 },
                 "practice3": {
                     "day": "18 Oct",
-                    "time": "11:00"
+                    "time": "01:10"
                 },
                 "qualifying": {
                     "day": "18 Oct",
-                    "time": "15:00"
+                    "time": "01:50"
+                },
+                "sprint": {
+                    "day": "18 Oct",
+                    "time": "06:00"
                 },
                 "race": {
                     "day": "19 Oct",
-                    "time": "15:00"
+                    "time": "05:00"
                 }
             }
         },
@@ -520,23 +584,27 @@
             "sessions": {
                 "practice1": {
                     "day": "24 Oct",
-                    "time": "10:00"
+                    "time": "04:45"
                 },
                 "practice2": {
                     "day": "24 Oct",
-                    "time": "14:00"
+                    "time": "09:00"
                 },
                 "practice3": {
                     "day": "25 Oct",
-                    "time": "10:00"
+                    "time": "04:10"
                 },
                 "qualifying": {
                     "day": "25 Oct",
-                    "time": "14:00"
+                    "time": "04:50"
+                },
+                "sprint": {
+                    "day": "25 Oct",
+                    "time": "09:00"
                 },
                 "race": {
                     "day": "26 Oct",
-                    "time": "15:00"
+                    "time": "08:00"
                 }
             }
         },
@@ -547,23 +615,27 @@
             "sessions": {
                 "practice1": {
                     "day": "07 Nov",
-                    "time": "10:00"
+                    "time": "11:45"
                 },
                 "practice2": {
                     "day": "07 Nov",
-                    "time": "14:00"
+                    "time": "16:00"
                 },
                 "practice3": {
                     "day": "08 Nov",
-                    "time": "10:00"
+                    "time": "11:10"
                 },
                 "qualifying": {
                     "day": "08 Nov",
-                    "time": "14:00"
+                    "time": "11:50"
+                },
+                "sprint": {
+                    "day": "08 Nov",
+                    "time": "16:00"
                 },
                 "race": {
                     "day": "09 Nov",
-                    "time": "14:00"
+                    "time": "15:00"
                 }
             }
         },
@@ -574,19 +646,23 @@
             "sessions": {
                 "practice1": {
                     "day": "14 Nov",
-                    "time": "10:00"
+                    "time": "10:45"
                 },
                 "practice2": {
                     "day": "14 Nov",
-                    "time": "14:00"
+                    "time": "15:00"
                 },
                 "practice3": {
                     "day": "15 Nov",
-                    "time": "10:00"
+                    "time": "10:10"
                 },
                 "qualifying": {
                     "day": "15 Nov",
-                    "time": "14:00"
+                    "time": "10:50"
+                },
+                "sprint": {
+                    "day": "15 Nov",
+                    "time": "15:00"
                 },
                 "race": {
                     "day": "16 Nov",

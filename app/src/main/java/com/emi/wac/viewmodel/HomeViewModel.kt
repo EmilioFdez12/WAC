@@ -75,7 +75,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             // Continuously loop while the coroutine scope is active
             while (isActive) {
                 // Wait between updates
-                delay(800)
+                delay(999)
                 updateTimeRemaining()
             }
         }
