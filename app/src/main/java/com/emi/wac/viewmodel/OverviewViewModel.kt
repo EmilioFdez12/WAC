@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 /**
  * ViewModel for the category details screen, managing leader, constructor, and circuit data.
  */
-class CategoryDetailsViewModel(application: Application) : AndroidViewModel(application) {
+class OverviewViewModel(application: Application) : AndroidViewModel(application) {
     private val racingRepository = RacingRepository(application)
     private val standingsRepository = StandingsRepository(Firebase.firestore)
 

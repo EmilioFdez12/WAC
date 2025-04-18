@@ -12,6 +12,44 @@ import kotlinx.coroutines.tasks.await
  */
 class StandingsRepository(private val db: FirebaseFirestore) {
 
+    suspend fun getDriverStandings(category: String): Result<List<DriverStanding>> {
+        try {
+            val document = db.collection("${category}_standings").document("latest").get().await()
+            val rawData = document.data
+    
+            // Log raw data for debugging
+            android.util.Log.d("StandingsRepository", "Raw data: $rawData")
+    
+            if (rawData != null) {
+                // Extract the standings list from the "data" key
+                val standingsData = rawData["data"]
+                if (standingsData is List<*>) {
+                    val standingsList = standingsData.filterIsInstance<Map<*, *>>()
+                    val standings = standingsList.map { item ->
+                        // Handle both "driver" and "name" fields for different categories
+                        val driverName = (item["driver"] as? String) ?: (item["name"] as? String) ?: ""
+                        val points = (item["points"] as? String) ?: ""
+                        val position = (item["position"] as? String) ?: ""
+                        val team = (item["team"] as? String) ?: ""
+                        
+                        DriverStanding(
+                            driver = driverName,
+                            points = points,
+                            position = position,
+                            team = team
+                        )
+                    }
+                    return Result.success(standings)
+                }
+                return Result.failure(Exception("Invalid data format"))
+            }
+            return Result.failure(Exception("No data found"))
+        } catch (e: Exception) {
+            android.util.Log.e("StandingsRepository", "Error fetching standings: ${e.message}", e)
+            return Result.failure(e)
+        }
+    }
+
     /**
      * Retrieves the current championship leader for a specific racing category (drivers).
      *

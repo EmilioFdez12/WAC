@@ -81,7 +81,7 @@ fun SessionItem(
         // Session name
         Text(
             text = name,
-            style = AlataTypography.titleLarge,
+            style = AlataTypography.titleMedium,
             color = Color.White,
             modifier = Modifier
                 .weight(1f)
