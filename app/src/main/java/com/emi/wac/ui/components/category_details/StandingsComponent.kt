@@ -29,8 +29,7 @@ fun StandingsComponent(
 ) {
     val standingsState by viewModel.driversStandings.collectAsState()
     val primaryColor = getPrimaryColorForCategory(category)
-    
-    // Load driver standings when the component is first displayed
+
     LaunchedEffect(category) {
         viewModel.loadDriverStandings(category)
     }

@@ -38,8 +38,6 @@ import com.emi.wac.data.model.drivers.DriverStanding
 import com.emi.wac.data.model.drivers.Drivers
 import com.emi.wac.data.repository.RacingRepository
 import com.emi.wac.ui.theme.AlataTypography
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 @Composable
 fun TopThreeDrivers(
@@ -50,11 +48,8 @@ fun TopThreeDrivers(
     val racingRepository = remember { RacingRepository(context) }
     var driversData by remember { mutableStateOf<Drivers?>(null) }
 
-    // Load drivers data to get portraits
     LaunchedEffect(category) {
-        withContext(Dispatchers.IO) {
-            driversData = racingRepository.getDrivers(category)
-        }
+        driversData = racingRepository.getDrivers(category)
     }
 
     val firstPlaceColor = Color(0xFFFFD700)
@@ -190,7 +185,7 @@ private fun TopDriverCard(
                 .fillMaxWidth()
                 .padding(top = 8.dp)
                 .background(color, RoundedCornerShape(4.dp))
-                .padding(vertical = 4.dp ),
+                .padding(vertical = 4.dp),
             contentAlignment = Alignment.Center
         ) {
             Text(

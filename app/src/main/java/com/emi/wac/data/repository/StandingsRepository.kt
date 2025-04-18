@@ -12,21 +12,22 @@ import kotlinx.coroutines.tasks.await
  */
 class StandingsRepository(private val db: FirebaseFirestore) {
 
+    /**
+     * Retrieves the current standings for drivers in a specific racing category.
+     *
+     * @param category The racing category (e.g., "f1", "motogp").
+     */
     suspend fun getDriverStandings(category: String): Result<List<DriverStanding>> {
         try {
             val document = db.collection("${category}_standings").document("latest").get().await()
             val rawData = document.data
-    
-            // Log raw data for debugging
-            android.util.Log.d("StandingsRepository", "Raw data: $rawData")
-    
+
             if (rawData != null) {
                 // Extract the standings list from the "data" key
                 val standingsData = rawData["data"]
                 if (standingsData is List<*>) {
                     val standingsList = standingsData.filterIsInstance<Map<*, *>>()
                     val standings = standingsList.map { item ->
-                        // Handle both "driver" and "name" fields for different categories
                         val driverName = (item["driver"] as? String) ?: (item["name"] as? String) ?: ""
                         val points = (item["points"] as? String) ?: ""
                         val position = (item["position"] as? String) ?: ""
