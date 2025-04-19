@@ -2,7 +2,7 @@
     "schedule": [
         {
             "gp": "Thai GP",
-            "dates": "28 Feb-02 Mar",
+            "dates": "28-02 Mar",
             "flag": "/flags/thailand.webp",
             "sessions": {
                 "practice1": {

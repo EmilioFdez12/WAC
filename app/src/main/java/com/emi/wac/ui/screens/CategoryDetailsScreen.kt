@@ -26,6 +26,7 @@ import com.emi.wac.common.Constants.BCKG_IMG
 import com.emi.wac.ui.components.category_details.OverViewComponent
 import com.emi.wac.ui.components.category_details.StandingsComponent
 import com.emi.wac.ui.components.category_details.overview.CategoryTabs
+import com.emi.wac.ui.components.category_details.ScheduleComponent
 import com.emi.wac.ui.theme.WACTheme
 import com.emi.wac.viewmodel.OverviewViewModel
 import com.emi.wac.viewmodel.StandingsViewModel
@@ -88,6 +89,11 @@ fun CategoryDetailsScreen(
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
+                2 -> {
+                ScheduleComponent(
+                    category = category
+                )
+            }
             }
         }
     }

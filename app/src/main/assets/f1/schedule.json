@@ -222,7 +222,7 @@
         },
         {
             "gp": "Spanish GP",
-            "dates": "30 May-01 Jun",
+            "dates": "30-01 Jun",
             "flag": "/flags/spain.webp",
             "sessions": {
                 "practice1": {

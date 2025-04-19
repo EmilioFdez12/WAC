@@ -12,5 +12,5 @@ data class GrandPrix(
     val gp: String,
     val dates: String,
     val flag: String,
-    val sessions: Sessions
+    val sessions: Sessions,
 )

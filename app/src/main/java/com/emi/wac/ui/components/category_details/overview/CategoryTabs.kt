@@ -3,6 +3,7 @@ package com.emi.wac.ui.components.category_details.overview
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -35,7 +36,9 @@ fun CategoryTabs(
                     contentColor = Color.White
                 ),
                 shape = RoundedCornerShape(8.dp),
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(bottom = 12.dp),
                 contentPadding = PaddingValues(vertical = 16.dp, horizontal = 0.dp)
             ) {
                 Text(
