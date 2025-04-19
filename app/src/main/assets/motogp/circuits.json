@@ -6,7 +6,7 @@
             "gp": "Thai GP",
             "image": "/motogp/images/circuits/tha-info.webp",
             "flag": "/motogp/images/flags/thailand.webp",
-            "lapRecord": "1:29.287 (Fabio Quartararo, Yamaha, 2022)",
+            "lapRecord": "1:30.637 (Marc Marquez, Ducati Lenovo, 2025)",
             "raceLaps": 26,
             "length": 4.554
         },
@@ -16,7 +16,7 @@
             "gp": "Argentine GP",
             "image": "/motogp/images/circuits/arg-info.webp",
             "flag": "/motogp/images/flags/argentina.webp",
-            "lapRecord": "1:37.683 (Marc Márquez, Honda, 2014)",
+            "lapRecord": "1:38.243 (Marc Márquez, Ducati Lenovo, 2025)",
             "raceLaps": 25,
             "length": 4.806
         },
@@ -26,7 +26,7 @@
             "gp": "Americas GP",
             "image": "/motogp/images/circuits/usa-info.webp",
             "flag": "/motogp/images/flags/usa.webp",
-            "lapRecord": "2:02.135 (Marc Márquez, Honda, 2014)",
+            "lapRecord": "2:02.221 (Marc Márquez, Ducati Lenovo, 2025)",
             "raceLaps": 20,
             "length": 5.513
         },
@@ -36,7 +36,7 @@
             "gp": "Qatar GP",
             "image": "/motogp/images/circuits/qat-info.webp",
             "flag": "/motogp/images/flags/qatar.webp",
-            "lapRecord": "1:52.772 (Jorge Lorenzo, Yamaha, 2016)",
+            "lapRecord": "1:52.772 (Marc Marquez, Ducati Lenovo, 2025)",
             "raceLaps": 22,
             "length": 5.380
         },
@@ -46,7 +46,7 @@
             "gp": "Spanish GP",
             "image": "/motogp/images/circuits/spa-info.webp",
             "flag": "/motogp/images/flags/spain.webp",
-            "lapRecord": "1:36.170 (Francesco Bagnaia, Ducati, 2022)",
+            "lapRecord": "1:37.449 (Francesco Bagnaia, Ducati, 2024)",
             "raceLaps": 25,
             "length": 4.423
         },
@@ -56,7 +56,7 @@
             "gp": "French GP",
             "image": "/motogp/images/circuits/fra-info.webp",
             "flag": "/motogp/images/flags/france.webp",
-            "lapRecord": "1:30.450 (Francesco Bagnaia, Ducati, 2023)",
+            "lapRecord": "1:30.450 (Enea Bastianini, Ducati, 2023)",
             "raceLaps": 27,
             "length": 4.185
         },
