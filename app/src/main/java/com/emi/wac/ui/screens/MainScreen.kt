@@ -18,6 +18,7 @@ import coil3.compose.rememberAsyncImagePainter
 import com.emi.wac.common.Constants.BCKG_IMG
 import com.emi.wac.common.Constants.CAT_DETAILS
 import com.emi.wac.common.Constants.HOME
+import com.emi.wac.data.utils.TransitionsUtils
 import com.emi.wac.ui.components.BottomBar
 
 @Composable
@@ -46,7 +47,13 @@ fun MainScreen() {
                 startDestination = HOME,
                 modifier = Modifier.padding(innerPadding)
             ) {
-                composable(HOME) {
+                composable(
+                    route = HOME,
+                    enterTransition = { TransitionsUtils.enterTransition(this) },
+                    exitTransition = { TransitionsUtils.exitTransition(this) },
+                    popEnterTransition = { TransitionsUtils.popEnterTransition(this) },
+                    popExitTransition = { TransitionsUtils.popExitTransition(this) }
+                ) {
                     HomeScreen(navController = navController)
                 }
                 composable(

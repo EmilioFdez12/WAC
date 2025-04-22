@@ -52,23 +52,24 @@ dependencies {
     implementation(libs.androidx.material3)
 
     // FireBase
-    implementation(platform("com.google.firebase:firebase-bom:33.12.0"))
+    implementation(platform(libs.firebase.bom))
     // Add the dependency for the Firebase SDK for Google Analytics
-    implementation("com.google.firebase:firebase-analytics")
-    implementation("com.google.firebase:firebase-firestore")
+    implementation(libs.firebase.analytics)
+    implementation(libs.google.firebase.firestore)
 
     // Otras Dependencias
-    implementation("com.squareup.moshi:moshi:1.15.0")
-    implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
-    implementation("androidx.compose.ui:ui-text-google-fonts:1.7.8")
-    implementation("com.google.code.gson:gson:2.12.1")
-    implementation("io.coil-kt.coil3:coil-compose:3.1.0")
-    implementation ("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
-    implementation("androidx.navigation:navigation-compose:2.8.9")
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation ("com.squareup.retrofit2:converter-moshi:2.11.0")
+    implementation(libs.moshi)
+    implementation(libs.moshi.kotlin)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.ui.text.google.fonts)
+    implementation(libs.gson)
+    implementation(libs.coil.compose)
+    implementation (libs.accompanist.systemuicontroller)
+    implementation(libs.androidx.navigation.compose)
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
+    implementation (libs.converter.moshi)
+    implementation(libs.androidx.core.splashscreen)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

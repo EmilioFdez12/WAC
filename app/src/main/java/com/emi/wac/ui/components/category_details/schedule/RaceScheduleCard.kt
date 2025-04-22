@@ -1,7 +1,10 @@
 package com.emi.wac.ui.components.category_details.schedule
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -127,6 +130,13 @@ fun RaceScheduleCard(
             // Sessions details (expanded view)
             AnimatedVisibility(visible = expanded) {
                 SessionsList(
+                    modifier = Modifier
+                        .animateContentSize(
+                            animationSpec = spring(
+                                dampingRatio = Spring.DampingRatioLowBouncy,
+                                stiffness = Spring.StiffnessLow
+                            )
+                        ),
                     grandPrix = grandPrix,
                     primaryColor = primaryColor,
                 )

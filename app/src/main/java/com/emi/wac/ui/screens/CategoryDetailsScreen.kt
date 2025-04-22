@@ -11,11 +11,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,9 +24,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.rememberAsyncImagePainter
 import com.emi.wac.common.Constants.BCKG_IMG
 import com.emi.wac.ui.components.category_details.OverViewComponent
+import com.emi.wac.ui.components.category_details.ScheduleComponent
 import com.emi.wac.ui.components.category_details.StandingsComponent
 import com.emi.wac.ui.components.category_details.overview.CategoryTabs
-import com.emi.wac.ui.components.category_details.ScheduleComponent
 import com.emi.wac.ui.theme.WACTheme
 import com.emi.wac.viewmodel.OverviewViewModel
 import com.emi.wac.viewmodel.StandingsViewModel
@@ -67,6 +67,7 @@ fun CategoryDetailsScreen(
                 category = category
             )
 
+
             when (selectedTab) {
                 0 -> Box(
                     modifier = Modifier
@@ -79,21 +80,16 @@ fun CategoryDetailsScreen(
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
-                1 -> Box(
-                    modifier = Modifier.fillMaxSize()
-                ) {
 
-                    StandingsComponent(
-                        category = category,
-                        viewModel = viewModelStanding,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-                2 -> {
-                ScheduleComponent(
+                1 -> StandingsComponent(
+                    category = category,
+                    viewModel = viewModelStanding,
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                2 -> ScheduleComponent(
                     category = category
                 )
-            }
             }
         }
     }

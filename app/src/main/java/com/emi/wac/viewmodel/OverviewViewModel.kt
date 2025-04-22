@@ -22,20 +22,17 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
     private val racingRepository = RacingRepository(application)
     private val standingsRepository = StandingsRepository(Firebase.firestore)
 
-    sealed class DataState<out T> {
-        object Loading : DataState<Nothing>()
-        data class Success<T>(val data: T) : DataState<T>()
-        data class Error(val message: String) : DataState<Nothing>()
-    }
-
     private val _leaderInfo =
         MutableStateFlow<DataState<Pair<DriverStanding, Driver?>>>(DataState.Loading)
     val leaderInfo = _leaderInfo.asStateFlow()
+
     private val _constructorLeaderInfo =
         MutableStateFlow<DataState<Pair<ConstructorStanding, Constructor?>>>(DataState.Loading)
     val constructorLeaderInfo = _constructorLeaderInfo.asStateFlow()
+
     private val _circuitInfo = MutableStateFlow<DataState<Circuit?>>(DataState.Loading)
     val circuitInfo = _circuitInfo.asStateFlow()
+
     private val _weatherInfo =
         MutableStateFlow<DataState<WeatherData>>(DataState.Loading)
     val weatherInfo = _weatherInfo.asStateFlow()
@@ -63,7 +60,7 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
                         DataState.Error("Failed to load leader: ${leaderStandingResult.exceptionOrNull()?.message}")
                 }
             } catch (e: Exception) {
-                Log.e("CategoryDetailsViewModel", "Error loading leader info", e)
+                Log.e("OverviewViewModel", "Error loading leader info", e)
                 _leaderInfo.value = DataState.Error("Error loading leader: ${e.message}")
             }
 
@@ -86,7 +83,7 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
                         DataState.Error("Failed to load constructor: ${constructorStandingResult.exceptionOrNull()?.message}")
                 }
             } catch (e: Exception) {
-                Log.e("CategoryDetailsViewModel", "Error loading constructor leader", e)
+                Log.e("OverviewViewModel", "Error loading constructor leader", e)
                 _constructorLeaderInfo.value =
                     DataState.Error("Error loading constructor: ${e.message}")
             }
@@ -98,11 +95,9 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
                     val nextCircuit = findCircuit(circuits?.circuits, nextRace.gp)
                     _circuitInfo.value = DataState.Success(nextCircuit)
 
-                    // Load weather for all sessions
                     val weatherRace = racingRepository.getWeatherForSession(category, "race")
                     val weatherQualy = racingRepository.getWeatherForSession(category, "qualifying")
-                    val weatherSprint =
-                        racingRepository.getWeatherForSession(category, "sprint") // Fixed typo
+                    val weatherSprint = racingRepository.getWeatherForSession(category, "sprint")
 
                     _weatherInfo.value = DataState.Success(
                         WeatherData(
@@ -116,7 +111,7 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
                     _weatherInfo.value = DataState.Error("No next race found")
                 }
             } catch (e: Exception) {
-                Log.e("CategoryDetailsViewModel", "Error loading circuit or weather info", e)
+                Log.e("OverviewViewModel", "Error loading circuit or weather info", e)
                 _circuitInfo.value = DataState.Error("Error loading circuit: ${e.message}")
                 _weatherInfo.value = DataState.Error("Error loading weather: ${e.message}")
             }

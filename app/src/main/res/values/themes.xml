@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Tema principal de la app (sin cambios) -->
     <style name="Theme.WAC" parent="android:Theme.Material.Light.NoActionBar">
         <!-- Status bar por defecto -->
         <item name="android:statusBarColor">?android:attr/statusBarColor</item>
@@ -7,5 +8,21 @@
         <!-- Quitar translucidez -->
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:windowTranslucentNavigation">false</item>
+    </style>
+
+    <!-- Tema para la splash screen -->
+    <style name="Theme.WAC.Splash" parent="Theme.SplashScreen">
+        <!-- Color de fondo de la splash screen -->
+        <item name="windowSplashScreenBackground">@color/primary_background</item>
+        <!-- Ícono animado de la splash screen -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_icon</item>
+        <!-- Tema que se aplicará después de la splash screen -->
+        <item name="postSplashScreenTheme">@style/Theme.WAC</item>
+        <!-- Evitar ActionBar/header -->
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <!-- Asegurar que la status bar sea visible durante la splash -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 </resources>

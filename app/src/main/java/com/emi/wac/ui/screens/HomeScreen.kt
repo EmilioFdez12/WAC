@@ -8,14 +8,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -30,8 +33,8 @@ import com.emi.wac.common.Constants.CAT_DETAILS
 import com.emi.wac.ui.components.home.RaceCard
 import com.emi.wac.ui.theme.PrimaryOrange
 import com.emi.wac.ui.theme.WACTheme
+import com.emi.wac.viewmodel.DataState
 import com.emi.wac.viewmodel.HomeViewModel
-
 
 @Composable
 fun HomeScreen(
@@ -41,8 +44,7 @@ fun HomeScreen(
 ) {
     val nextF1Race by viewModel.nextF1Race.collectAsState()
     val nextMotoGPRace by viewModel.nextMotoGPRace.collectAsState()
-    val backgroundPainter: Painter =
-        rememberAsyncImagePainter(model = BCKG_IMG)
+    val backgroundPainter: Painter = rememberAsyncImagePainter(model = BCKG_IMG)
 
     Box(modifier = modifier.fillMaxSize()) {
         Image(
@@ -57,23 +59,58 @@ fun HomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            when (val state = nextF1Race) {
+                is DataState.Loading -> {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                }
 
-            RaceCard(
-                logo = "f1",
-                raceInfo = nextF1Race,
-                onCardClick = { navController.navigate("$CAT_DETAILS/f1") }
-            )
+                is DataState.Success -> {
+                    RaceCard(
+                        logo = "f1",
+                        raceInfo = state.data.grandPrix,
+                        onCardClick = { navController.navigate("$CAT_DETAILS/f1") }
+                    )
+                }
+
+                is DataState.Error -> {
+                    Text(
+                        text = "Error F1: ${state.message}",
+                        color = Red,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                }
+            }
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            RaceCard(
-                logo = "motogp",
-                raceInfo = nextMotoGPRace,
-                countdownColor = PrimaryOrange,
-                imageOffset = Offset(0f, 36f),
-                imageScale = 1.6f,
-                onCardClick = { navController.navigate("$CAT_DETAILS/motogp") }
-            )
+            when (val state = nextMotoGPRace) {
+                is DataState.Loading -> {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                }
+
+                is DataState.Success -> {
+                    RaceCard(
+                        logo = "motogp",
+                        raceInfo = state.data.grandPrix,
+                        countdownColor = PrimaryOrange,
+                        imageOffset = Offset(0f, 36f),
+                        imageScale = 1.6f,
+                        onCardClick = { navController.navigate("$CAT_DETAILS/motogp") }
+                    )
+                }
+
+                is DataState.Error -> {
+                    Text(
+                        text = "Error MotoGP: ${state.message}",
+                        color = Red,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                }
+            }
         }
     }
 }

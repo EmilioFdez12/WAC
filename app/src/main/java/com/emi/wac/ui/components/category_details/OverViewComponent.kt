@@ -21,6 +21,7 @@ import com.emi.wac.ui.components.category_details.overview.ConstructorLeaderCard
 import com.emi.wac.ui.components.category_details.overview.LeaderDriverCard
 import com.emi.wac.ui.components.category_details.overview.schedule.RaceWeekendSchedule
 import com.emi.wac.ui.components.category_details.weather.WeatherRow
+import com.emi.wac.viewmodel.DataState
 import com.emi.wac.viewmodel.OverviewViewModel
 
 @Composable
@@ -38,7 +39,7 @@ fun OverViewComponent(
         modifier = modifier.fillMaxWidth()
     ) {
         when (val state = leaderInfo) {
-            is OverviewViewModel.DataState.Success -> {
+            is DataState.Success -> {
                 val (standing, driver) = state.data
                 Log.d(
                     "OverViewComponent",
@@ -55,7 +56,7 @@ fun OverViewComponent(
                 )
             }
 
-            is OverviewViewModel.DataState.Loading -> {
+            is DataState.Loading -> {
                 Log.d("OverViewComponent", "LeaderInfo Loading")
                 CircularProgressIndicator(
                     modifier = Modifier
@@ -64,7 +65,7 @@ fun OverViewComponent(
                 )
             }
 
-            is OverviewViewModel.DataState.Error -> {
+            is DataState.Error -> {
                 Log.d("OverViewComponent", "LeaderInfo Error: ${state.message}")
                 Text(
                     text = "Error: ${state.message}",
@@ -75,7 +76,7 @@ fun OverViewComponent(
         }
 
         when (val state = constructorLeaderInfo) {
-            is OverviewViewModel.DataState.Success -> {
+            is DataState.Success -> {
                 val (standing, constructor) = state.data
                 ConstructorLeaderCard(
                     modifier = Modifier.padding(top = 16.dp),
@@ -89,7 +90,7 @@ fun OverViewComponent(
                 )
             }
 
-            is OverviewViewModel.DataState.Loading -> {
+            is DataState.Loading -> {
                 CircularProgressIndicator(
                     modifier = Modifier
                         .padding(top = 16.dp)
@@ -97,7 +98,7 @@ fun OverViewComponent(
                 )
             }
 
-            is OverviewViewModel.DataState.Error -> {
+            is DataState.Error -> {
                 Text(
                     text = "Error: ${state.message}",
                     modifier = Modifier.padding(top = 16.dp),
@@ -112,7 +113,7 @@ fun OverViewComponent(
         )
 
         when (val state = weatherInfo) {
-            is OverviewViewModel.DataState.Success -> {
+            is DataState.Success -> {
                 val weatherData = state.data
                 Column(
                     modifier = Modifier
@@ -174,7 +175,7 @@ fun OverViewComponent(
                 }
             }
 
-            is OverviewViewModel.DataState.Loading -> {
+            is DataState.Loading -> {
                 CircularProgressIndicator(
                     modifier = Modifier
                         .padding(top = 8.dp)
@@ -182,13 +183,13 @@ fun OverViewComponent(
                 )
             }
 
-            is OverviewViewModel.DataState.Error -> {
-                // No mostrar nada en caso de error para evitar clutter
+            is DataState.Error -> {
+                // No mostrar nada en caso de error
             }
         }
 
         when (val state = circuitInfo) {
-            is OverviewViewModel.DataState.Success -> {
+            is DataState.Success -> {
                 CircuitInfo(
                     modifier = Modifier.padding(
                         top = 16.dp,
@@ -201,7 +202,7 @@ fun OverViewComponent(
                 )
             }
 
-            is OverviewViewModel.DataState.Loading -> {
+            is DataState.Loading -> {
                 CircularProgressIndicator(
                     modifier = Modifier
                         .padding(top = 16.dp)
@@ -209,7 +210,7 @@ fun OverViewComponent(
                 )
             }
 
-            is OverviewViewModel.DataState.Error -> {
+            is DataState.Error -> {
                 Text(
                     text = "Error: ${state.message}",
                     modifier = Modifier.padding(top = 16.dp),

@@ -84,7 +84,7 @@ fun RaceWeekendSchedule(
                 }
 
                 race.sessions.sprintQualifying?.let {
-                    sessions.add(SessionInfo("SPRINT QUALIFYING", it.day, it.time, false))
+                    sessions.add(SessionInfo("SPRINT Q", it.day, it.time, false))
                 }
 
                 race.sessions.practice3?.let {
