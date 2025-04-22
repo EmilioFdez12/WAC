@@ -1,15 +1,18 @@
 package com.emi.wac.ui.components.category_details
 
 import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.unit.dp
@@ -17,6 +20,7 @@ import com.emi.wac.ui.components.category_details.overview.CircuitInfo
 import com.emi.wac.ui.components.category_details.overview.ConstructorLeaderCard
 import com.emi.wac.ui.components.category_details.overview.LeaderDriverCard
 import com.emi.wac.ui.components.category_details.overview.schedule.RaceWeekendSchedule
+import com.emi.wac.ui.components.category_details.weather.WeatherRow
 import com.emi.wac.viewmodel.OverviewViewModel
 
 @Composable
@@ -28,6 +32,7 @@ fun OverViewComponent(
     val leaderInfo by viewModel.leaderInfo.collectAsState()
     val constructorLeaderInfo by viewModel.constructorLeaderInfo.collectAsState()
     val circuitInfo by viewModel.circuitInfo.collectAsState()
+    val weatherInfo by viewModel.weatherInfo.collectAsState()
 
     Column(
         modifier = modifier.fillMaxWidth()
@@ -55,7 +60,7 @@ fun OverViewComponent(
                 CircularProgressIndicator(
                     modifier = Modifier
                         .padding(top = 16.dp)
-                        .align(CenterHorizontally)
+                        .align(Alignment.CenterHorizontally)
                 )
             }
 
@@ -72,7 +77,6 @@ fun OverViewComponent(
         when (val state = constructorLeaderInfo) {
             is OverviewViewModel.DataState.Success -> {
                 val (standing, constructor) = state.data
-
                 ConstructorLeaderCard(
                     modifier = Modifier.padding(top = 16.dp),
                     constructorStanding = standing,
@@ -89,7 +93,7 @@ fun OverViewComponent(
                 CircularProgressIndicator(
                     modifier = Modifier
                         .padding(top = 16.dp)
-                        .align(CenterHorizontally)
+                        .align(Alignment.CenterHorizontally)
                 )
             }
 
@@ -106,6 +110,82 @@ fun OverViewComponent(
             modifier = Modifier.padding(top = 16.dp, start = 32.dp, end = 32.dp),
             category = category
         )
+
+        when (val state = weatherInfo) {
+            is OverviewViewModel.DataState.Success -> {
+                val weatherData = state.data
+                Column(
+                    modifier = Modifier
+                        .padding(top = 8.dp, start = 32.dp, end = 32.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    // Fila para RACE y QUALY
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        // Race
+                        weatherData.race?.let { (temperature, weatherCode) ->
+                            WeatherRow(
+                                sessionName = "RACE",
+                                temperature = temperature,
+                                weatherCode = weatherCode,
+                                category = category,
+                                modifier = Modifier.width(160.dp)
+                            )
+                        } ?: Text(
+                            text = "Carrera: No hay datos disponibles",
+                            modifier = Modifier
+                                .width(120.dp)
+                                .padding(vertical = 4.dp),
+                            color = Red
+                        )
+
+                        // Qualifying
+                        weatherData.qualifying?.let { (temperature, weatherCode) ->
+                            WeatherRow(
+                                sessionName = "QUALY",
+                                temperature = temperature,
+                                weatherCode = weatherCode,
+                                category = category,
+                                modifier = Modifier.width(160.dp)
+                            )
+                        } ?: Text(
+                            text = "Clasificación: No hay datos disponibles",
+                            modifier = Modifier
+                                .width(120.dp)
+                                .padding(vertical = 4.dp),
+                            color = Red
+                        )
+                    }
+
+                    // Sprint debajo, centrado (si existe)
+                    weatherData.sprint?.let { (temperature, weatherCode) ->
+                        WeatherRow(
+                            sessionName = "SPRINT",
+                            temperature = temperature,
+                            weatherCode = weatherCode,
+                            category = category,
+                            modifier = Modifier
+                                .width(160.dp)
+                                .padding(top = 8.dp)
+                        )
+                    }
+                }
+            }
+
+            is OverviewViewModel.DataState.Loading -> {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .padding(top = 8.dp)
+                        .align(Alignment.CenterHorizontally)
+                )
+            }
+
+            is OverviewViewModel.DataState.Error -> {
+                // No mostrar nada en caso de error para evitar clutter
+            }
+        }
 
         when (val state = circuitInfo) {
             is OverviewViewModel.DataState.Success -> {
@@ -125,7 +205,7 @@ fun OverViewComponent(
                 CircularProgressIndicator(
                     modifier = Modifier
                         .padding(top = 16.dp)
-                        .align(CenterHorizontally)
+                        .align(Alignment.CenterHorizontally)
                 )
             }
 

@@ -8,7 +8,8 @@
             "flag": "/motogp/images/flags/thailand.webp",
             "lapRecord": "1:30.637 (Marc Marquez, Ducati Lenovo, 2025)",
             "raceLaps": 26,
-            "length": 4.554
+            "length": 4.554,
+            "localization": "14.9636, 103.0778"
         },
         {
             "id": 2,
@@ -18,7 +19,8 @@
             "flag": "/motogp/images/flags/argentina.webp",
             "lapRecord": "1:38.243 (Marc Márquez, Ducati Lenovo, 2025)",
             "raceLaps": 25,
-            "length": 4.806
+            "length": 4.806,
+            "localization": "-27.5083, -64.9167"
         },
         {
             "id": 3,
@@ -28,7 +30,8 @@
             "flag": "/motogp/images/flags/usa.webp",
             "lapRecord": "2:02.221 (Marc Márquez, Ducati Lenovo, 2025)",
             "raceLaps": 20,
-            "length": 5.513
+            "length": 5.513,
+            "localization": "30.1328, -97.6411"
         },
         {
             "id": 4,
@@ -38,7 +41,8 @@
             "flag": "/motogp/images/flags/qatar.webp",
             "lapRecord": "1:52.772 (Marc Marquez, Ducati Lenovo, 2025)",
             "raceLaps": 22,
-            "length": 5.380
+            "length": 5.380,
+            "localization": "25.4900, 51.4542"
         },
         {
             "id": 5,
@@ -48,7 +52,8 @@
             "flag": "/motogp/images/flags/spain.webp",
             "lapRecord": "1:37.449 (Francesco Bagnaia, Ducati, 2024)",
             "raceLaps": 25,
-            "length": 4.423
+            "length": 4.423,
+            "localization": "36.7083, -6.0342"
         },
         {
             "id": 6,
@@ -58,7 +63,8 @@
             "flag": "/motogp/images/flags/france.webp",
             "lapRecord": "1:30.450 (Enea Bastianini, Ducati, 2023)",
             "raceLaps": 27,
-            "length": 4.185
+            "length": 4.185,
+            "localization": "47.9500, 0.2083"
         },
         {
             "id": 7,
@@ -68,7 +74,8 @@
             "flag": "/motogp/images/flags/uk.webp",
             "lapRecord": "1:58.168 (Marc Márquez, Honda, 2019)",
             "raceLaps": 20,
-            "length": 5.900
+            "length": 5.900,
+            "localization": "52.0786, -1.0169"
         },
         {
             "id": 8,
@@ -78,7 +85,8 @@
             "flag": "/motogp/images/flags/spain.webp",
             "lapRecord": "1:46.635 (Francesco Bagnaia, Ducati, 2021)",
             "raceLaps": 23,
-            "length": 5.078
+            "length": 5.078,
+            "localization": "41.0786, -0.2078"
         },
         {
             "id": 9,
@@ -88,7 +96,8 @@
             "flag": "/motogp/images/flags/italy.webp",
             "lapRecord": "1:45.187 (Johann Zarco, Ducati, 2021)",
             "raceLaps": 23,
-            "length": 5.245
+            "length": 5.245,
+            "localization": "43.9975, 11.3719"
         },
         {
             "id": 10,
@@ -98,7 +107,8 @@
             "flag": "/motogp/images/flags/netherlands.webp",
             "lapRecord": "1:31.504 (Francesco Bagnaia, Ducati, 2022)",
             "raceLaps": 26,
-            "length": 4.555
+            "length": 4.555,
+            "localization": "52.9617, 6.5233"
         },
         {
             "id": 11,
@@ -108,7 +118,8 @@
             "flag": "/motogp/images/flags/germany.webp",
             "lapRecord": "1:19.765 (Marc Márquez, Honda, 2021)",
             "raceLaps": 30,
-            "length": 3.671
+            "length": 3.671,
+            "localization": "50.9917, 12.9389"
         },
         {
             "id": 12,
@@ -118,7 +129,8 @@
             "flag": "/motogp/images/flags/czech_republic.webp",
             "lapRecord": "1:54.596 (Dani Pedrosa, Honda, 2014)",
             "raceLaps": 21,
-            "length": 5.403
+            "length": 5.403,
+            "localization": "49.2050, 16.4547"
         },
         {
             "id": 13,
@@ -128,7 +140,8 @@
             "flag": "/motogp/images/flags/austria.webp",
             "lapRecord": "1:22.643 (Jorge Lorenzo, Ducati, 2018)",
             "raceLaps": 28,
-            "length": 4.318
+            "length": 4.318,
+            "localization": "47.2197, 14.7647"
         },
         {
             "id": 14,
@@ -138,7 +151,8 @@
             "flag": "/motogp/images/flags/hungary.webp",
             "lapRecord": "N/A (New circuit, no MotoGP record yet)",
             "raceLaps": 25,
-            "length": 4.115
+            "length": 4.115,
+            "localization": "46.8636, 17.5369"
         },
         {
             "id": 15,
@@ -148,7 +162,8 @@
             "flag": "/motogp/images/flags/spain.webp",
             "lapRecord": "1:38.639 (Fabio Quartararo, Yamaha, 2022)",
             "raceLaps": 24,
-            "length": 4.627
+            "length": 4.627,
+            "localization": "41.5700, 2.2611"
         },
         {
             "id": 16,
@@ -158,7 +173,8 @@
             "flag": "/motogp/images/flags/italy.webp",
             "lapRecord": "1:30.390 (Francesco Bagnaia, Ducati, 2022)",
             "raceLaps": 27,
-            "length": 4.226
+            "length": 4.226,
+            "localization": "43.9608, 12.6861"
         },
         {
             "id": 17,
@@ -168,7 +184,8 @@
             "flag": "/motogp/images/flags/japan.webp",
             "lapRecord": "1:43.198 (Jorge Lorenzo, Yamaha, 2015)",
             "raceLaps": 24,
-            "length": 4.801
+            "length": 4.801,
+            "localization": "36.5342, 140.2283"
         },
         {
             "id": 18,
@@ -178,7 +195,8 @@
             "flag": "/motogp/images/flags/indonesia.webp",
             "lapRecord": "1:30.503 (Miguel Oliveira, KTM, 2022)",
             "raceLaps": 27,
-            "length": 4.310
+            "length": 4.310,
+            "localization": "-8.8958, 116.3056"
         },
         {
             "id": 19,
@@ -188,7 +206,8 @@
             "flag": "/motogp/images/flags/australia.webp",
             "lapRecord": "1:27.246 (Marc Márquez, Honda, 2019)",
             "raceLaps": 27,
-            "length": 4.448
+            "length": 4.448,
+            "localization": "-38.5028, 145.2367"
         },
         {
             "id": 20,
@@ -198,7 +217,8 @@
             "flag": "/motogp/images/flags/malaysia.webp",
             "lapRecord": "1:57.491 (Fabio Quartararo, Yamaha, 2019)",
             "raceLaps": 20,
-            "length": 5.543
+            "length": 5.543,
+            "localization": "2.7606, 101.7378"
         },
         {
             "id": 21,
@@ -208,7 +228,8 @@
             "flag": "/motogp/images/flags/portugal.webp",
             "lapRecord": "1:37.226 (Francesco Bagnaia, Ducati, 2022)",
             "raceLaps": 25,
-            "length": 4.592
+            "length": 4.592,
+            "localization": "37.2270, -8.6267"
         },
         {
             "id": 22,
@@ -218,7 +239,8 @@
             "flag": "/motogp/images/flags/spain.webp",
             "lapRecord": "1:29.401 (Jorge Lorenzo, Yamaha, 2016)",
             "raceLaps": 27,
-            "length": 4.005
+            "length": 4.005,
+            "localization": "39.4869, -0.6308"
         }
     ]
 }

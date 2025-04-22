@@ -9,31 +9,24 @@ import com.emi.wac.data.model.contructor.Constructors
 import com.emi.wac.data.model.drivers.Drivers
 import com.emi.wac.data.model.sessions.GrandPrix
 import com.emi.wac.data.model.sessions.Schedule
+import com.emi.wac.data.network.WeatherClient
 import com.emi.wac.data.utils.DateUtils
 import com.emi.wac.data.utils.JsonParser
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
 
-/**
- * Repository class responsible for fetching and processing racing-related data.
- *
- * @property context The application context used to access assets and resources
- */
 class RacingRepository(private val context: Context) {
     private val tag = "RacingRepository"
     private val jsonParser = JsonParser(context)
 
-    // Class objects used for parsing JSON
     private val schedule = Schedule::class.java
     private val circuits = Circuits::class.java
     private val drivers = Drivers::class.java
     private val constructors = Constructors::class.java
 
-    /**
-     * Retrieves the racing schedule for a specific category.
-     *
-     * @param category The racing category (e.g., "f1", "motogp")
-     * @return Schedule object containing all races, null if fails
-     */
     fun getSchedule(category: String): Schedule? {
         return jsonParser.parseJson("$category/schedule.json", schedule)
             ?: run {
@@ -42,12 +35,6 @@ class RacingRepository(private val context: Context) {
             }
     }
 
-    /**
-     * Retrieves the racing circuits for a specific category.
-     *
-     * @param category The racing category (e.g., "f1", "motogp")
-     * @return List of Circuits, null if fails
-     */
     fun getCircuits(category: String): Circuits? {
         return jsonParser.parseJson("$category/circuits.json", circuits)
             ?: run {
@@ -56,12 +43,6 @@ class RacingRepository(private val context: Context) {
             }
     }
 
-    /**
-     * Retrieves the drivers for a specific category.
-     *
-     * @param category The racing category (e.g., "f1", "motogp")
-     * @return List of drivers containing all races, null if fails
-     */
     fun getDrivers(category: String): Drivers? {
         return jsonParser.parseJson("$category/drivers.json", drivers)
             ?: run {
@@ -70,26 +51,14 @@ class RacingRepository(private val context: Context) {
             }
     }
 
-    /**
-     * Retrieves the constructors for a specific category.
-     *
-     * @param category The racing category (e.g., "f1", "motogp")
-     * @return List of constructors containing all races, null if fails
-     */
     fun getConstructors(category: String): Constructors? {
         return jsonParser.parseJson("$category/constructors.json", constructors)
             ?: run {
-                Log.e(tag, "Error loading drivers")
+                Log.e(tag, "Error loading constructors")
                 null
             }
     }
 
-    /**
-     * Gets the next upcoming Grand Prix for a category.
-     *
-     * @param category The racing category to check
-     * @return The next GrandPrix object, null if none found
-     */
     fun getNextGrandPrixObject(category: String): GrandPrix? {
         val categorySchedule = getSchedule(category) ?: return null
         val currentDate = Calendar.getInstance()
@@ -105,13 +74,6 @@ class RacingRepository(private val context: Context) {
         }
     }
 
-    /**
-     * Gets information about the next upcoming Grand Prix for a category.
-     *
-     * @param category The racing category to check
-     * @param leaderName Name of the current championship leader
-     * @return RaceInfo object containing details about the next race
-     */
     fun getNextGrandPrix(category: String, leaderName: String = ""): RaceInfo {
         val currentDate = Calendar.getInstance()
         val currentYear = DateUtils.getCurrentYear()
@@ -134,19 +96,59 @@ class RacingRepository(private val context: Context) {
         } ?: LOADING_RACE_INFO
     }
 
-    /**
-     * Retrieves the portrait of a driver for a specific category.
-     */
     private fun getDriverPortrait(category: String, driverName: String): String {
         try {
             if (driverName.isEmpty()) return ""
             val drivers = getDrivers(category)
-            // Find the driver in the list who matches the name
             val driverPortrait = drivers?.drivers?.find { it.name == driverName }?.portrait ?: ""
             return driverPortrait
         } catch (e: Exception) {
             Log.e(tag, "Error finding driver portrait", e)
             return ""
+        }
+    }
+
+    suspend fun getWeatherForSession(
+        category: String,
+        sessionType: String
+    ): Pair<Float, Int>? {
+        val nextRace = getNextGrandPrixObject(category) ?: return null
+        val circuits = getCircuits(category) ?: return null
+        val circuit = circuits.circuits.find { it.gp == nextRace.gp } ?: return null
+
+        val (lat, lon) = circuit.localization.split(",").map { it.trim().toDouble() }
+        val session = if (sessionType == "qualifying") nextRace.sessions.qualifying else nextRace.sessions.race
+        val currentYear = DateUtils.getCurrentYear()
+
+        val dateTime = DateUtils.parseDate(session?.day ?: "", session?.time ?: "", currentYear) ?: return null
+        val isoFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val isoDate = isoFormat.format(dateTime.time)
+        val targetFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:00", Locale.getDefault())
+        val targetTime = targetFormat.format(dateTime.time)
+
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = WeatherClient.weatherApiService.getHourlyWeather(
+                    latitude = lat,
+                    longitude = lon,
+                    startDate = isoDate,
+                    endDate = isoDate
+                )
+                Log.d(tag, "Weather response: $response")
+                val index = response.hourly?.time?.indexOf(targetTime) ?: -1
+                if (index != -1) {
+                    Pair(
+                        response.hourly!!.temperature_2m[index],
+                        response.hourly.weathercode[index]
+                    )
+                } else {
+                    Log.e(tag, "Hora no encontrada en la respuesta o hourly es null: $targetTime")
+                    null
+                }
+            } catch (e: Exception) {
+                Log.e(tag, "Error fetching weather", e)
+                null
+            }
         }
     }
 }

@@ -20,7 +20,8 @@ data class Circuit(
     val flag: String,
     val lapRecord: String,
     val raceLaps: Int,
-    val length: Double
+    val length: Double,
+    val localization: String,
 )
 
 

@@ -8,7 +8,8 @@
             "flag": "/f1/images/flags/australia.webp",
             "lapRecord": "1:17.125 (Charles Leclerc, Ferrari, 2024)",
             "raceLaps": 58,
-            "length": 5.278
+            "length": 5.278,
+            "localization": "-37.8497, 144.968"
         },
         {
             "id": 2,
@@ -18,7 +19,8 @@
             "flag": "/f1/images/flags/china.webp",
             "lapRecord": "1:32.238 (Michael Schumacher, Ferrari, 2004)",
             "raceLaps": 56,
-            "length": 5.451
+            "length": 5.451,
+            "localization": "31.3389, 121.2197"
         },
         {
             "id": 3,
@@ -28,7 +30,8 @@
             "flag": "/f1/images/flags/japan.webp",
             "lapRecord": "1:30.983 (Lewis Hamilton, Mercedes, 2019)",
             "raceLaps": 53,
-            "length": 5.807
+            "length": 5.807,
+            "localization": "34.8431, 136.5410"
         },
         {
             "id": 4,
@@ -38,7 +41,8 @@
             "flag": "/f1/images/flags/bahrain.webp",
             "lapRecord": "1:31.447 (Pedro de la Rosa, McLaren, 2005)",
             "raceLaps": 57,
-            "length": 5.412
+            "length": 5.412,
+            "localization": "26.0325, 50.5106"
         },
         {
             "id": 5,
@@ -48,7 +52,8 @@
             "flag": "/f1/images/flags/saudi_arabia.webp",
             "lapRecord": "1:30.734 (Lewis Hamilton, Mercedes, 2021)",
             "raceLaps": 50,
-            "length": 6.174
+            "length": 6.174,
+            "localization": "21.6319, 39.1044"
         },
         {
             "id": 6,
@@ -58,7 +63,8 @@
             "flag": "/f1/images/flags/usa.webp",
             "lapRecord": "1:29.520 (Max Verstappen, Red Bull, 2022)",
             "raceLaps": 57,
-            "length": 5.412
+            "length": 5.412,
+            "localization": "25.9581, -80.2389"
         },
         {
             "id": 7,
@@ -68,7 +74,8 @@
             "flag": "/f1/images/flags/italy.webp",
             "lapRecord": "1:15.484 (Lewis Hamilton, Mercedes, 2020)",
             "raceLaps": 63,
-            "length": 4.909
+            "length": 4.909,
+            "localization": "44.3439, 11.7167"
         },
         {
             "id": 8,
@@ -78,7 +85,8 @@
             "flag": "/f1/images/flags/monaco.webp",
             "lapRecord": "1:12.909 (Lewis Hamilton, Mercedes, 2021)",
             "raceLaps": 78,
-            "length": 3.337
+            "length": 3.337,
+            "localization": "43.7347, 7.4206"
         },
         {
             "id": 9,
@@ -88,7 +96,8 @@
             "flag": "/f1/images/flags/spain.webp",
             "lapRecord": "1:16.305 (Lewis Hamilton, Mercedes, 2021)",
             "raceLaps": 66,
-            "length": 4.655
+            "length": 4.655,
+            "localization": "41.5700, 2.2611"
         },
         {
             "id": 10,
@@ -98,7 +107,8 @@
             "flag": "/f1/images/flags/canada.webp",
             "lapRecord": "1:13.078 (Valtteri Bottas, Mercedes, 2019)",
             "raceLaps": 70,
-            "length": 4.361
+            "length": 4.361,
+            "localization": "45.5000, -73.5228"
         },
         {
             "id": 11,
@@ -108,7 +118,8 @@
             "flag": "/f1/images/flags/austria.webp",
             "lapRecord": "1:05.619 (Carlos Sainz, Ferrari, 2020)",
             "raceLaps": 71,
-            "length": 4.318
+            "length": 4.318,
+            "localization": "47.2197, 14.7647"
         },
         {
             "id": 12,
@@ -118,7 +129,8 @@
             "flag": "/f1/images/flags/uk.webp",
             "lapRecord": "1:27.097 (Lewis Hamilton, Mercedes, 2020)",
             "raceLaps": 52,
-            "length": 5.891
+            "length": 5.891,
+            "localization": "52.0786, -1.0169"
         },
         {
             "id": 13,
@@ -128,7 +140,8 @@
             "flag": "/f1/images/flags/hungary.webp",
             "lapRecord": "1:16.627 (Lewis Hamilton, Mercedes, 2020)",
             "raceLaps": 70,
-            "length": 4.381
+            "length": 4.381,
+            "localization": "47.5829, 19.2486"
         },
         {
             "id": 14,
@@ -138,7 +151,8 @@
             "flag": "/f1/images/flags/belgium.webp",
             "lapRecord": "1:41.252 (Valtteri Bottas, Mercedes, 2018)",
             "raceLaps": 44,
-            "length": 7.004
+            "length": 7.004,
+            "localization": "50.4372, 5.9714"
         },
         {
             "id": 15,
@@ -148,7 +162,8 @@
             "flag": "/f1/images/flags/netherlands.webp",
             "lapRecord": "1:09.756 (George Russell, Mercedes, 2021)",
             "raceLaps": 72,
-            "length": 4.259
+            "length": 4.259,
+            "localization": "52.3888, 4.5409"
         },
         {
             "id": 16,
@@ -158,7 +173,8 @@
             "flag": "/f1/images/flags/italy.webp",
             "lapRecord": "1:21.046 (Rubens Barrichello, Ferrari, 2004)",
             "raceLaps": 53,
-            "length": 5.793
+            "length": 5.793,
+            "localization": "45.6156, 9.2811"
         },
         {
             "id": 17,
@@ -168,7 +184,8 @@
             "flag": "/f1/images/flags/azerbaijan.webp",
             "lapRecord": "1:43.009 (Charles Leclerc, Ferrari, 2019)",
             "raceLaps": 51,
-            "length": 6.003
+            "length": 6.003,
+            "localization": "40.3725, 49.8533"
         },
         {
             "id": 18,
@@ -178,7 +195,8 @@
             "flag": "/f1/images/flags/singapore.webp",
             "lapRecord": "1:41.905 (Kevin Magnussen, Haas, 2018)",
             "raceLaps": 62,
-            "length": 4.940
+            "length": 4.940,
+            "localization": "1.2914, 103.8639"
         },
         {
             "id": 19,
@@ -188,7 +206,8 @@
             "flag": "/f1/images/flags/usa.webp",
             "lapRecord": "1:36.169 (Charles Leclerc, Ferrari, 2019)",
             "raceLaps": 56,
-            "length": 5.513
+            "length": 5.513,
+            "localization": "30.1328, -97.6411"
         },
         {
             "id": 20,
@@ -198,7 +217,8 @@
             "flag": "/f1/images/flags/mexico.webp",
             "lapRecord": "1:18.741 (Valtteri Bottas, Mercedes, 2021)",
             "raceLaps": 71,
-            "length": 4.304
+            "length": 4.304,
+            "localization": "19.4042, -99.0909"
         },
         {
             "id": 21,
@@ -208,7 +228,8 @@
             "flag": "/f1/images/flags/brazil.webp",
             "lapRecord": "1:10.540 (Valtteri Bottas, Mercedes, 2018)",
             "raceLaps": 71,
-            "length": 4.309
+            "length": 4.309,
+            "localization": "-23.7036, -46.6997"
         },
         {
             "id": 22,
@@ -218,7 +239,8 @@
             "flag": "/f1/images/flags/usa.webp",
             "lapRecord": "1:33.570 (Max Verstappen, Red Bull, 2023)",
             "raceLaps": 50,
-            "length": 6.201
+            "length": 6.201,
+            "localization": "36.1147, -115.1728"
         },
         {
             "id": 23,
@@ -228,7 +250,8 @@
             "flag": "/f1/images/flags/qatar.webp",
             "lapRecord": "1:21.217 (Max Verstappen, Red Bull, 2023)",
             "raceLaps": 57,
-            "length": 5.418
+            "length": 5.418,
+            "localization": "25.4900, 51.4542"
         },
         {
             "id": 24,
@@ -238,7 +261,8 @@
             "flag": "/f1/images/flags/uae.webp",
             "lapRecord": "1:26.103 (Lewis Hamilton, Mercedes, 2020)",
             "raceLaps": 58,
-            "length": 5.281
+            "length": 5.281,
+            "localization": "24.4672, 54.6031"
         }
     ]
 }
