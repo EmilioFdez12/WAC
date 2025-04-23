@@ -24,7 +24,13 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     data class RaceData(
         val grandPrix: RaceInfo,
-        val raceDateTime: Date
+        val sessions: List<SessionData>
+    )
+
+    data class SessionData(
+        val name: String,
+        val dateTime: Date,
+        val duration: Long = 2 * 60 * 60 * 1000 // 2 hours in milliseconds
     )
 
     private val _f1RaceData = MutableStateFlow<DataState<RaceData>>(DataState.Loading)
@@ -51,7 +57,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         updateJob?.cancel()
         updateJob = viewModelScope.launch {
             while (isActive) {
-                delay(999)
+                delay(1000)
                 updateTimeRemaining()
             }
         }
@@ -64,45 +70,144 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         raceDataFlow.value = DataState.Loading
         try {
             val leaderName = getLeaderDriverName(category)
+            val grandPrixObject = repository.getNextGrandPrixObject(category)
+                ?: throw IllegalStateException("No Grand Prix found")
             val raceInfo = repository.getNextGrandPrix(category, leaderName)
-            val raceDateTime = DateUtils.parseDate(
-                repository.getNextGrandPrixObject(category)?.sessions?.race?.day ?: "",
-                repository.getNextGrandPrixObject(category)?.sessions?.race?.time ?: "",
-                DateUtils.getCurrentYear()
-            ) ?: throw IllegalStateException("No valid race date")
-            raceDataFlow.value = DataState.Success(RaceData(raceInfo, raceDateTime))
+
+            // Obtain all sessions
+            val sessions = mutableListOf<SessionData>()
+            val sessionMap = grandPrixObject.sessions
+            val currentYear = DateUtils.getCurrentYear()
+
+            // List of sessions ordered by date
+            val sessionTypes = listOf(
+                "practice1" to "FP 1",
+                "practice2" to "FP 2",
+                "practice3" to "FP 3",
+                "sprintQualifying" to "Sprint Qualy",
+                "sprint" to "Sprint",
+                "qualifying" to "Qualy",
+                "race" to "Race"
+            )
+
+            // Add sessions to the list
+            sessionTypes.forEach { (key, name) ->
+                val session = when (key) {
+                    "practice1" -> sessionMap.practice1
+                    "practice2" -> sessionMap.practice2
+                    "practice3" -> sessionMap.practice3
+                    "sprintQualifying" -> sessionMap.sprintQualifying
+                    "sprint" -> sessionMap.sprint
+                    "qualifying" -> sessionMap.qualifying
+                    "race" -> sessionMap.race
+                    else -> null
+                }
+                if (session != null && session.day.isNotEmpty() && session.time.isNotEmpty()) {
+                    val dateTime = DateUtils.parseDate(session.day, session.time, currentYear)
+                    if (dateTime != null) {
+                        sessions.add(SessionData(name = name, dateTime = dateTime))
+                    }
+                }
+            }
+
+            if (sessions.isEmpty()) {
+                throw IllegalStateException("No valid sessions found")
+            }
+
+            // Order by date
+            sessions.sortBy { it.dateTime }
+
+            // Calculate current or next session and time remaining
+            val currentTime = Calendar.getInstance().time
+            val (sessionName, timeRemaining) = calculateSessionAndTimeRemaining(sessions, currentTime)
+
+            // Initialize with the correct session
+            raceDataFlow.value = DataState.Success(
+                RaceData(
+                    grandPrix = raceInfo.copy(
+                        sessionName = sessionName ?: sessions.first().name,
+                        timeRemaining = timeRemaining
+                    ),
+                    sessions = sessions
+                )
+            )
         } catch (e: Exception) {
             raceDataFlow.value = DataState.Error("Error loading race data: ${e.message}")
         }
     }
 
     private fun updateTimeRemaining() {
-        val currentDate = Calendar.getInstance()
+        val currentTime = Calendar.getInstance().time
 
         _f1RaceData.value.let { state ->
             if (state is DataState.Success) {
-                val updatedRaceInfo = state.data.grandPrix.copy(
-                    timeRemaining = DateUtils.calculateTimeRemaining(
-                        state.data.raceDateTime,
-                        currentDate
-                    )
-                )
-                _f1RaceData.value = DataState.Success(state.data.copy(grandPrix = updatedRaceInfo))
+                updateRaceDataTimeRemaining(state, currentTime, _f1RaceData, "f1")
             }
         }
 
         _motoGPRaceData.value.let { state ->
             if (state is DataState.Success) {
-                val updatedRaceInfo = state.data.grandPrix.copy(
-                    timeRemaining = DateUtils.calculateTimeRemaining(
-                        state.data.raceDateTime,
-                        currentDate
-                    )
-                )
-                _motoGPRaceData.value =
-                    DataState.Success(state.data.copy(grandPrix = updatedRaceInfo))
+                updateRaceDataTimeRemaining(state, currentTime, _motoGPRaceData, "motogp")
             }
         }
+    }
+
+    private fun updateRaceDataTimeRemaining(
+        state: DataState.Success<RaceData>,
+        currentTime: Date,
+        raceDataFlow: MutableStateFlow<DataState<RaceData>>,
+        category: String
+    ) {
+        val sessions = state.data.sessions
+        val (sessionName, timeRemaining) = calculateSessionAndTimeRemaining(sessions, currentTime)
+
+        if (sessionName == null) {
+            // If there is no next session, load the next Grand Prix
+            viewModelScope.launch {
+                updateRaceData(category, raceDataFlow)
+            }
+            return
+        }
+
+        // Update with the session and time remaining
+        val updatedRaceInfo = state.data.grandPrix.copy(
+            timeRemaining = timeRemaining,
+            sessionName = sessionName
+        )
+        raceDataFlow.value = DataState.Success(
+            state.data.copy(grandPrix = updatedRaceInfo)
+        )
+    }
+
+    private fun calculateSessionAndTimeRemaining(
+        sessions: List<SessionData>,
+        currentTime: Date
+    ): Pair<String?, String> {
+        // Search ongoing session
+        val currentSession = sessions.find { session ->
+            val sessionEnd = Date(session.dateTime.time + session.duration)
+            session.dateTime <= currentTime && currentTime < sessionEnd
+        }
+
+        if (currentSession != null) {
+            // Show LIVE for ongoing session
+            return currentSession.name to "\u25CF LIVE"
+        }
+
+        // Search next session
+        val nextSession = sessions.find { it.dateTime > currentTime }
+
+        if (nextSession == null) {
+            // No future sessions
+            return null to "No sessions"
+        }
+
+        // Calculate time remaining for the next session
+        val timeRemaining = DateUtils.calculateTimeRemaining(
+            nextSession.dateTime,
+            Calendar.getInstance()
+        )
+        return nextSession.name to timeRemaining
     }
 
     private suspend fun getLeaderDriverName(category: String): String {

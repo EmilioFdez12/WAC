@@ -16,6 +16,7 @@ object Constants {
 
     const val HOME = "home"
     const val CAT_DETAILS = "category_details"
+    const val ASSETS = "file:///android_asset"
 
     const val CATEGORY_MOTOGP = "motogp"
     const val CATEGORY_F1 = "f1"

@@ -2,24 +2,11 @@ package com.emi.wac.ui.components.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import com.emi.wac.common.Constants.ASSETS
 import com.emi.wac.data.model.RaceInfo
 import com.emi.wac.ui.theme.PrimaryWhite
 import com.emi.wac.ui.theme.getPrimaryColorForCategory
@@ -83,7 +71,7 @@ fun RaceCard(
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data("file:///android_asset${raceInfo.leaderImagePath}")
+                    .data("$ASSETS${raceInfo.leaderImagePath}")
                     .crossfade(true)
                     .build(),
                 contentDescription = "Leader image",
@@ -113,14 +101,14 @@ fun RaceCard(
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data("file:///android_asset/logos/$logo.png")
+                        .data("$ASSETS/logos/$logo.png")
                         .crossfade(true)
                         .build(),
                     contentDescription = logo.uppercase() + " Logo",
                 )
 
                 Text(
-                    text = "NEXT RACE",
+                    text = raceInfo.sessionName.uppercase(),
                     color = PrimaryWhite,
                     modifier = Modifier.padding(top = 12.dp),
                     style = MaterialTheme.typography.titleLarge
@@ -129,7 +117,10 @@ fun RaceCard(
                 Box(
                     modifier = Modifier
                         .padding(top = 8.dp)
-                        .background(countdownColor, RoundedCornerShape(4.dp))
+                        .background(
+                            if (raceInfo.timeRemaining == "LIVE") Color.Green else countdownColor,
+                            RoundedCornerShape(4.dp)
+                        )
                 ) {
                     Text(
                         text = raceInfo.timeRemaining,
@@ -143,7 +134,7 @@ fun RaceCard(
 
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data("file:///android_asset/${raceInfo.flagPath}")
+                        .data("$ASSETS/${raceInfo.flagPath}")
                         .crossfade(true)
                         .build(),
                     contentDescription = "Country Flag",
