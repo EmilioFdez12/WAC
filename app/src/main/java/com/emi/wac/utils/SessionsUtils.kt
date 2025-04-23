@@ -1,4 +1,4 @@
-package com.emi.wac.data.utils
+package com.emi.wac.utils
 
 /**
  * Utility functions for handling race sessions.

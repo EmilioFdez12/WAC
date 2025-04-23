@@ -10,8 +10,8 @@ import com.emi.wac.data.model.drivers.Drivers
 import com.emi.wac.data.model.sessions.GrandPrix
 import com.emi.wac.data.model.sessions.Schedule
 import com.emi.wac.data.network.WeatherClient
-import com.emi.wac.data.utils.DateUtils
-import com.emi.wac.data.utils.JsonParser
+import com.emi.wac.utils.DateUtils
+import com.emi.wac.utils.JsonParser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat

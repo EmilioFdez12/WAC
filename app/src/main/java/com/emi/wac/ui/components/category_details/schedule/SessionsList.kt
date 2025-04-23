@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.emi.wac.data.model.sessions.GrandPrix
-import com.emi.wac.data.utils.SessionsUtils
+import com.emi.wac.utils.SessionsUtils
 import com.emi.wac.ui.theme.AlataTypography
 
 @Composable

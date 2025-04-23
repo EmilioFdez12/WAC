@@ -1,6 +1,10 @@
 package com.emi.wac.ui.screens
 
 import android.app.Application
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,7 +12,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -59,56 +62,56 @@ fun HomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            when (val state = nextF1Race) {
-                is DataState.Loading -> {
-                    CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
-                }
-
-                is DataState.Success -> {
-                    RaceCard(
-                        logo = "f1",
-                        raceInfo = state.data.grandPrix,
-                        onCardClick = { navController.navigate("$CAT_DETAILS/f1") }
-                    )
-                }
-
-                is DataState.Error -> {
-                    Text(
-                        text = "Error F1: ${state.message}",
-                        color = Red,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
+            AnimatedVisibility(
+                visible = nextF1Race is DataState.Success,
+                enter = fadeIn(animationSpec = tween(300)),
+                exit = fadeOut(animationSpec = tween(300))
+            ) {
+                when (val state = nextF1Race) {
+                    is DataState.Success -> {
+                        RaceCard(
+                            logo = "f1",
+                            raceInfo = state.data.grandPrix,
+                            onCardClick = { navController.navigate("$CAT_DETAILS/f1") }
+                        )
+                    }
+                    is DataState.Error -> {
+                        Text(
+                            text = "Error F1: ${state.message}",
+                            color = Red,
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        )
+                    }
+                    else -> {} // No renderizar nada en Loading
                 }
             }
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            when (val state = nextMotoGPRace) {
-                is DataState.Loading -> {
-                    CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
-                }
-
-                is DataState.Success -> {
-                    RaceCard(
-                        logo = "motogp",
-                        raceInfo = state.data.grandPrix,
-                        countdownColor = PrimaryOrange,
-                        imageOffset = Offset(0f, 36f),
-                        imageScale = 1.6f,
-                        onCardClick = { navController.navigate("$CAT_DETAILS/motogp") }
-                    )
-                }
-
-                is DataState.Error -> {
-                    Text(
-                        text = "Error MotoGP: ${state.message}",
-                        color = Red,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
+            AnimatedVisibility(
+                visible = nextMotoGPRace is DataState.Success,
+                enter = fadeIn(animationSpec = tween(300)),
+                exit = fadeOut(animationSpec = tween(300))
+            ) {
+                when (val state = nextMotoGPRace) {
+                    is DataState.Success -> {
+                        RaceCard(
+                            logo = "motogp",
+                            raceInfo = state.data.grandPrix,
+                            countdownColor = PrimaryOrange,
+                            imageOffset = Offset(0f, 36f),
+                            imageScale = 1.6f,
+                            onCardClick = { navController.navigate("$CAT_DETAILS/motogp") }
+                        )
+                    }
+                    is DataState.Error -> {
+                        Text(
+                            text = "Error MotoGP: ${state.message}",
+                            color = Red,
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        )
+                    }
+                    else -> {} // No renderizar nada en Loading
                 }
             }
         }

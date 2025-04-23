@@ -46,7 +46,8 @@ import com.emi.wac.ui.theme.getPrimaryColorForCategory
 @Composable
 fun RaceScheduleCard(
     grandPrix: GrandPrix,
-    category: String
+    category: String,
+    modifier: Modifier,
 ) {
     val primaryColor = getPrimaryColorForCategory(category)
     var expanded by remember { mutableStateOf(false) }

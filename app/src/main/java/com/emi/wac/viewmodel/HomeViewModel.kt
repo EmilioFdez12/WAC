@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.emi.wac.data.model.RaceInfo
 import com.emi.wac.data.repository.RacingRepository
 import com.emi.wac.data.repository.StandingsRepository
-import com.emi.wac.data.utils.DateUtils
+import com.emi.wac.utils.DateUtils
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.Job

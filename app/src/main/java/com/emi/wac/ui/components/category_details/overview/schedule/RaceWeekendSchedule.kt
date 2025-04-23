@@ -21,7 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.emi.wac.data.model.sessions.GrandPrix
 import com.emi.wac.data.repository.RacingRepository
-import com.emi.wac.data.utils.DateUtils
+import com.emi.wac.utils.DateUtils
 import com.emi.wac.ui.theme.AlataTypography
 import com.emi.wac.ui.theme.getHardColorForCategory
 import com.emi.wac.ui.theme.getSoftColorForCategory

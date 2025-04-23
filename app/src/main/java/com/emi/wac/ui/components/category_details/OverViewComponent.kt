@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -55,16 +54,6 @@ fun OverViewComponent(
                     category = category
                 )
             }
-
-            is DataState.Loading -> {
-                Log.d("OverViewComponent", "LeaderInfo Loading")
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .padding(top = 16.dp)
-                        .align(Alignment.CenterHorizontally)
-                )
-            }
-
             is DataState.Error -> {
                 Log.d("OverViewComponent", "LeaderInfo Error: ${state.message}")
                 Text(
@@ -72,6 +61,10 @@ fun OverViewComponent(
                     modifier = Modifier.padding(top = 16.dp),
                     color = Red
                 )
+            }
+            is DataState.Loading -> {
+                Log.d("OverViewComponent", "LeaderInfo Loading")
+                // No renderizar nada en Loading
             }
         }
 
@@ -89,21 +82,15 @@ fun OverViewComponent(
                     category = category
                 )
             }
-
-            is DataState.Loading -> {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .padding(top = 16.dp)
-                        .align(Alignment.CenterHorizontally)
-                )
-            }
-
             is DataState.Error -> {
                 Text(
                     text = "Error: ${state.message}",
                     modifier = Modifier.padding(top = 16.dp),
                     color = Red
                 )
+            }
+            is DataState.Loading -> {
+                // No renderizar nada en Loading
             }
         }
 
@@ -120,12 +107,10 @@ fun OverViewComponent(
                         .padding(top = 8.dp, start = 32.dp, end = 32.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // Fila para RACE y QUALY
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        // Race
                         weatherData.race?.let { (temperature, weatherCode) ->
                             WeatherRow(
                                 sessionName = "RACE",
@@ -142,7 +127,6 @@ fun OverViewComponent(
                             color = Red
                         )
 
-                        // Qualifying
                         weatherData.qualifying?.let { (temperature, weatherCode) ->
                             WeatherRow(
                                 sessionName = "QUALY",
@@ -160,7 +144,6 @@ fun OverViewComponent(
                         )
                     }
 
-                    // Sprint debajo, centrado (si existe)
                     weatherData.sprint?.let { (temperature, weatherCode) ->
                         WeatherRow(
                             sessionName = "SPRINT",
@@ -174,17 +157,11 @@ fun OverViewComponent(
                     }
                 }
             }
-
-            is DataState.Loading -> {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .padding(top = 8.dp)
-                        .align(Alignment.CenterHorizontally)
-                )
-            }
-
             is DataState.Error -> {
                 // No mostrar nada en caso de error
+            }
+            is DataState.Loading -> {
+                // No renderizar nada en Loading
             }
         }
 
@@ -201,21 +178,15 @@ fun OverViewComponent(
                     circuit = state.data
                 )
             }
-
-            is DataState.Loading -> {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .padding(top = 16.dp)
-                        .align(Alignment.CenterHorizontally)
-                )
-            }
-
             is DataState.Error -> {
                 Text(
                     text = "Error: ${state.message}",
                     modifier = Modifier.padding(top = 16.dp),
                     color = Red
                 )
+            }
+            is DataState.Loading -> {
+                // No renderizar nada en Loading
             }
         }
     }

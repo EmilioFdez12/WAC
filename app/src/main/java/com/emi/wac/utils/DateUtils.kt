@@ -1,4 +1,4 @@
-package com.emi.wac.data.utils
+package com.emi.wac.utils
 
 import java.text.SimpleDateFormat
 import java.util.Calendar

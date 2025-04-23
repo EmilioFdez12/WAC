@@ -1,4 +1,4 @@
-package com.emi.wac.data.utils
+package com.emi.wac.utils
 
 import com.emi.wac.R
 
