@@ -72,9 +72,9 @@ fun HomeScreen(
                 when (val state = nextF1Race) {
                     is DataState.Success -> {
                         RaceCard(
-                            logo = "f1",
+                            logo = CATEGORY_F1,
                             raceInfo = state.data.grandPrix,
-                            onCardClick = { navController.navigate("$CAT_DETAILS/f1") },
+                            onCardClick = { navController.navigate("$CAT_DETAILS/$CATEGORY_F1") },
                             imageOffset = Offset(-24f, 0f),
                             category = CATEGORY_F1
                         )
@@ -100,12 +100,12 @@ fun HomeScreen(
                 when (val state = nextMotoGPRace) {
                     is DataState.Success -> {
                         RaceCard(
-                            logo = "motogp",
+                            logo = CATEGORY_MOTOGP,
                             raceInfo = state.data.grandPrix,
                             countdownColor = PrimaryOrange,
                             imageOffset = Offset(-24f, 36f),
                             imageScale = 1.6f,
-                            onCardClick = { navController.navigate("$CAT_DETAILS/$CATEGORY_F1") },
+                            onCardClick = { navController.navigate("$CAT_DETAILS/$CATEGORY_MOTOGP") },
                             category = CATEGORY_MOTOGP
                         )
                     }

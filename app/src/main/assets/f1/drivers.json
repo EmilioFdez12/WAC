@@ -11,8 +11,8 @@
         {
             "id": 2,
             "name": "Liam Lawson",
-            "teamId": 1,
-            "team": "Red Bull Racing",
+            "teamId": 7,
+            "team": "Racing Bulls",
             "number": 30,
             "portrait": "/f1/images/drivers/LIALAW01.webp"
         },
@@ -99,8 +99,8 @@
         {
             "id": 13,
             "name": "Yuki Tsunoda",
-            "teamId": 7,
-            "team": "Racing Bulls",
+            "teamId": 1,
+            "team": "Red Bull Racing",
             "number": 22,
             "portrait": "/f1/images/drivers/YUKTSU01.webp"
         },
@@ -114,7 +114,7 @@
         },
         { 
             "id": 15,
-            "name": "Alex Albon",
+            "name": "Alexander Albon",
             "teamId": 8,
             "team": "Williams",
             "number": 23,
@@ -130,7 +130,7 @@
         },
         {
             "id": 17,
-            "name": "Nio Hülkenberg",
+            "name": "Nico Hulkenberg",
             "teamId": 9,
             "team": "Sauber",
             "number": 27,

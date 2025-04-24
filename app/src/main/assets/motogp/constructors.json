@@ -1,59 +1,81 @@
 {
-  "constructors": [
-    {
-      "teamId": 1,
-      "team": "Ducati Lenovo Team",
-      "car": "/motogp/images/cars/ducati-lenovo.webp"
-    },
-    {
-      "teamId": 2,
-      "team": "Gresini Racing MotoGP",
-      "car": "/motogp/images/cars/gresini-racing.webp"
-    },
-    {
-      "teamId": 3,
-      "team": "Aprilia Racing",
-      "car": "/motogp/images/cars/aprilia-racing.webp"
-    },
-    {
-      "teamId": 4,
-      "team": "Red Bull KTM Tech3",
-      "car": "/motogp/images/cars/red-bull-ktm-tech3.webp"
-    },
-    {
-      "teamId": 5,
-      "team": "Monster Energy Yamaha MotoGP",
-      "car": "/motogp/images/cars/yamaha-motogp.webp"
-    },
-    {
-      "teamId": 6,
-      "team": "Prima Pramac Yamaha Factory Team",
-      "car": "/motogp/images/cars/pramac-yamaha.webp"
-    },
-    {
-      "teamId": 7,
-      "team": "Red Bull KTM Factory Racing",
-      "car": "/motogp/images/cars/red-bull-ktm-factory.webp"
-    },
-    {
-      "teamId": 8,
-      "team": "Repsol Honda Team",
-      "car": "/motogp/images/cars/repsol-honda.webp"
-    },
-    {
-      "teamId": 9,
-      "team": "Trackhouse Racing",
-      "car": "/motogp/images/cars/trackhouse-racing.webp"
-    },
-    {
-      "teamId": 10,
-      "team": "LCR Honda Castrol",
-      "car": "/motogp/images/cars/lcr-honda.webp"
-    },
-    {
-      "teamId": 11,
-      "team": "Pertamina Enduro VR46",
-      "car": "/motogp/images/cars/vr46-racing.webp"
-    }
-  ]
+    "constructors": [
+        {
+            "teamId": 1,
+            "team": "Ducati Lenovo Team",
+            "car": "/motogp/images/cars/ducati-lenovo.webp",
+            "logo": "",
+            "imagotipo": ""
+        },
+        {
+            "teamId": 2,
+            "team": "Gresini Racing MotoGP",
+            "car": "/motogp/images/cars/gresini-racing.webp",
+            "logo": "",
+            "imagotipo": ""
+        },
+        {
+            "teamId": 3,
+            "team": "Aprilia Racing",
+            "car": "/motogp/images/cars/aprilia-racing.webp",
+            "logo": "",
+            "imagotipo": ""
+        },
+        {
+            "teamId": 4,
+            "team": "Red Bull KTM Tech3",
+            "car": "/motogp/images/cars/red-bull-ktm-tech3.webp",
+            "logo": "",
+            "imagotipo": ""
+        },
+        {
+            "teamId": 5,
+            "team": "Monster Energy Yamaha MotoGP",
+            "car": "/motogp/images/cars/yamaha-motogp.webp",
+            "logo": "",
+            "imagotipo": ""
+        },
+        {
+            "teamId": 6,
+            "team": "Prima Pramac Yamaha Factory Team",
+            "car": "/motogp/images/cars/pramac-yamaha.webp",
+            "logo": "",
+            "imagotipo": ""
+        },
+        {
+            "teamId": 7,
+            "team": "Red Bull KTM Factory Racing",
+            "car": "/motogp/images/cars/red-bull-ktm-factory.webp",
+            "logo": "",
+            "imagotipo": ""
+        },
+        {
+            "teamId": 8,
+            "team": "Repsol Honda Team",
+            "car": "/motogp/images/cars/repsol-honda.webp",
+            "logo": "",
+            "imagotipo": ""
+        },
+        {
+            "teamId": 9,
+            "team": "Trackhouse Racing",
+            "car": "/motogp/images/cars/trackhouse-racing.webp",
+            "logo": "",
+            "imagotipo": ""
+        },
+        {
+            "teamId": 10,
+            "team": "LCR Honda Castrol",
+            "car": "/motogp/images/cars/lcr-honda.webp",
+            "logo": "",
+            "imagotipo": ""
+        },
+        {
+            "teamId": 11,
+            "team": "Pertamina Enduro VR46",
+            "car": "/motogp/images/cars/vr46-racing.webp",
+            "logo": "",
+            "imagotipo": ""
+        }
+    ]
 }

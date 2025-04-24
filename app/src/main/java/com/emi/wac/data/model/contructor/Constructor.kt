@@ -8,9 +8,11 @@ package com.emi.wac.data.model.contructor
  * @property car The path to the car image of the team
  */
 data class Constructor(
-    val teamId: String,
+    val teamId: Int,
     val team: String,
     val car: String,
+    val logo: String,
+    val imagotipo: String,
 )
 
 /**

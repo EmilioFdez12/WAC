@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -24,15 +25,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import coil3.compose.rememberAsyncImagePainter
 import coil3.request.ImageRequest
+import coil3.request.crossfade
+import com.emi.wac.common.Constants.ASSETS
 import com.emi.wac.common.Constants.CATEGORY_MOTOGP
+import com.emi.wac.data.model.contructor.Constructor
+import com.emi.wac.data.model.contructor.Constructors
 import com.emi.wac.data.model.drivers.Driver
 import com.emi.wac.data.model.drivers.DriverStanding
 import com.emi.wac.data.model.drivers.Drivers
@@ -47,9 +54,11 @@ fun TopThreeDrivers(
     val context = LocalContext.current
     val racingRepository = remember { RacingRepository(context) }
     var driversData by remember { mutableStateOf<Drivers?>(null) }
+    var constructorsData by remember { mutableStateOf<Constructors?>(null) }
 
     LaunchedEffect(category) {
         driversData = racingRepository.getDrivers(category)
+        constructorsData = racingRepository.getConstructors(category)
     }
 
     val firstPlaceColor = Color(0xFFFFD700)
@@ -70,6 +79,7 @@ fun TopThreeDrivers(
                 position = "2°",
                 color = secondPlaceColor,
                 driversList = driversData?.drivers,
+                constructorList = constructorsData?.constructors,
                 category = category,
                 modifier = Modifier.weight(1f)
             )
@@ -82,6 +92,7 @@ fun TopThreeDrivers(
                 position = "1°",
                 color = firstPlaceColor,
                 driversList = driversData?.drivers,
+                constructorList = constructorsData?.constructors,
                 category = category,
                 modifier = Modifier.weight(1f)
             )
@@ -94,6 +105,7 @@ fun TopThreeDrivers(
                 position = "3°",
                 color = thirdPlaceColor,
                 driversList = driversData?.drivers,
+                constructorList = constructorsData?.constructors,
                 category = category,
                 modifier = Modifier.weight(1f)
             )
@@ -107,17 +119,38 @@ private fun TopDriverCard(
     position: String,
     color: Color,
     driversList: List<Driver>?,
+    constructorList: List<Constructor>?,
     category: String,
     modifier: Modifier = Modifier
 ) {
     // Find the driver in the drivers list to get the portrait
     val driver = driversList?.find { it.name.contains(standing.driver, ignoreCase = true) }
     val portraitPath = driver?.portrait ?: ""
+    // Find constructor logo
+    val teamImagotipo = driver?.teamId?.let { teamId ->
+        constructorList?.find { it.teamId == teamId }?.imagotipo
+    } ?: ""
 
     Column(
         modifier = modifier.padding(4.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Team imagotipo above the card
+        if (teamImagotipo.isNotEmpty()) {
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data("$ASSETS$teamImagotipo")
+                    .crossfade(true)
+                    .build(),
+                contentDescription = "${driver?.team} imagotipo",
+                modifier = Modifier
+                    .size(width = 160.dp, height = 80.dp)
+                    .padding(bottom = 8.dp)
+                    .clip(RoundedCornerShape(8.dp)),
+                contentScale = ContentScale.Fit
+            )
+        }
+
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -133,7 +166,7 @@ private fun TopDriverCard(
             ) {
                 // Driver portrait
                 if (portraitPath.isNotEmpty()) {
-                    val imagePath = "file:///android_asset$portraitPath"
+                    val imagePath = "$ASSETS$portraitPath"
                     Image(
                         painter = rememberAsyncImagePainter(
                             ImageRequest.Builder(LocalContext.current)
