@@ -11,7 +11,7 @@ object Constants {
         flagPath = "",
         timeRemaining = "",
         leaderImagePath = "",
-        leaderName = "Fernando Alonso"
+        leaderName = ""
     )
 
     const val HOME = "home"

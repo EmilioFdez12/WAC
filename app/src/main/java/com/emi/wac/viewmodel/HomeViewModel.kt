@@ -1,6 +1,7 @@
 package com.emi.wac.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.emi.wac.data.model.RaceInfo
@@ -15,8 +16,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
+import java.util.Locale
 
 class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = RacingRepository(application)
@@ -57,7 +60,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         updateJob?.cancel()
         updateJob = viewModelScope.launch {
             while (isActive) {
-                delay(1000)
+                delay(1000) // Update every second
                 updateTimeRemaining()
             }
         }
@@ -106,6 +109,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                     val dateTime = DateUtils.parseDate(session.day, session.time, currentYear)
                     if (dateTime != null) {
                         sessions.add(SessionData(name = name, dateTime = dateTime))
+                        // Log session details for debugging
+                        Log.d("HomeViewModel", "$category: $name - $dateTime")
                     }
                 }
             }
@@ -183,6 +188,25 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         sessions: List<SessionData>,
         currentTime: Date
     ): Pair<String?, String> {
+        // Get FP1 date to check 24-hour threshold
+        val fp1Session = sessions.firstOrNull { it.name == "FP 1" }
+            ?: return null to "No FP1 session"
+
+        // Format FP1 date as "dd MMM" (e.g., "25 Apr")
+        val dateFormat = SimpleDateFormat("dd MMM", Locale.ENGLISH)
+        val fp1DateString = dateFormat.format(fp1Session.dateTime)
+
+        // Check if FP1 is in the future and calculate hours to FP1
+        val timeToFp1 = fp1Session.dateTime.time - currentTime.time
+        val hoursToFp1 = timeToFp1.toDouble() / (1000 * 60 * 60) // Use Double for precision
+        val within24Hours = hoursToFp1 <= 24 && hoursToFp1 >= 0
+
+        if (!within24Hours) {
+            // More than 24 hours to FP1 or FP1 in the past: show date
+            return fp1Session.name to fp1DateString
+        }
+
+        // Within 24 hours: proceed with session logic
         // Search ongoing session
         val currentSession = sessions.find { session ->
             val sessionEnd = Date(session.dateTime.time + session.duration)

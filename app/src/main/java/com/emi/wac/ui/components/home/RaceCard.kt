@@ -15,6 +15,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -23,8 +24,11 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.emi.wac.common.Constants.ASSETS
 import com.emi.wac.data.model.RaceInfo
+import com.emi.wac.ui.theme.AlataTypography
 import com.emi.wac.ui.theme.PrimaryWhite
+import com.emi.wac.ui.theme.getHardColorForCategory
 import com.emi.wac.ui.theme.getPrimaryColorForCategory
+import com.emi.wac.ui.theme.getSoftColorForCategory
 
 @Composable
 fun RaceCard(
@@ -37,6 +41,7 @@ fun RaceCard(
         Color(0xFF151515),
         Color(0xFF151515)
     ),
+    category: String,
     countdownColor: Color = getPrimaryColorForCategory(logo),
     imageAlignment: Alignment = Alignment.CenterEnd,
     imagePadding: PaddingValues = PaddingValues(start = 100.dp),
@@ -69,6 +74,17 @@ fun RaceCard(
                     )
                 )
         ) {
+            Text(
+                text = "LEADER",
+                color = getHardColorForCategory(category),
+                style = AlataTypography.titleMedium,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(end = 16.dp, top = 16.dp)
+                    .background(getSoftColorForCategory(category), RoundedCornerShape(4.dp))
+                    .padding(horizontal = 8.dp, vertical = 4.dp),
+            )
+
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data("$ASSETS${raceInfo.leaderImagePath}")

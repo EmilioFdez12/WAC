@@ -4,6 +4,14 @@ import com.emi.wac.data.model.weather.WeatherResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
+/**
+ * Interface for the Open-Meteo Weather API service.
+ * This interface defines the endpoints for retrieving weather forecast data
+ * for specific locations and time periods.
+ * 
+ * The API provides hourly weather data including temperature and weather conditions
+ * which is used to display weather information for race weekends.
+ */
 interface WeatherAPIService {
     @GET("v1/forecast")
     suspend fun getHourlyWeather(

@@ -8,6 +8,8 @@ package com.emi.wac.data.model
  * @property timeRemaining Time remaining until the next Grand Prix
  * @property leaderImagePath Path to the image of the championship leader
  * @property leaderName Name of the championship leader
+ * @property sessionName Name of the session
+ *
  */
 data class RaceInfo(
     val gpName: String,

@@ -32,6 +32,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil3.compose.rememberAsyncImagePainter
 import com.emi.wac.common.Constants.BCKG_IMG
+import com.emi.wac.common.Constants.CATEGORY_F1
+import com.emi.wac.common.Constants.CATEGORY_MOTOGP
 import com.emi.wac.common.Constants.CAT_DETAILS
 import com.emi.wac.ui.components.home.RaceCard
 import com.emi.wac.ui.theme.PrimaryOrange
@@ -72,14 +74,16 @@ fun HomeScreen(
                         RaceCard(
                             logo = "f1",
                             raceInfo = state.data.grandPrix,
-                            onCardClick = { navController.navigate("$CAT_DETAILS/f1") }
+                            onCardClick = { navController.navigate("$CAT_DETAILS/f1") },
+                            imageOffset = Offset(-24f, 0f),
+                            category = CATEGORY_F1
                         )
                     }
                     is DataState.Error -> {
                         Text(
                             text = "Error F1: ${state.message}",
                             color = Red,
-                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                            modifier = Modifier.align(Alignment.CenterHorizontally),
                         )
                     }
                     else -> {} // No renderizar nada en Loading
@@ -99,9 +103,10 @@ fun HomeScreen(
                             logo = "motogp",
                             raceInfo = state.data.grandPrix,
                             countdownColor = PrimaryOrange,
-                            imageOffset = Offset(0f, 36f),
+                            imageOffset = Offset(-24f, 36f),
                             imageScale = 1.6f,
-                            onCardClick = { navController.navigate("$CAT_DETAILS/motogp") }
+                            onCardClick = { navController.navigate("$CAT_DETAILS/$CATEGORY_F1") },
+                            category = CATEGORY_MOTOGP
                         )
                     }
                     is DataState.Error -> {

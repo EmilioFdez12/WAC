@@ -3,7 +3,8 @@
     {
       "teamId": 1,
       "team": "Red Bull Racing",
-      "car": "/f1/images/cars/red-bull-racing.webp"
+      "car": "/f1/images/cars/red-bull-racing.webp",
+      "logo": "/f1/images/logos/REDBULL01.webp"
     },
     {
       "teamId": 2,
