@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -45,6 +46,7 @@ import com.emi.wac.data.model.drivers.DriverStanding
 import com.emi.wac.data.model.drivers.Drivers
 import com.emi.wac.data.repository.RacingRepository
 import com.emi.wac.ui.theme.AlataTypography
+import com.emi.wac.ui.theme.PrimaryBlack
 
 @Composable
 fun TopThreeDrivers(
@@ -127,29 +129,32 @@ private fun TopDriverCard(
     val driver = driversList?.find { it.name.contains(standing.driver, ignoreCase = true) }
     val portraitPath = driver?.portrait ?: ""
     // Find constructor logo
-    val teamImagotipo = driver?.teamId?.let { teamId ->
-        constructorList?.find { it.teamId == teamId }?.imagotipo
+    val teamLogo = driver?.teamId?.let { teamId ->
+        constructorList?.find { it.teamId == teamId }?.logo
     } ?: ""
 
     Column(
         modifier = modifier.padding(4.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Team imagotipo above the card
-        if (teamImagotipo.isNotEmpty()) {
+        // Team logo above the card
+        if (teamLogo.isNotEmpty()) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data("$ASSETS$teamImagotipo")
+                    .data("$ASSETS$teamLogo")
                     .crossfade(true)
                     .build(),
-                contentDescription = "${driver?.team} imagotipo",
+                contentDescription = "${driver?.team} logo",
                 modifier = Modifier
-                    .size(width = 160.dp, height = 80.dp)
-                    .padding(bottom = 8.dp)
+                    .size(width = 80.dp, height = 40.dp)
+                    .background(PrimaryBlack, RoundedCornerShape(8.dp))
+                    .padding(horizontal = 8.dp, vertical = 8.dp)
                     .clip(RoundedCornerShape(8.dp)),
                 contentScale = ContentScale.Fit
             )
         }
+
+        Spacer(modifier = Modifier.size(8.dp))
 
         Card(
             modifier = Modifier

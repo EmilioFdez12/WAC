@@ -26,6 +26,12 @@ val AlataTypography = Typography(
         lineHeight = 24.sp,
         letterSpacing = 0.15.sp
     ),
+    titleSmall = TextStyle(
+        fontFamily = AlataFontFamily,
+        fontSize = 18.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
+    ),
     bodyLarge = TextStyle(
         fontFamily = AlataFontFamily,
         fontSize = 16.sp,

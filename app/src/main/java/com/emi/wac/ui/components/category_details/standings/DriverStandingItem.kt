@@ -39,7 +39,7 @@ fun DriverStandingItem(
     val primaryColor = getPrimaryColorForCategory(category)
     val context = LocalContext.current
 
-    // Buscar el driver y el logo del equipo
+    // Search the driver and the team logo
     val driver = drivers?.find { it.name.contains(standing.driver, ignoreCase = true) }
     val teamLogo = driver?.teamId?.let { teamId ->
         constructors?.find { it.teamId == teamId }?.logo
@@ -61,7 +61,7 @@ fun DriverStandingItem(
         ) {
             Text(
                 text = standing.position,
-                style = AlataTypography.titleMedium,
+                style = AlataTypography.bodyLarge,
                 fontWeight = FontWeight.Bold,
                 color = PrimaryWhite
             )
@@ -70,7 +70,7 @@ fun DriverStandingItem(
         // Driver name
         Text(
             text = standing.driver,
-            style = AlataTypography.titleMedium,
+            style = AlataTypography.titleSmall,
             color = Color.White,
             modifier = Modifier.weight(1f)
         )

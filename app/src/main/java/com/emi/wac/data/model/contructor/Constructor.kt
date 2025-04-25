@@ -12,7 +12,6 @@ data class Constructor(
     val team: String,
     val car: String,
     val logo: String,
-    val imagotipo: String,
 )
 
 /**
