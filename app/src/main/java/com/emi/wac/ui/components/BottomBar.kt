@@ -1,5 +1,6 @@
 package com.emi.wac.ui.components
 
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -38,7 +39,8 @@ fun BottomBar() {
 
     NavigationBar(
         containerColor = Color.Transparent,
-        modifier = Modifier.padding(bottom = 0.dp),
+        modifier = Modifier.padding(bottom = 0.dp)
+            .height(110.dp),
     ) {
         items.forEachIndexed { index, item ->
             NavigationBarItem(

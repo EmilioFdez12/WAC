@@ -170,32 +170,39 @@ class RacingRepository(context: Context) {
         category: String,
         sessionType: String
     ): Pair<Float, Int>? {
-        val weatherParams = prepareWeatherParameters(category, sessionType) ?: return null
-        val (lat, lon, isoDate, targetTime) = weatherParams
+        try {
+            val weatherParams = prepareWeatherParameters(category, sessionType) ?: return null
+            val (lat, lon, isoDate, targetTime) = weatherParams
 
-        return withContext(Dispatchers.IO) {
-            try {
-                val response = WeatherClient.weatherApiService.getHourlyWeather(
-                    latitude = lat,
-                    longitude = lon,
-                    startDate = isoDate,
-                    endDate = isoDate
-                )
-                Log.d(tag, "Weather response: $response")
-                val index = response.hourly?.time?.indexOf(targetTime) ?: -1
-                if (index != -1) {
-                    Pair(
-                        response.hourly!!.temperature_2m[index],
-                        response.hourly.weathercode[index]
+            return withContext(Dispatchers.IO) {
+                try {
+                    val response = WeatherClient.weatherApiService.getHourlyWeather(
+                        latitude = lat,
+                        longitude = lon,
+                        startDate = isoDate,
+                        endDate = isoDate
                     )
-                } else {
-                    Log.e(tag, "Time not found in response or hourly is null: $targetTime")
+                    Log.d(tag, "Weather response: $response")
+                    val index = response.hourly?.time?.indexOf(targetTime) ?: -1
+                    if (index != -1 && (response.hourly?.temperature_2m?.size
+                            ?: 0) > index && (response.hourly?.weathercode?.size ?: 0) > index
+                    ) {
+                        Pair(
+                            response.hourly!!.temperature_2m[index],
+                            response.hourly.weathercode[index]
+                        )
+                    } else {
+                        Log.e(tag, "Time not found in response or invalid index: $targetTime, index=$index")
+                        null
+                    }
+                } catch (e: Exception) {
+                    Log.e(tag, "Error fetching weather", e)
                     null
                 }
-            } catch (e: Exception) {
-                Log.e(tag, "Error fetching weather", e)
-                null
             }
+        } catch (e: Exception) {
+            Log.e(tag, "Error preparing weather parameters", e)
+            return null
         }
     }
 
@@ -211,27 +218,60 @@ class RacingRepository(context: Context) {
         category: String,
         sessionType: String
     ): WeatherParameters? {
-        // Obtain next gp
-        val nextRace = getNextGrandPrixObject(category) ?: return null
-        val circuits = getCircuits(category) ?: return null
-        // Obtain next circuit
-        val circuit = circuits.circuits.find { it.gp == nextRace.gp } ?: return null
+        try {
+            // Obtain next gp
+            val nextRace = getNextGrandPrixObject(category) ?: return null
+            val circuits = getCircuits(category) ?: return null
+            // Obtain next circuit
+            val circuit = circuits.circuits.find { it.gp == nextRace.gp } ?: return null
 
-        val (lat, lon) = circuit.localization.split(",").map { it.trim().toDouble() }
-        val session =
-            if (sessionType == "qualifying") nextRace.sessions.qualifying else if (sessionType == "sprint") nextRace.sessions.sprint else nextRace.sessions.race
-        // Calculate date for API query
-        val currentYear = DateUtils.getCurrentYear()
-        val dateTime =
-            DateUtils.parseDate(session?.day ?: "", session?.time ?: "", currentYear) ?: return null
-        val isoFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val targetFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:00", Locale.getDefault())
+            // Verificar que la localización tenga el formato correcto
+            if (!circuit.localization.contains(",")) {
+                Log.e(tag, "Invalid localization format: ${circuit.localization}")
+                return null
+            }
 
-        val isoDate = isoFormat.format(dateTime.time)
-        val targetTime = targetFormat.format(dateTime.time)
+            val locParts = circuit.localization.split(",")
+            if (locParts.size < 2) {
+                Log.e(tag, "Insufficient localization parts: ${circuit.localization}")
+                return null
+            }
 
-        // Return parameters
-        return WeatherParameters(lat, lon, isoDate, targetTime)
+            val lat = locParts[0].trim().toDoubleOrNull() ?: return null
+            val lon = locParts[1].trim().toDoubleOrNull() ?: return null
+
+            val session = when (sessionType) {
+                "qualifying" -> nextRace.sessions.qualifying
+                "sprint" -> nextRace.sessions.sprint
+                else -> nextRace.sessions.race
+            }
+
+            // Verificar que la sesión exista y tenga datos válidos
+            if (session == null) {
+                Log.e(tag, "Session $sessionType does not exist for this race weekend")
+                return null
+            }
+            
+            if (session.day.isEmpty() || session.time.isEmpty()) {
+                Log.e(tag, "Invalid session data for $sessionType")
+                return null
+            }
+
+            // Calculate date for API query
+            val currentYear = DateUtils.getCurrentYear()
+            val dateTime = DateUtils.parseDate(session.day, session.time, currentYear) ?: return null
+            val isoFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val targetFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:00", Locale.getDefault())
+
+            val isoDate = isoFormat.format(dateTime.time)
+            val targetTime = targetFormat.format(dateTime.time)
+
+            // Return parameters
+            return WeatherParameters(lat, lon, isoDate, targetTime)
+        } catch (e: Exception) {
+            Log.e(tag, "Error preparing weather parameters", e)
+            return null
+        }
     }
 
     /**

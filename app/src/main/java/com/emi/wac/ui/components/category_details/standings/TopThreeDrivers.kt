@@ -146,9 +146,9 @@ private fun TopDriverCard(
                     .build(),
                 contentDescription = "${driver?.team} logo",
                 modifier = Modifier
-                    .size(width = 80.dp, height = 40.dp)
+                    .size(width = 124.dp, height = 56.dp)
                     .background(PrimaryBlack, RoundedCornerShape(8.dp))
-                    .padding(horizontal = 8.dp, vertical = 8.dp)
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
                     .clip(RoundedCornerShape(8.dp)),
                 contentScale = ContentScale.Fit
             )

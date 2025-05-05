@@ -107,6 +107,7 @@ fun OverViewComponent(
                         .padding(top = 8.dp, start = 32.dp, end = 32.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    // Solo mostrar las sesiones que tienen datos de clima disponibles
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
@@ -144,6 +145,7 @@ fun OverViewComponent(
                         )
                     }
 
+                    // Solo mostrar el sprint si existe para este fin de semana
                     weatherData.sprint?.let { (temperature, weatherCode) ->
                         WeatherRow(
                             sessionName = "SPRINT",

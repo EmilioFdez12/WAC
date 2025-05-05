@@ -88,16 +88,68 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
                     DataState.Error("Error loading constructor: ${e.message}")
             }
 
+            // Cargar información del circuito y clima en bloques separados para evitar que un error en uno afecte al otro
             try {
                 val nextRace = racingRepository.getNextGrandPrixObject(category)
                 if (nextRace != null) {
                     val circuits = racingRepository.getCircuits(category)
                     val nextCircuit = findCircuit(circuits?.circuits, nextRace.gp)
                     _circuitInfo.value = DataState.Success(nextCircuit)
-
-                    val weatherRace = racingRepository.getWeatherForSession(category, "race")
-                    val weatherQualy = racingRepository.getWeatherForSession(category, "qualifying")
-                    val weatherSprint = racingRepository.getWeatherForSession(category, "sprint")
+                } else {
+                    _circuitInfo.value = DataState.Error("No next race found")
+                }
+            } catch (e: Exception) {
+                Log.e("OverviewViewModel", "Error loading circuit info", e)
+                _circuitInfo.value = DataState.Error("Error loading circuit: ${e.message}")
+            }
+            
+            // Cargar información del clima en un bloque separado
+            try {
+                val nextRace = racingRepository.getNextGrandPrixObject(category)
+                if (nextRace != null) {
+                    // Verificar primero si las sesiones existen en el objeto nextRace antes de intentar cargar el clima
+                    
+                    // Cargar clima para la carrera (siempre existe según el modelo)
+                    val weatherRace = if (nextRace.sessions.race.day.isNotEmpty() && 
+                                         nextRace.sessions.race.time.isNotEmpty()) {
+                        try {
+                            racingRepository.getWeatherForSession(category, "race")
+                        } catch (e: Exception) {
+                            Log.e("OverviewViewModel", "Error loading race weather", e)
+                            null
+                        }
+                    } else {
+                        Log.d("OverviewViewModel", "Race session does not exist for this weekend")
+                        null
+                    }
+                    
+                    // Cargar clima para la clasificación solo si existe la sesión
+                    val weatherQualy = if (nextRace.sessions.qualifying?.day?.isNotEmpty() == true && 
+                                          nextRace.sessions.qualifying.time.isNotEmpty() == true) {
+                        try {
+                            racingRepository.getWeatherForSession(category, "qualifying")
+                        } catch (e: Exception) {
+                            Log.e("OverviewViewModel", "Error loading qualifying weather", e)
+                            null
+                        }
+                    } else {
+                        Log.d("OverviewViewModel", "Qualifying session does not exist for this weekend")
+                        null
+                    }
+                    
+                    // Cargar clima para el sprint solo si existe la sesión
+                    val weatherSprint = if (nextRace.sessions.sprint?.day?.isNotEmpty() == true && 
+                                           nextRace.sessions.sprint.time.isNotEmpty() == true) {
+                        try {
+                            racingRepository.getWeatherForSession(category, "sprint")
+                        } catch (e: Exception) {
+                            Log.e("OverviewViewModel", "Error loading sprint weather", e)
+                            null
+                        }
+                    } else {
+                        Log.d("OverviewViewModel", "Sprint session does not exist for this weekend")
+                        null
+                    }
 
                     _weatherInfo.value = DataState.Success(
                         WeatherData(
@@ -107,12 +159,10 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
                         )
                     )
                 } else {
-                    _circuitInfo.value = DataState.Error("No next race found")
                     _weatherInfo.value = DataState.Error("No next race found")
                 }
             } catch (e: Exception) {
-                Log.e("OverviewViewModel", "Error loading circuit or weather info", e)
-                _circuitInfo.value = DataState.Error("Error loading circuit: ${e.message}")
+                Log.e("OverviewViewModel", "Error loading weather info", e)
                 _weatherInfo.value = DataState.Error("Error loading weather: ${e.message}")
             }
         }

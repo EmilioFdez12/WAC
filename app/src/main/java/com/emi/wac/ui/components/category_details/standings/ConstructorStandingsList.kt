@@ -12,38 +12,20 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.emi.wac.data.model.contructor.Constructors
-import com.emi.wac.data.model.drivers.DriverStanding
-import com.emi.wac.data.model.drivers.Drivers
-import com.emi.wac.data.repository.RacingRepository
+import com.emi.wac.data.model.contructor.ConstructorStanding
 import com.emi.wac.ui.theme.getPrimaryColorForCategory
+import com.emi.wac.ui.components.category_details.standings.ConstructorStandingItem
 
 @Composable
-fun DriverStandingsList(
-    standings: List<DriverStanding>,
+fun ConstructorStandingsList(
+    standings: List<ConstructorStanding>,
     category: String
 ) {
-    val context = LocalContext.current
-    val racingRepository = remember { RacingRepository(context) }
-    var driversData by remember { mutableStateOf<Drivers?>(null) }
-    var constructorsData by remember { mutableStateOf<Constructors?>(null) }
-
-    LaunchedEffect(category) {
-        driversData = racingRepository.getDrivers(category)
-        constructorsData = racingRepository.getConstructors(category)
-    }
-
-
     Card(
         modifier = Modifier
             .fillMaxWidth(),
@@ -76,15 +58,13 @@ fun DriverStandingsList(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(332.dp)
+                    .height(578.dp)
                     .padding(16.dp)
             ) {
                 items(standings) { standing ->
-                    DriverStandingItem(
+                    ConstructorStandingItem(
                         standing = standing,
-                        category = category,
-                        drivers = driversData?.drivers,
-                        constructors = constructorsData?.constructors
+                        category = category
                     )
                     if (standings.indexOf(standing) < standings.size - 1) {
                         HorizontalDivider(

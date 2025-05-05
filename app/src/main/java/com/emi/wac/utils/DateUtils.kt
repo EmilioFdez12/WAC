@@ -44,9 +44,11 @@ object DateUtils {
     fun getCurrentYear(): Int = Calendar.getInstance().get(Calendar.YEAR)
 
     fun formatTime(time: String): String {
+        if (time.isEmpty()) return "00:00"
+        
         val parts = time.split(":")
-        val hours = parts[0].padStart(2, '0')
-        val minutes = parts[1]
+        val hours = parts.getOrNull(0)?.padStart(2, '0') ?: "00"
+        val minutes = parts.getOrNull(1) ?: "00"
         return "$hours:$minutes"
     }
 

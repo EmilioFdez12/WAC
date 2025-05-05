@@ -101,6 +101,44 @@ class StandingsRepository(private val db: FirebaseFirestore) {
             Result.failure(Exception("No constructor data found for $category"))
         }
     }
+    
+    /**
+     * Retrieves the current standings for constructors in a specific racing category.
+     *
+     * @param category The racing category (e.g., "f1", "motogp").
+     * @return Result containing a list of ConstructorStanding if successful, or failure with an exception.
+     */
+    suspend fun getConstructorStandings(category: String): Result<List<ConstructorStanding>> {
+        try {
+            val document = db.collection("${category}_constructors_standings").document("latest").get().await()
+            val rawData = document.data
+
+            if (rawData != null) {
+                // Extract the standings list from the "data" key
+                val standingsData = rawData["data"]
+                if (standingsData is List<*>) {
+                    val standingsList = standingsData.filterIsInstance<Map<*, *>>()
+                    val standings = standingsList.map { item ->
+                        val team = (item["team"] as? String) ?: ""
+                        val points = (item["points"] as? String) ?: ""
+                        val position = (item["position"] as? String) ?: ""
+                        
+                        ConstructorStanding(
+                            team = team,
+                            points = points,
+                            position = position
+                        )
+                    }
+                    return Result.success(standings)
+                }
+                return Result.failure(Exception("Invalid data format"))
+            }
+            return Result.failure(Exception("No constructor standings data found"))
+        } catch (e: Exception) {
+            android.util.Log.e("StandingsRepository", "Error fetching constructor standings: ${e.message}", e)
+            return Result.failure(e)
+        }
+    }
 
     /**
      * Fetches raw data from the "latest" document in a Firestore collection.
