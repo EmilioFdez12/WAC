@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -5,6 +7,14 @@ plugins {
     // Add the Google services Gradle plugin
     id("com.google.gms.google-services")
 }
+
+val localProperties = Properties().apply {
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        load(localPropertiesFile.inputStream())
+    }
+}
+
 
 android {
     namespace = "com.emi.wac"
@@ -18,6 +28,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField(
+            "String",
+            "NEWS_API_KEY",
+            "\"${localProperties.getProperty("news.api.key") ?: ""}\""
+        )
     }
 
     buildTypes {
@@ -38,6 +53,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -64,11 +80,14 @@ dependencies {
     implementation(libs.androidx.ui.text.google.fonts)
     implementation(libs.gson)
     implementation(libs.coil.compose)
-    implementation (libs.accompanist.systemuicontroller)
+    implementation(libs.coil.network.okhttp)
+    implementation(libs.coil.network.ktor2)
+    implementation(libs.coil.network.ktor3)
+    implementation(libs.accompanist.systemuicontroller)
     implementation(libs.androidx.navigation.compose)
-    implementation (libs.retrofit)
-    implementation (libs.converter.gson)
-    implementation (libs.converter.moshi)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.converter.moshi)
     implementation(libs.androidx.core.splashscreen)
 
     testImplementation(libs.junit)

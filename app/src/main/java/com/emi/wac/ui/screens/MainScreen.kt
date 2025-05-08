@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -40,6 +41,7 @@ import com.emi.wac.viewmodel.StandingsViewModel
 fun MainScreen() {
     val navController = rememberNavController()
     val backgroundPainter = rememberAsyncImagePainter(model = Constants.BCKG_IMG)
+    var selectedTab by remember { mutableIntStateOf(0) }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -53,7 +55,26 @@ fun MainScreen() {
             modifier = Modifier.fillMaxSize(),
             containerColor = Color.Transparent,
             bottomBar = {
-                BottomBar()
+                BottomBar(
+                    selectedItem = selectedTab,
+                    onItemSelected = { index ->
+                        selectedTab = index
+                        when (index) {
+                            0 -> navController.navigate(Constants.HOME) {
+                                popUpTo(navController.graph.startDestinationId)
+                                launchSingleTop = true
+                            }
+                            1 -> navController.navigate("news") {
+                                popUpTo(navController.graph.startDestinationId)
+                                launchSingleTop = true
+                            }
+                            2 -> navController.navigate("profile") {
+                                popUpTo(navController.graph.startDestinationId)
+                                launchSingleTop = true
+                            }
+                        }
+                    }
+                )
             }
         ) { innerPadding ->
             NavHost(
@@ -68,12 +89,40 @@ fun MainScreen() {
                     popEnterTransition = { TransitionsUtils.popEnterTransition() },
                     popExitTransition = { TransitionsUtils.popExitTransition() }
                 ) {
+                    selectedTab = 0
                     HomeScreen(navController = navController)
                 }
+                
+                composable(
+                    route = "news",
+                    enterTransition = { TransitionsUtils.enterTransition() },
+                    exitTransition = { TransitionsUtils.exitTransition() },
+                    popEnterTransition = { TransitionsUtils.popEnterTransition() },
+                    popExitTransition = { TransitionsUtils.popExitTransition() }
+                ) {
+                    selectedTab = 1
+                    NewsScreen()
+                }
+                
+                composable(
+                    route = "profile",
+                    enterTransition = { TransitionsUtils.enterTransition() },
+                    exitTransition = { TransitionsUtils.exitTransition() },
+                    popEnterTransition = { TransitionsUtils.popEnterTransition() },
+                    popExitTransition = { TransitionsUtils.popExitTransition() }
+                ) {
+                    selectedTab = 2
+                    // Aquí iría la pantalla de perfil cuando la implementes
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        // Placeholder para la pantalla de perfil
+                    }
+                }
+                
                 composable(
                     route = "${Constants.CAT_DETAILS}/{category}",
                     arguments = listOf(navArgument("category") { type = NavType.StringType })
                 ) { backStackEntry ->
+                    // ... existing code ...
                     val category = backStackEntry.arguments?.getString("category") ?: ""
                     val overviewViewModel: OverviewViewModel = viewModel()
                     val standingsViewModel: StandingsViewModel = viewModel()

@@ -11,10 +11,6 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.ui.Modifier
@@ -29,8 +25,10 @@ private data class NavigationItem(
 )
 
 @Composable
-fun BottomBar() {
-    var selectedItem by remember { mutableIntStateOf(0) }
+fun BottomBar(
+    selectedItem: Int = 0,
+    onItemSelected: (Int) -> Unit = {}
+) {
     val items = listOf(
         NavigationItem("Home", Icons.Filled.Home),
         NavigationItem("News", Icons.Filled.Notifications),
@@ -47,7 +45,7 @@ fun BottomBar() {
                 icon = { Icon(item.icon, contentDescription = item.title) },
                 label = { Text(item.title) },
                 selected = selectedItem == index,
-                onClick = { selectedItem = index },
+                onClick = { onItemSelected(index) },
                 colors = NavigationBarItemDefaults.colors(
                     unselectedIconColor = PrimaryBlack,
                     unselectedTextColor = PrimaryBlack,
@@ -60,4 +58,3 @@ fun BottomBar() {
         }
     }
 }
-

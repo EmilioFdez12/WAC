@@ -1,5 +1,6 @@
 package com.emi.wac.common
 
+import com.emi.wac.BuildConfig
 import com.emi.wac.data.model.RaceInfo
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -23,6 +24,11 @@ object Constants {
     const val CATEGORY_MOTOGP = "motogp"
     const val CATEGORY_F1 = "f1"
     const val BCKG_IMG = "file:///android_asset/background.webp"
+
+    const val DOMAIN = "autosport.com"
+    const val SORT = "sortby"
+    const val LANGUAGE = "en"
+    const val NEWS_API_KEY = BuildConfig.NEWS_API_KEY
 
     const val RACE_DURATION = 2 * 60 * 60 * 1000L // 2 hours
     const val SESSION_DURATION = 60 * 60 * 1000L // 1 hour

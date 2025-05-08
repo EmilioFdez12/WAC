@@ -9,3 +9,10 @@ data class Hourly(
     val temperature_2m: List<Float>,
     val weathercode: List<Int>,
 )
+
+data class WeatherData(
+    val qualifying: Pair<Float, Int>?,
+    val race: Pair<Float, Int>?,
+    val sprint: Pair<Float, Int>?
+)
+

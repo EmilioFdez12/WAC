@@ -11,7 +11,17 @@ import java.util.Locale
 object DateUtils {
     private val dateFormat = SimpleDateFormat("dd MMM yyyy HH:mm", Locale.ENGLISH)
 
-
+    fun formatDate(dateString: String): String {
+        return try {
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
+            val outputFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+            val date = inputFormat.parse(dateString)
+            date?.let { outputFormat.format(it) } ?: dateString
+        } catch (e: Exception) {
+            dateString
+        }
+    }
+    
     fun parseDate(day: String, time: String, year: Int): Date? {
         val formattedTime = formatTime(time)
         return dateFormat.parse("$day $year $formattedTime")
