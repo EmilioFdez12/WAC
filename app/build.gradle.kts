@@ -6,6 +6,8 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     // Add the Google services Gradle plugin
     id("com.google.gms.google-services")
+    id ("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 val localProperties = Properties().apply {
@@ -22,7 +24,7 @@ android {
 
     defaultConfig {
         applicationId = "com.emi.wac"
-        minSdk = 29
+        minSdk = 34
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -69,9 +71,20 @@ dependencies {
 
     // FireBase
     implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
     // Add the dependency for the Firebase SDK for Google Analytics
     implementation(libs.firebase.analytics)
     implementation(libs.google.firebase.firestore)
+
+    implementation (libs.androidx.credentials)
+    implementation (libs.androidx.credentials.play.services.auth)
+    implementation (libs.googleid)
+    implementation (libs.kotlinx.coroutines.android)
+
+    // Hilt
+    implementation (libs.hilt.android)
+    kapt (libs.hilt.compiler)
+    implementation (libs.androidx.hilt.navigation.compose)
 
     // Otras Dependencias
     implementation(libs.moshi)

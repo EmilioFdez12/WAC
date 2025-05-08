@@ -30,6 +30,7 @@ import androidx.navigation.navArgument
 import coil3.compose.rememberAsyncImagePainter
 import com.emi.wac.common.Constants
 import com.emi.wac.data.model.sessions.GrandPrix
+import com.emi.wac.data.repository.AuthRepository
 import com.emi.wac.data.repository.RacingRepository
 import com.emi.wac.ui.components.BottomBar
 import com.emi.wac.utils.TransitionsUtils
@@ -38,7 +39,10 @@ import com.emi.wac.viewmodel.OverviewViewModel
 import com.emi.wac.viewmodel.StandingsViewModel
 
 @Composable
-fun MainScreen() {
+fun MainScreen(
+    authRepository: AuthRepository,
+    onLogout: () -> Unit
+) {
     val navController = rememberNavController()
     val backgroundPainter = rememberAsyncImagePainter(model = Constants.BCKG_IMG)
     var selectedTab by remember { mutableIntStateOf(0) }
@@ -64,10 +68,12 @@ fun MainScreen() {
                                 popUpTo(navController.graph.startDestinationId)
                                 launchSingleTop = true
                             }
+
                             1 -> navController.navigate("news") {
                                 popUpTo(navController.graph.startDestinationId)
                                 launchSingleTop = true
                             }
+
                             2 -> navController.navigate("profile") {
                                 popUpTo(navController.graph.startDestinationId)
                                 launchSingleTop = true
@@ -92,7 +98,7 @@ fun MainScreen() {
                     selectedTab = 0
                     HomeScreen(navController = navController)
                 }
-                
+
                 composable(
                     route = "news",
                     enterTransition = { TransitionsUtils.enterTransition() },
@@ -103,7 +109,7 @@ fun MainScreen() {
                     selectedTab = 1
                     NewsScreen()
                 }
-                
+
                 composable(
                     route = "profile",
                     enterTransition = { TransitionsUtils.enterTransition() },
@@ -112,24 +118,19 @@ fun MainScreen() {
                     popExitTransition = { TransitionsUtils.popExitTransition() }
                 ) {
                     selectedTab = 2
-                    // Aquí iría la pantalla de perfil cuando la implementes
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        // Placeholder para la pantalla de perfil
-                    }
+                    // ProfileScreen(authRepository = authRepository, onLogout = onLogout)
                 }
-                
+
                 composable(
                     route = "${Constants.CAT_DETAILS}/{category}",
                     arguments = listOf(navArgument("category") { type = NavType.StringType })
                 ) { backStackEntry ->
-                    // ... existing code ...
                     val category = backStackEntry.arguments?.getString("category") ?: ""
                     val overviewViewModel: OverviewViewModel = viewModel()
                     val standingsViewModel: StandingsViewModel = viewModel()
                     val context = LocalContext.current
                     val racingRepository = RacingRepository(context)
 
-                    // Estados de los datos
                     val circuitInfo by overviewViewModel.circuitInfo.collectAsState()
                     val leaderInfo by overviewViewModel.leaderInfo.collectAsState()
                     val constructorLeaderInfo by overviewViewModel.constructorLeaderInfo.collectAsState()
@@ -137,14 +138,12 @@ fun MainScreen() {
                     val standingsState by standingsViewModel.driversStandings.collectAsState()
                     var schedule: List<GrandPrix>? by remember { mutableStateOf(null) }
 
-                    // Cargar datos para la categoría seleccionada
                     LaunchedEffect(category) {
                         overviewViewModel.loadCategoryDetails(category)
                         standingsViewModel.loadDriverStandings(category)
                         schedule = racingRepository.getSchedule(category)?.schedule
                     }
 
-                    // Verificar si todos los datos están listos
                     val isDataReady = circuitInfo is DataState.Success &&
                         leaderInfo is DataState.Success &&
                         constructorLeaderInfo is DataState.Success &&
@@ -152,7 +151,6 @@ fun MainScreen() {
                         standingsState is StandingsViewModel.StandingsState.Success &&
                         schedule != null
 
-                    // Animaciones para LoadingScreen y CategoryDetailsScreen
                     AnimatedVisibility(
                         visible = !isDataReady,
                         enter = fadeIn(animationSpec = tween(300)),

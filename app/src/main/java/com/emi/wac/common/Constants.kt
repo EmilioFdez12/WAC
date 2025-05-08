@@ -1,6 +1,9 @@
 package com.emi.wac.common
 
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import com.emi.wac.BuildConfig
+import com.emi.wac.R
 import com.emi.wac.data.model.RaceInfo
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -41,5 +44,23 @@ object Constants {
         "sprint" to "Sprint",
         "qualifying" to "Qualy",
         "race" to "Race"
+    )
+
+    val LEXENDBLACK = FontFamily(
+        Font(R.font.lexend_deca_black)
+    )
+    val LEXENDREGULAR = FontFamily(
+        Font(R.font.lexend_deca_regular)
+    )
+    val LEXENDBOLD = FontFamily(
+        Font(R.font.lexend_deca_bold)
+    )
+
+    // Image list
+    val backgroundImages = listOf(
+        R.drawable.background1,
+        R.drawable.background2,
+        R.drawable.background3,
+        R.drawable.background4,
     )
 }
