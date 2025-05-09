@@ -1,4 +1,4 @@
-package com.emi.wac.ui.screens
+package com.emi.wac.ui.screens.app
 
 import android.util.Log
 import androidx.compose.animation.Crossfade
