@@ -58,7 +58,6 @@ fun LoginScreen(
     val scope = rememberCoroutineScope()
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var isLoading by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     val launcher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
@@ -157,7 +156,6 @@ fun LoginScreen(
                         modifier = Modifier
                             .fillMaxWidth(),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                        enabled = !isLoading,
                         colors = TextFieldDefaults.colors(
                             focusedTextColor = PrimaryWhite,
                             unfocusedTextColor = PrimaryWhite,
@@ -187,7 +185,6 @@ fun LoginScreen(
                             .fillMaxWidth(),
                         visualTransformation = PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                        enabled = !isLoading,
                         colors = TextFieldDefaults.colors(
                             focusedTextColor = Color.White,
                             unfocusedTextColor = Color.White,
@@ -204,20 +201,15 @@ fun LoginScreen(
 
                     CustomButton(
                         text = "CONTINUE",
-                        isLoading = isLoading,
-                        enabled = !isLoading,
                         gradientColors = listOf(PrimaryRed, PrimaryRed),
                         textColor = Color.White,
                         onClick = {
-                            isLoading = true
                             errorMessage = null
                             scope.launch {
                                 try {
                                     authRepository.signInWithEmail(email, password)
-                                    isLoading = false
                                     onLoginSuccess()
                                 } catch (e: Exception) {
-                                    isLoading = false
                                     errorMessage = e.message ?: "Login failed"
                                 }
                             }
@@ -230,19 +222,15 @@ fun LoginScreen(
                     CustomButton(
                         text = "Continue with Google",
                         icon = R.drawable.google,
-                        isLoading = isLoading,
-                        enabled = !isLoading,
                         gradientColors = listOf(Color.White, Color.White),
                         textColor = Color.Black,
                         onClick = {
-                            isLoading = true
                             errorMessage = null
                             GoogleSignInUtils.doGoogleSignIn(
                                 context = context,
                                 scope = scope,
                                 launcher = launcher,
                                 login = {
-                                    isLoading = false
                                     onLoginSuccess()
                                 }
                             )
@@ -264,7 +252,7 @@ fun LoginScreen(
                                 .padding(bottom = 4.dp)
                         )
                         Text(
-                            text = "Forget your password?",
+                            text = "Forgot your password?",
                             color = PrimaryRed,
                             fontSize = 14.sp,
                             modifier = Modifier.clickable { /* TODO: Navegar a recuperación de contraseña */ }

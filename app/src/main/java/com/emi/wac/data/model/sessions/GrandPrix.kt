@@ -13,4 +13,5 @@ data class GrandPrix(
     val dates: String,
     val flag: String,
     val sessions: Sessions,
+    val circuitImage: String = ""
 )

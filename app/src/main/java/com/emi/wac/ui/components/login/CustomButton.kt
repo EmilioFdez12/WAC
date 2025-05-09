@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -41,8 +40,6 @@ import com.emi.wac.ui.theme.PrimaryRed
 fun CustomButton(
     text: String,
     icon: Int? = null,
-    isLoading: Boolean,
-    enabled: Boolean,
     gradientColors: List<Color> = listOf(PrimaryRed, Color(0xFFB71C1C)),
     textColor: Color = Color.White,
     borderColor: Color? = null,
@@ -73,39 +70,31 @@ fun CustomButton(
             .clickable(
                 interactionSource = interactionSource,
                 indication = null,
-                enabled = enabled
             ) { onClick() },
         contentAlignment = Alignment.Center
     ) {
-        if (isLoading) {
-            CircularProgressIndicator(
-                color = textColor,
-                modifier = Modifier.size(24.dp)
-            )
-        } else {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                if (icon != null) {
-                    Image(
-                        painter = painterResource(id = icon),
-                        contentDescription = "Button Icon",
-                        modifier = Modifier
-                            .size(36.dp)
-                            .padding(end = 8.dp),
-                        contentScale = ContentScale.Fit
-                    )
-                }
-                Text(
-                    text = text,
-                    color = textColor,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = if (text == "CONTINUE") 18.sp else 16.sp,
-                    fontFamily = if (text == "CONTINUE") LEXENDBLACK else LEXENDBOLD,
-                    textAlign = TextAlign.Center
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            if (icon != null) {
+                Image(
+                    painter = painterResource(id = icon),
+                    contentDescription = "Button Icon",
+                    modifier = Modifier
+                        .size(36.dp)
+                        .padding(end = 8.dp),
+                    contentScale = ContentScale.Fit
                 )
             }
+            Text(
+                text = text,
+                color = textColor,
+                fontWeight = FontWeight.Bold,
+                fontSize = if (text == "CONTINUE") 18.sp else 16.sp,
+                fontFamily = if (text == "CONTINUE") LEXENDBLACK else LEXENDBOLD,
+                textAlign = TextAlign.Center
+            )
         }
     }
 }

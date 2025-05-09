@@ -24,6 +24,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,7 +40,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
 import coil3.request.ImageRequest
+import com.emi.wac.data.model.circuit.Circuits
 import com.emi.wac.data.model.sessions.GrandPrix
+import com.emi.wac.data.repository.RacingRepository
 import com.emi.wac.ui.theme.AlataTypography
 import com.emi.wac.ui.theme.getPrimaryColorForCategory
 
@@ -51,13 +54,21 @@ fun RaceScheduleCard(
 ) {
     val primaryColor = getPrimaryColorForCategory(category)
     var expanded by remember { mutableStateOf(false) }
+    var circuitsData by remember { mutableStateOf<Circuits?>(null) }
     val rotationState by animateFloatAsState(
         targetValue = if (expanded) 180f else 0f,
         label = "rotation"
     )
 
+    val context = LocalContext.current
+    val racingRepository = remember { RacingRepository(context) }
+
+    LaunchedEffect(category) {
+        circuitsData = racingRepository.getCircuits(category)
+    }
+
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clickable { expanded = !expanded },
         colors = CardDefaults.cardColors(
@@ -140,6 +151,7 @@ fun RaceScheduleCard(
                         ),
                     grandPrix = grandPrix,
                     primaryColor = primaryColor,
+                    circuitsData = circuitsData
                 )
             }
         }

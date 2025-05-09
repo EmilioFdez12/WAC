@@ -12,11 +12,14 @@ import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
 import androidx.credentials.exceptions.NoCredentialException
 import com.emi.wac.R
+import com.emi.wac.data.model.auth.User
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -25,6 +28,9 @@ import java.util.UUID
 class GoogleSignInUtils {
 
     companion object {
+        /**
+         * Launches the Google Sign In flow.
+         */
         fun doGoogleSignIn(
             context: Context,
             scope: CoroutineScope,
@@ -51,14 +57,11 @@ class GoogleSignInUtils {
                                     Firebase.auth.signInWithCredential(authCredential).await().user
                                 user?.let {
                                     if (it.isAnonymous.not()) {
+                                        saveUserToFirestore(it)
                                         login.invoke()
                                     }
                                 }
                             }
-                        }
-
-                        else -> {
-
                         }
                     }
                 } catch (_: NoCredentialException) {
@@ -69,12 +72,14 @@ class GoogleSignInUtils {
             }
         }
 
+        // Gets the intent to launch the Google Sign In
         private fun getIntent(): Intent {
             return Intent(Settings.ACTION_ADD_ACCOUNT).apply {
                 putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf("com.google"))
             }
         }
 
+        // Gets the options for the credential manager
         private fun getCredentialOptions(context: Context): CredentialOption {
             return GetGoogleIdOption.Builder()
                 .setFilterByAuthorizedAccounts(false)
@@ -86,6 +91,44 @@ class GoogleSignInUtils {
 
         private fun getNonce(): String? {
             return UUID.randomUUID().toString()
+        }
+
+        /**
+         * Saves information of Firebase Auth user in Firestore
+         */
+        private suspend fun saveUserToFirestore(firebaseUser: FirebaseUser) {
+            try {
+                val userRef = Firebase.firestore.collection("users").document(firebaseUser.uid)
+
+                // Verify if user exists
+                val existingUser = userRef.get().await()
+
+                if (existingUser.exists()) {
+                    // Update last login
+                    userRef.update(
+                        "lastLogin", System.currentTimeMillis(),
+                        "photoUrl", firebaseUser.photoUrl?.toString(),
+                        "displayName", firebaseUser.displayName
+                    ).await()
+                } else {
+                    // New user
+                    val user = User(
+                        uid = firebaseUser.uid,
+                        email = firebaseUser.email,
+                        displayName = firebaseUser.displayName,
+                        photoUrl = firebaseUser.photoUrl?.toString(),
+                        isAnonymous = firebaseUser.isAnonymous,
+                        createdAt = System.currentTimeMillis(),
+                        lastLogin = System.currentTimeMillis()
+                    )
+                    userRef.set(user).await()
+                }
+            } catch (e: Exception) {
+                android.util.Log.e(
+                    "GoogleSignInUtils",
+                    "Error al guardar usuario en Firestore: ${e.message}",
+                )
+            }
         }
     }
 }

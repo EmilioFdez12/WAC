@@ -1,4 +1,4 @@
-package com.emi.wac.ui.screens
+package com.emi.wac.ui.screens.app
 
 import android.content.Intent
 import androidx.compose.foundation.layout.Box

@@ -33,6 +33,10 @@ import com.emi.wac.data.model.sessions.GrandPrix
 import com.emi.wac.data.repository.AuthRepository
 import com.emi.wac.data.repository.RacingRepository
 import com.emi.wac.ui.components.BottomBar
+import com.emi.wac.ui.screens.app.CategoryDetailsScreen
+import com.emi.wac.ui.screens.app.HomeScreen
+import com.emi.wac.ui.screens.app.NewsScreen
+import com.emi.wac.ui.screens.app.ProfileScreen
 import com.emi.wac.utils.TransitionsUtils
 import com.emi.wac.viewmodel.DataState
 import com.emi.wac.viewmodel.OverviewViewModel
@@ -118,7 +122,7 @@ fun MainScreen(
                     popExitTransition = { TransitionsUtils.popExitTransition() }
                 ) {
                     selectedTab = 2
-                    // ProfileScreen(authRepository = authRepository, onLogout = onLogout)
+                    ProfileScreen(authRepository = authRepository, onLogout = onLogout)
                 }
 
                 composable(
