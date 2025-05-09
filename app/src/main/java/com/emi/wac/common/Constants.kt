@@ -29,7 +29,7 @@ object Constants {
     const val BCKG_IMG = "file:///android_asset/background.webp"
 
     const val DOMAIN = "autosport.com"
-    const val SORT = "sortby"
+    const val SORT = "publishedAt"
     const val LANGUAGE = "en"
     const val NEWS_API_KEY = BuildConfig.NEWS_API_KEY
 
