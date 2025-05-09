@@ -48,8 +48,8 @@ fun ConstructorStandingItem(
         constructorsData = racingRepository.getConstructors(category)
     }
     
-    // Buscar el logo del constructor
-    val constructor = constructorsData?.constructors?.find { it.team.contains(standing.team, ignoreCase = true) }
+    // Search constructor logo
+    val constructor = constructorsData?.constructors?.find { it.team.equals(standing.team, ignoreCase = true) }
     val teamLogo = constructor?.logo ?: ""
 
     Row(
@@ -59,7 +59,7 @@ fun ConstructorStandingItem(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Posición
+        // Position
         Box(
             modifier = Modifier
                 .background(primaryColor, RoundedCornerShape(4.dp))
@@ -74,7 +74,7 @@ fun ConstructorStandingItem(
             )
         }
 
-        // Nombre del constructor
+        // Constructor name
         Text(
             text = standing.team,
             style = AlataTypography.titleSmall,
@@ -82,7 +82,7 @@ fun ConstructorStandingItem(
             modifier = Modifier.weight(1f)
         )
 
-        // Puntos
+        // Points
         Text(
             text = "${standing.points} pts",
             style = AlataTypography.bodyLarge,
@@ -90,7 +90,7 @@ fun ConstructorStandingItem(
             color = Color.White
         )
 
-        // Logo del equipo
+        // Team logo
         if (teamLogo.isNotEmpty()) {
             AsyncImage(
                 model = ImageRequest.Builder(context)
