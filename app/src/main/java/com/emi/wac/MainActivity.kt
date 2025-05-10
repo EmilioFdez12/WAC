@@ -8,10 +8,15 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.emi.wac.data.repository.AuthRepository
 import com.emi.wac.ui.screens.LoginScreen
 import com.emi.wac.ui.screens.MainScreen
+import com.emi.wac.ui.screens.RegisterScreen
 import com.emi.wac.ui.theme.WACTheme
+import com.emi.wac.utils.TransitionsUtils
 import com.emi.wac.viewmodel.DataState
 import com.emi.wac.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,10 +60,34 @@ class MainActivity : ComponentActivity() {
         setContent {
             WACTheme {
                 if (authRepository.getCurrentUser() == null) {
-                    LoginScreen(
-                        authRepository = authRepository,
-                        onLoginSuccess = { recreate() }
-                    )
+                    // Use NavController to navigate between login and register
+                    val navController = rememberNavController()
+
+
+                    NavHost(navController = navController, startDestination = "login") {
+                        composable(
+                            route = "login",
+                            enterTransition = { TransitionsUtils.enterTransition() },
+                            exitTransition = { TransitionsUtils.exitTransition() },
+                        ) {
+                            LoginScreen(
+                                authRepository = authRepository,
+                                onLoginSuccess = { recreate() },
+                                onNavigateToRegister = { navController.navigate("register") }
+                            )
+                        }
+                        composable(
+                            route = "register",
+                            enterTransition = { TransitionsUtils.enterTransition() },
+                            exitTransition = { TransitionsUtils.exitTransition() },
+                        ) {
+                            RegisterScreen(
+                                authRepository = authRepository,
+                                onRegisterSuccess = { recreate() },
+                                onNavigateToLogin = { navController.navigate("login") }
+                            )
+                        }
+                    }
                 } else {
                     MainScreen(
                         authRepository = authRepository,

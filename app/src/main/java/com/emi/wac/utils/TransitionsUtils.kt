@@ -1,20 +1,18 @@
 package com.emi.wac.utils
 
-import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideOut
 import androidx.compose.ui.unit.IntOffset
-import androidx.navigation.NavBackStackEntry
 
 /**
  * Util for navigation transitions
  */
 object TransitionsUtils {
 
-    private const val ANIMATION_DURATION = 300
+    private const val ANIMATION_DURATION = 500
 
     fun enterTransition(): EnterTransition {
         return slideIn(

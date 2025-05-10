@@ -49,45 +49,51 @@ import com.emi.wac.common.Constants.LEXENDREGULAR
 import com.emi.wac.common.Constants.backgroundImages
 import com.emi.wac.data.repository.AuthRepository
 import com.emi.wac.ui.components.login.CustomButton
-import com.emi.wac.ui.theme.PrimaryRed
 import com.emi.wac.ui.theme.PrimaryWhite
 import com.emi.wac.utils.GoogleSignInUtils
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import kotlinx.coroutines.launch
 
+private val PrimaryBlue = Color(0xFF1976D2)
+private val DarkBlue = Color(0xFF0D47A1)
+
 @Composable
-fun LoginScreen(
+fun RegisterScreen(
     authRepository: AuthRepository,
-    onLoginSuccess: () -> Unit,
-    onNavigateToRegister: () -> Unit,
+    onRegisterSuccess: () -> Unit,
+    onNavigateToLogin: () -> Unit
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
+    var displayName by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     var showPassword by remember { mutableStateOf(false) }
-    val launcher =
-        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
+    var showConfirmPassword by remember { mutableStateOf(false) }
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
 
-    // Select a random image only once when the composable is first created
+    // Selects a random image
     val randomImage by remember { mutableIntStateOf(backgroundImages.random()) }
     val backgroundPainter = rememberAsyncImagePainter(model = randomImage)
 
     // Validation function
     fun validateInputs(): String? {
         return when {
+            displayName.length < 3 -> "Username must be at least 3 characters long"
             !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() -> "Invalid email format"
+            password.length < 6 -> "Password must be at least 6 characters long"
+            !password.any { it.isUpperCase() } -> "Password must contain at least one uppercase letter"
+            !password.any { it.isDigit() } -> "Password must contain at least one number"
+            password != confirmPassword -> "Passwords do not match"
             else -> null
         }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // Background image
         Image(
             painter = backgroundPainter,
-            contentDescription = "Login Background",
+            contentDescription = "Register Background",
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
@@ -110,9 +116,7 @@ fun LoginScreen(
                     color = Color.White,
                     modifier = Modifier
                         .padding(top = 16.dp, bottom = 4.dp)
-                        .background(
-                            Color.Black.copy(alpha = 0.75f), RoundedCornerShape(8.dp)
-                        )
+                        .background(Color.Black.copy(alpha = 0.75f), RoundedCornerShape(8.dp))
                         .padding(horizontal = 16.dp, vertical = 8.dp)
                 )
 
@@ -127,19 +131,18 @@ fun LoginScreen(
                         text = "WAC",
                         fontSize = 56.sp,
                         fontFamily = LEXENDBLACK,
-                        color = PrimaryRed
+                        color = PrimaryBlue
                     )
                 }
 
                 Text(
                     text = "\"WE ARE CHECKING\"",
                     fontSize = 16.sp,
-                    color = PrimaryRed,
+                    color = PrimaryBlue,
                     modifier = Modifier.padding(top = 8.dp)
                 )
             }
 
-            // Form
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -158,16 +161,35 @@ fun LoginScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    // Display Name field
+                    TextField(
+                        value = displayName,
+                        onValueChange = { displayName = it },
+                        label = {
+                            Text("Username", fontSize = 18.sp, fontFamily = LEXENDREGULAR)
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                        colors = TextFieldDefaults.colors(
+                            focusedTextColor = PrimaryWhite,
+                            unfocusedTextColor = PrimaryWhite,
+                            focusedLabelColor = Color.LightGray,
+                            unfocusedLabelColor = Color.LightGray,
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            focusedIndicatorColor = PrimaryBlue,
+                            unfocusedIndicatorColor = PrimaryWhite.copy(alpha = 0.5f)
+                        )
+                    )
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
                     // Email field
                     TextField(
                         value = email,
                         onValueChange = { email = it },
                         label = {
-                            Text(
-                                "Email",
-                                fontSize = 18.sp,
-                                fontFamily = LEXENDREGULAR
-                            )
+                            Text("Email", fontSize = 18.sp, fontFamily = LEXENDREGULAR)
                         },
                         modifier = Modifier.fillMaxWidth(),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -178,23 +200,19 @@ fun LoginScreen(
                             unfocusedLabelColor = Color.LightGray,
                             focusedContainerColor = Color.Transparent,
                             unfocusedContainerColor = Color.Transparent,
-                            focusedIndicatorColor = PrimaryRed,
+                            focusedIndicatorColor = PrimaryBlue,
                             unfocusedIndicatorColor = PrimaryWhite.copy(alpha = 0.5f)
                         )
                     )
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
 
-                    // Password field with show/hide toggle
+                    // Password field with show/hide toggle using custom drawables
                     TextField(
                         value = password,
                         onValueChange = { password = it },
                         label = {
-                            Text(
-                                "Password",
-                                fontSize = 18.sp,
-                                fontFamily = LEXENDREGULAR
-                            )
+                            Text("Password", fontSize = 18.sp, fontFamily = LEXENDREGULAR)
                         },
                         modifier = Modifier.fillMaxWidth(),
                         visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
@@ -215,47 +233,79 @@ fun LoginScreen(
                             unfocusedLabelColor = Color.LightGray,
                             focusedContainerColor = Color.Transparent,
                             unfocusedContainerColor = Color.Transparent,
-                            focusedIndicatorColor = PrimaryRed,
+                            focusedIndicatorColor = PrimaryBlue,
                             unfocusedIndicatorColor = PrimaryWhite.copy(alpha = 0.5f)
                         )
                     )
 
-                    // Show error message if exists
-                    errorMessage?.let { message ->
-                        Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    // Confirm Password field with show/hide toggle using custom drawables
+                    TextField(
+                        value = confirmPassword,
+                        onValueChange = { confirmPassword = it },
+                        label = {
+                            Text("Confirm Password", fontSize = 18.sp, fontFamily = LEXENDREGULAR)
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        visualTransformation = if (showConfirmPassword) VisualTransformation.None else PasswordVisualTransformation(),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                        trailingIcon = {
+                            IconButton(onClick = { showConfirmPassword = !showConfirmPassword }) {
+                                Icon(
+                                    painter = painterResource(if (showConfirmPassword) R.drawable.eye_closed else R.drawable.eye),
+                                    contentDescription = if (showConfirmPassword) "Hide password" else "Show password",
+                                    tint = Color.White
+                                )
+                            }
+                        },
+                        colors = TextFieldDefaults.colors(
+                            focusedTextColor = Color.White,
+                            unfocusedTextColor = Color.White,
+                            focusedLabelColor = Color.LightGray,
+                            unfocusedLabelColor = Color.LightGray,
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            focusedIndicatorColor = PrimaryBlue,
+                            unfocusedIndicatorColor = PrimaryWhite.copy(alpha = 0.5f)
+                        )
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Error message if any
+                    if (errorMessage != null) {
                         Text(
-                            text = message,
+                            text = errorMessage!!,
                             color = Color.Red,
                             fontSize = 14.sp,
-                            fontFamily = LEXENDREGULAR,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 8.dp)
+                            modifier = Modifier.padding(bottom = 8.dp)
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(32.dp))
-
                     CustomButton(
-                        text = "CONTINUE",
-                        gradientColors = listOf(PrimaryRed, PrimaryRed),
+                        text = "REGISTER",
+                        gradientColors = listOf(PrimaryBlue, DarkBlue),
                         textColor = Color.White,
                         onClick = {
                             errorMessage = validateInputs()
-                            scope.launch {
-                                try {
-                                    val result = authRepository.signInWithEmail(email, password)
-                                    result.onSuccess {
-                                        onLoginSuccess()
-                                    }.onFailure { e ->
-                                        errorMessage = when (e) {
-                                            is FirebaseAuthInvalidUserException -> "No existe una cuenta con este correo electrónico"
-                                            is FirebaseAuthInvalidCredentialsException -> "Contraseña incorrecta"
-                                            else -> "Error al iniciar sesión: ${e.message}"
+                            if (errorMessage == null) {
+                                scope.launch {
+                                    try {
+                                        // Proceed with registration
+                                        val result = authRepository.createUserWithEmail(email, password, displayName)
+                                        result.onSuccess {
+                                            onRegisterSuccess()
+                                        }.onFailure { e ->
+                                            errorMessage = when {
+                                                e.message?.contains("email already exists") == true ->
+                                                    "An account with this email already exists"
+                                                else -> e.message ?: "Registration failed"
+                                            }
                                         }
+                                    } catch (e: Exception) {
+                                        errorMessage = e.message ?: "Registration failed"
                                     }
-                                } catch (e: Exception) {
-                                    errorMessage = "Error al iniciar sesión: ${e.message}"
                                 }
                             }
                         }
@@ -263,7 +313,6 @@ fun LoginScreen(
 
                     Separator()
 
-                    // Google Sign-In button
                     CustomButton(
                         text = "Continue with Google",
                         icon = R.drawable.google,
@@ -275,48 +324,35 @@ fun LoginScreen(
                                 context = context,
                                 scope = scope,
                                 launcher = launcher,
-                                login = {
-                                    onLoginSuccess()
-                                }
+                                login = { onRegisterSuccess() }
                             )
                         }
                     )
 
-                    Spacer(modifier = Modifier.height(32.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
-                    // Links
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(bottom = 8.dp)
                         ) {
                             Text(
-                                text = "Don't have an account? ",
+                                text = "Already have an account? ",
                                 color = Color.White,
                                 fontSize = 16.sp,
                                 modifier = Modifier
-                                    .clickable { onNavigateToRegister() }
+                                    .clickable { onNavigateToLogin() }
+                                    .padding(bottom = 4.dp)
                             )
                             Text(
-                                text = "Sign Up",
-                                color = PrimaryRed,
+                                text = "Log In",
+                                color = PrimaryBlue,
                                 fontSize = 16.sp,
                                 modifier = Modifier
-                                    .clickable { onNavigateToRegister() }
+                                    .clickable { onNavigateToLogin() }
+                                    .padding(bottom = 4.dp)
                             )
                         }
-
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        Text(
-                            text = "Forgot your password?",
-                            color = PrimaryRed,
-                            fontSize = 16.sp,
-                            modifier = Modifier.clickable { /* TODO: Navigate to password recovery */ }
-                        )
-
-                        Spacer(modifier = Modifier.height(8.dp))
                     }
                 }
             }
@@ -331,6 +367,6 @@ private fun Separator() {
         color = Color.White,
         fontFamily = LEXENDBOLD,
         fontSize = 16.sp,
-        modifier = Modifier.padding(vertical = 16.dp)
+        modifier = Modifier.padding(vertical = 8.dp)
     )
 }
