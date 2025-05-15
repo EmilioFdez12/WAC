@@ -209,7 +209,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             val timeToNext =
                 (it.dateTime.time - currentTime.time) / (1000 * 60 * 60)
             // Show date if > 24 hours
-            it.name to if (timeToNext > 24) DATE_FORMAT.format(it.dateTime)
+            it.name to if (timeToNext >= 24) DATE_FORMAT.format(it.dateTime)
             // Show countdown
             else DateUtils.calculateTimeRemaining(
                 it.dateTime,

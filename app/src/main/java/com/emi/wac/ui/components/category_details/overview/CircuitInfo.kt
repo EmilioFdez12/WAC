@@ -27,6 +27,7 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.emi.wac.data.model.circuit.Circuit
+import com.emi.wac.data.model.sessions.GrandPrix
 import com.emi.wac.data.repository.RacingRepository
 import com.emi.wac.ui.theme.AlataTypography
 import com.emi.wac.ui.theme.PrimaryWhite
@@ -40,12 +41,16 @@ fun CircuitInfo(
 ) {
     val context = LocalContext.current
     val racingRepository = remember { RacingRepository(context) }
-    var nextRace by remember { mutableStateOf(racingRepository.getNextGrandPrixObject(category)) }
+    var nextRace by remember { mutableStateOf<GrandPrix?>(null)}
     var circuitInfo by remember { mutableStateOf<Circuit?>(circuit) }
     val primaryColor = getPrimaryColorForCategory(category)
     val imgBackground = if (category == "f1") Color.Transparent else Color(0xFF151515)
     val imgPadding = if (category == "f1") 0.dp else 8.dp
 
+    // Cargar el próximo Gran Premio
+    LaunchedEffect(category) {
+        nextRace = racingRepository.getNextGrandPrixObject(category)
+    }
 
     // Load circuit info if not provided
     LaunchedEffect(category, nextRace) {

@@ -3,7 +3,7 @@
         {
             "id": 1,
             "name": "Chang International Circuit",
-            "gp": "Thai GP",
+            "gp": "GP de Tailandia",
             "image": "/motogp/images/circuits/tha-info.webp",
             "flag": "/motogp/images/flags/thailand.webp",
             "lapRecord": "1:30.637 (Marc Marquez, Ducati Lenovo, 2025)",
@@ -14,7 +14,7 @@
         {
             "id": 2,
             "name": "Termas de Rio Hondo",
-            "gp": "Argentine GP",
+            "gp": "GP de Argentina",
             "image": "/motogp/images/circuits/arg-info.webp",
             "flag": "/motogp/images/flags/argentina.webp",
             "lapRecord": "1:38.243 (Marc Márquez, Ducati Lenovo, 2025)",
@@ -25,8 +25,8 @@
         {
             "id": 3,
             "name": "Circuit of the Americas",
-            "gp": "Americas GP",
-            "image": "/motogp/images/circuits/usa-info.webp",
+            "gp": "GP de las Américas",
+            "image": "/motogp/images/circuits/ame-info.webp",
             "flag": "/motogp/images/flags/usa.webp",
             "lapRecord": "2:02.221 (Marc Márquez, Ducati Lenovo, 2025)",
             "raceLaps": 20,
@@ -36,7 +36,7 @@
         {
             "id": 4,
             "name": "Lusail International Circuit",
-            "gp": "Qatar GP",
+            "gp": "GP de Qatar",
             "image": "/motogp/images/circuits/qat-info.webp",
             "flag": "/motogp/images/flags/qatar.webp",
             "lapRecord": "1:52.772 (Marc Marquez, Ducati Lenovo, 2025)",
@@ -47,7 +47,7 @@
         {
             "id": 5,
             "name": "Circuito de Jerez - Ángel Nieto",
-            "gp": "Spanish GP",
+            "gp": "GP de España",
             "image": "/motogp/images/circuits/spa-info.webp",
             "flag": "/motogp/images/flags/spain.webp",
             "lapRecord": "1:37.449 (Francesco Bagnaia, Ducati, 2024)",
@@ -58,7 +58,7 @@
         {
             "id": 6,
             "name": "Le Mans - Circuit Bugatti",
-            "gp": "French GP",
+            "gp": "GP de Francia",
             "image": "/motogp/images/circuits/fra-info.webp",
             "flag": "/motogp/images/flags/france.webp",
             "lapRecord": "1:30.450 (Enea Bastianini, Ducati, 2023)",
@@ -69,7 +69,7 @@
         {
             "id": 7,
             "name": "Silverstone Circuit",
-            "gp": "British GP",
+            "gp": "GP de Gran Bretaña",
             "image": "/motogp/images/circuits/gbr-info.webp",
             "flag": "/motogp/images/flags/uk.webp",
             "lapRecord": "1:58.168 (Marc Márquez, Honda, 2019)",
@@ -80,7 +80,7 @@
         {
             "id": 8,
             "name": "MotorLand Aragón",
-            "gp": "Aragón GP",
+            "gp": "GP de Aragón",
             "image": "/motogp/images/circuits/ara-info.webp",
             "flag": "/motogp/images/flags/spain.webp",
             "lapRecord": "1:46.635 (Francesco Bagnaia, Ducati, 2021)",
@@ -91,7 +91,7 @@
         {
             "id": 9,
             "name": "Autodromo Internazionale del Mugello",
-            "gp": "Italian GP",
+            "gp": "GP de Italia",
             "image": "/motogp/images/circuits/ita-info.webp",
             "flag": "/motogp/images/flags/italy.webp",
             "lapRecord": "1:45.187 (Johann Zarco, Ducati, 2021)",
@@ -102,7 +102,7 @@
         {
             "id": 10,
             "name": "TT Circuit Assen",
-            "gp": "Dutch GP",
+            "gp": "GP de Países Bajos",
             "image": "/motogp/images/circuits/ned-info.webp",
             "flag": "/motogp/images/flags/netherlands.webp",
             "lapRecord": "1:31.504 (Francesco Bagnaia, Ducati, 2022)",
@@ -113,7 +113,7 @@
         {
             "id": 11,
             "name": "Sachsenring",
-            "gp": "German GP",
+            "gp": "GP de Alemania",
             "image": "/motogp/images/circuits/ger-info.webp",
             "flag": "/motogp/images/flags/germany.webp",
             "lapRecord": "1:19.765 (Marc Márquez, Honda, 2021)",
@@ -124,9 +124,9 @@
         {
             "id": 12,
             "name": "Automotodrom Brno",
-            "gp": "Czech GP",
+            "gp": "GP de República Checa",
             "image": "/motogp/images/circuits/cze-info.webp",
-            "flag": "/motogp/images/flags/czech_republic.webp",
+            "flag": "/motogp/images/flags/czech-republic.webp",
             "lapRecord": "1:54.596 (Dani Pedrosa, Honda, 2014)",
             "raceLaps": 21,
             "length": 5.403,
@@ -135,7 +135,7 @@
         {
             "id": 13,
             "name": "Red Bull Ring",
-            "gp": "Austrian GP",
+            "gp": "GP de Austria",
             "image": "/motogp/images/circuits/aut-info.webp",
             "flag": "/motogp/images/flags/austria.webp",
             "lapRecord": "1:22.643 (Jorge Lorenzo, Ducati, 2018)",
@@ -146,7 +146,7 @@
         {
             "id": 14,
             "name": "Balaton Park Circuit",
-            "gp": "Hungarian GP",
+            "gp": "GP de Hungría",
             "image": "/motogp/images/circuits/hun2-info.webp",
             "flag": "/motogp/images/flags/hungary.webp",
             "lapRecord": "N/A (New circuit, no MotoGP record yet)",
@@ -157,7 +157,7 @@
         {
             "id": 15,
             "name": "Circuit de Barcelona-Catalunya",
-            "gp": "Catalan GP",
+            "gp": "GP de Cataluña",
             "image": "/motogp/images/circuits/cat-info.webp",
             "flag": "/motogp/images/flags/spain.webp",
             "lapRecord": "1:38.639 (Fabio Quartararo, Yamaha, 2022)",
@@ -168,7 +168,7 @@
         {
             "id": 16,
             "name": "Misano World Circuit Marco Simoncelli",
-            "gp": "San Marino GP",
+            "gp": "GP de San Marino",
             "image": "/motogp/images/circuits/rsm-info.webp",
             "flag": "/motogp/images/flags/italy.webp",
             "lapRecord": "1:30.390 (Francesco Bagnaia, Ducati, 2022)",
@@ -179,8 +179,8 @@
         {
             "id": 17,
             "name": "Mobility Resort Motegi",
-            "gp": "Japanese GP",
-            "image": "/motogp/images/circuits/jap-info.webp",
+            "gp": "GP de Japón",
+            "image": "/motogp/images/circuits/jpn-info.webp",
             "flag": "/motogp/images/flags/japan.webp",
             "lapRecord": "1:43.198 (Jorge Lorenzo, Yamaha, 2015)",
             "raceLaps": 24,
@@ -190,7 +190,7 @@
         {
             "id": 18,
             "name": "Pertamina Mandalika International Circuit",
-            "gp": "Indonesian GP",
+            "gp": "GP de Indonesia",
             "image": "/motogp/images/circuits/ina-info.webp",
             "flag": "/motogp/images/flags/indonesia.webp",
             "lapRecord": "1:30.503 (Miguel Oliveira, KTM, 2022)",
@@ -201,8 +201,8 @@
         {
             "id": 19,
             "name": "Phillip Island Grand Prix Circuit",
-            "gp": "Australian GP",
-            "image": "/motogp/images/circuits/aus.webp",
+            "gp": "GP de Australia",
+            "image": "/motogp/images/circuits/aus-info.webp",
             "flag": "/motogp/images/flags/australia.webp",
             "lapRecord": "1:27.246 (Marc Márquez, Honda, 2019)",
             "raceLaps": 27,
@@ -212,8 +212,8 @@
         {
             "id": 20,
             "name": "Sepang International Circuit",
-            "gp": "Malaysian GP",
-            "image": "/motogp/images/circuits/sepang_international.webp",
+            "gp": "GP de Malasia",
+            "image": "/motogp/images/circuits/mal-info.webp",
             "flag": "/motogp/images/flags/malaysia.webp",
             "lapRecord": "1:57.491 (Fabio Quartararo, Yamaha, 2019)",
             "raceLaps": 20,
@@ -223,7 +223,7 @@
         {
             "id": 21,
             "name": "Autódromo Internacional do Algarve",
-            "gp": "Portuguese GP",
+            "gp": "GP de Portugal",
             "image": "/motogp/images/circuits/por-info.webp",
             "flag": "/motogp/images/flags/portugal.webp",
             "lapRecord": "1:37.226 (Francesco Bagnaia, Ducati, 2022)",
@@ -234,7 +234,7 @@
         {
             "id": 22,
             "name": "Circuit Ricardo Tormo",
-            "gp": "Valencian GP",
+            "gp": "GP de Valencia",
             "image": "/motogp/images/circuits/val-info.webp",
             "flag": "/motogp/images/flags/spain.webp",
             "lapRecord": "1:29.401 (Jorge Lorenzo, Yamaha, 2016)",

@@ -21,6 +21,7 @@ import com.emi.wac.ui.theme.AlataTypography
 import com.emi.wac.ui.theme.PrimaryBlack
 import com.emi.wac.ui.theme.PrimaryWhite
 import com.emi.wac.ui.theme.getPrimaryColorForCategory
+import com.emi.wac.utils.DateUtils
 
 @Composable
 fun SessionItem(
@@ -41,6 +42,7 @@ fun SessionItem(
     val parts = day.split(" ")
     val dayNumber = parts[0]
     val monthName = parts[1].uppercase()
+    val localtime = DateUtils.convertToLocalTime(time)
 
     Row(
         modifier = Modifier
@@ -91,7 +93,7 @@ fun SessionItem(
 
         // Time
         Text(
-            text = time,
+            text = localtime,
             style = AlataTypography.titleMedium,
             color = Color.White,
             modifier = Modifier.padding(end = 16.dp)

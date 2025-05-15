@@ -88,69 +88,129 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
                     DataState.Error("Error loading constructor: ${e.message}")
             }
 
-            // Cargar información del circuito y clima en bloques separados para evitar que un error en uno afecte al otro
+            // Circuit info
             try {
+                Log.d(
+                    "OverviewViewModel",
+                    "Fetching next race for circuit info, category=$category"
+                )
                 val nextRace = racingRepository.getNextGrandPrixObject(category)
                 if (nextRace != null) {
+                    Log.d(
+                        "OverviewViewModel", "Next race found: gp=${nextRace.gp}, " +
+                            "race day=${nextRace.sessions.race.day}, " +
+                            "race time=${nextRace.sessions.race.time}, " +
+                            "qualifying day=${nextRace.sessions.qualifying?.day}, " +
+                            "sprint day=${nextRace.sessions.sprint?.day}"
+                    )
                     val circuits = racingRepository.getCircuits(category)
                     val nextCircuit = findCircuit(circuits?.circuits, nextRace.gp)
                     _circuitInfo.value = DataState.Success(nextCircuit)
                 } else {
+                    Log.e("OverviewViewModel", "No next race found for circuit info")
                     _circuitInfo.value = DataState.Error("No next race found")
                 }
             } catch (e: Exception) {
-                Log.e("OverviewViewModel", "Error loading circuit info", e)
+                Log.e("OverviewViewModel", "Error loading circuit info: ${e.message}", e)
                 _circuitInfo.value = DataState.Error("Error loading circuit: ${e.message}")
             }
-            
-            // Cargar información del clima en un bloque separado
+
+            // Weather info
             try {
+                Log.d(
+                    "OverviewViewModel",
+                    "Fetching next race for weather info, category=$category"
+                )
                 val nextRace = racingRepository.getNextGrandPrixObject(category)
                 if (nextRace != null) {
-                    // Verificar primero si las sesiones existen en el objeto nextRace antes de intentar cargar el clima
-                    
-                    // Cargar clima para la carrera (siempre existe según el modelo)
-                    val weatherRace = if (nextRace.sessions.race.day.isNotEmpty() && 
-                                         nextRace.sessions.race.time.isNotEmpty()) {
+                    Log.d(
+                        "OverviewViewModel", "Next race for weather: gp=${nextRace.gp}, " +
+                            "race=${nextRace.sessions.race.day}/${nextRace.sessions.race.time}, " +
+                            "qualifying=${nextRace.sessions.qualifying?.day}/${nextRace.sessions.qualifying?.time}, " +
+                            "sprint=${nextRace.sessions.sprint?.day}/${nextRace.sessions.sprint?.time}"
+                    )
+
+                    // Race weather
+                    val weatherRace = if (nextRace.sessions.race.day.isNotEmpty() &&
+                        nextRace.sessions.race.time.isNotEmpty()
+                    ) {
+                        Log.d("OverviewViewModel", "Fetching weather for race session")
                         try {
-                            racingRepository.getWeatherForSession(category, "race")
+                            val result = racingRepository.getWeatherForSession(category, "race")
+                            Log.d("OverviewViewModel", "Race weather result: $result")
+                            result
                         } catch (e: Exception) {
-                            Log.e("OverviewViewModel", "Error loading race weather", e)
+                            Log.e(
+                                "OverviewViewModel",
+                                "Error loading race weather: ${e.message}",
+                                e
+                            )
                             null
                         }
                     } else {
-                        Log.d("OverviewViewModel", "Race session does not exist for this weekend")
-                        null
-                    }
-                    
-                    // Cargar clima para la clasificación solo si existe la sesión
-                    val weatherQualy = if (nextRace.sessions.qualifying?.day?.isNotEmpty() == true && 
-                                          nextRace.sessions.qualifying.time.isNotEmpty() == true) {
-                        try {
-                            racingRepository.getWeatherForSession(category, "qualifying")
-                        } catch (e: Exception) {
-                            Log.e("OverviewViewModel", "Error loading qualifying weather", e)
-                            null
-                        }
-                    } else {
-                        Log.d("OverviewViewModel", "Qualifying session does not exist for this weekend")
-                        null
-                    }
-                    
-                    // Cargar clima para el sprint solo si existe la sesión
-                    val weatherSprint = if (nextRace.sessions.sprint?.day?.isNotEmpty() == true && 
-                                           nextRace.sessions.sprint.time.isNotEmpty() == true) {
-                        try {
-                            racingRepository.getWeatherForSession(category, "sprint")
-                        } catch (e: Exception) {
-                            Log.e("OverviewViewModel", "Error loading sprint weather", e)
-                            null
-                        }
-                    } else {
-                        Log.d("OverviewViewModel", "Sprint session does not exist for this weekend")
+                        Log.e(
+                            "OverviewViewModel",
+                            "Race session invalid: day=${nextRace.sessions.race.day}, time=${nextRace.sessions.race.time}"
+                        )
                         null
                     }
 
+                    // Qualifying weather
+                    val weatherQualy =
+                        if (nextRace.sessions.qualifying?.day?.isNotEmpty() == true &&
+                            nextRace.sessions.qualifying.time.isNotEmpty()
+                        ) {
+                            Log.d("OverviewViewModel", "Fetching weather for qualifying session")
+                            try {
+                                val result =
+                                    racingRepository.getWeatherForSession(category, "qualifying")
+                                Log.d("OverviewViewModel", "Qualifying weather result: $result")
+                                result
+                            } catch (e: Exception) {
+                                Log.e(
+                                    "OverviewViewModel",
+                                    "Error loading qualifying weather: ${e.message}",
+                                    e
+                                )
+                                null
+                            }
+                        } else {
+                            Log.e(
+                                "OverviewViewModel",
+                                "Qualifying session invalid or missing: day=${nextRace.sessions.qualifying?.day}, time=${nextRace.sessions.qualifying?.time}"
+                            )
+                            null
+                        }
+
+                    // Sprint weather
+                    val weatherSprint = if (nextRace.sessions.sprint?.day?.isNotEmpty() == true &&
+                        nextRace.sessions.sprint.time.isNotEmpty()
+                    ) {
+                        Log.d("OverviewViewModel", "Fetching weather for sprint session")
+                        try {
+                            val result = racingRepository.getWeatherForSession(category, "sprint")
+                            Log.d("OverviewViewModel", "Sprint weather result: $result")
+                            result
+                        } catch (e: Exception) {
+                            Log.e(
+                                "OverviewViewModel",
+                                "Error loading sprint weather: ${e.message}",
+                                e
+                            )
+                            null
+                        }
+                    } else {
+                        Log.e(
+                            "OverviewViewModel",
+                            "Sprint session invalid or missing: day=${nextRace.sessions.sprint?.day}, time=${nextRace.sessions.sprint?.time}"
+                        )
+                        null
+                    }
+
+                    Log.d(
+                        "OverviewViewModel",
+                        "Weather data compiled: race=$weatherRace, qualy=$weatherQualy, sprint=$weatherSprint"
+                    )
                     _weatherInfo.value = DataState.Success(
                         WeatherData(
                             qualifying = weatherQualy,
@@ -159,10 +219,11 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
                         )
                     )
                 } else {
+                    Log.e("OverviewViewModel", "No next race found for weather info")
                     _weatherInfo.value = DataState.Error("No next race found")
                 }
             } catch (e: Exception) {
-                Log.e("OverviewViewModel", "Error loading weather info", e)
+                Log.e("OverviewViewModel", "Error loading weather info: ${e.message}", e)
                 _weatherInfo.value = DataState.Error("Error loading weather: ${e.message}")
             }
         }
@@ -182,6 +243,9 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
     }
 
     private fun findCircuit(circuits: List<Circuit>?, gpName: String): Circuit? {
-        return circuits?.find { it.gp == gpName }
+        return circuits?.find {
+            it.gp.contains(gpName, ignoreCase = true) ||
+                gpName.contains(it.gp, ignoreCase = true)
+        }
     }
 }
