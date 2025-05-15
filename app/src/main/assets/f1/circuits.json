@@ -69,7 +69,7 @@
         {
             "id": 7,
             "name": "Autodromo Enzo e Dino Ferrari",
-            "gp": "GP de Emilia Romagna",
+            "gp": "GP Emilia Romagna",
             "image": "/f1/images/circuits/Emilia_Romagna_Circuit.webp",
             "flag": "/f1/images/flags/italy.webp",
             "lapRecord": "1:15.484 (Lewis Hamilton, Mercedes, 2020)",
@@ -157,7 +157,7 @@
         {
             "id": 15,
             "name": "Circuit Zandvoort",
-            "gp": "GP de Países Bajos",
+            "gp": "GP Países Bajos",
             "image": "/f1/images/circuits/Netherlands_Circuit.webp",
             "flag": "/f1/images/flags/netherlands.webp",
             "lapRecord": "1:09.756 (George Russell, Mercedes, 2021)",
@@ -212,7 +212,7 @@
         {
             "id": 20,
             "name": "Autódromo Hermanos Rodríguez",
-            "gp": "GP de Ciudad de México",
+            "gp": "GP Ciudad de México",
             "image": "/f1/images/circuits/Mexico_Circuit.webp",
             "flag": "/f1/images/flags/mexico.webp",
             "lapRecord": "1:18.741 (Valtteri Bottas, Mercedes, 2021)",

@@ -12,6 +12,7 @@ import com.emi.wac.data.model.drivers.DriverStanding
 import com.emi.wac.data.model.weather.WeatherData
 import com.emi.wac.data.repository.RacingRepository
 import com.emi.wac.data.repository.StandingsRepository
+import com.emi.wac.data.repository.WeatherRepository
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,6 +21,7 @@ import kotlinx.coroutines.launch
 
 class OverviewViewModel(application: Application) : AndroidViewModel(application) {
     private val racingRepository = RacingRepository(application)
+    private val weatherRepository = WeatherRepository(racingRepository)
     private val standingsRepository = StandingsRepository(Firebase.firestore)
 
     private val _leaderInfo =
@@ -136,7 +138,7 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
                     ) {
                         Log.d("OverviewViewModel", "Fetching weather for race session")
                         try {
-                            val result = racingRepository.getWeatherForSession(category, "race")
+                            val result = weatherRepository.getWeatherForSession(category, "race")
                             Log.d("OverviewViewModel", "Race weather result: $result")
                             result
                         } catch (e: Exception) {
@@ -163,7 +165,7 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
                             Log.d("OverviewViewModel", "Fetching weather for qualifying session")
                             try {
                                 val result =
-                                    racingRepository.getWeatherForSession(category, "qualifying")
+                                    weatherRepository.getWeatherForSession(category, "qualifying")
                                 Log.d("OverviewViewModel", "Qualifying weather result: $result")
                                 result
                             } catch (e: Exception) {
@@ -188,7 +190,7 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
                     ) {
                         Log.d("OverviewViewModel", "Fetching weather for sprint session")
                         try {
-                            val result = racingRepository.getWeatherForSession(category, "sprint")
+                            val result = weatherRepository.getWeatherForSession(category, "sprint")
                             Log.d("OverviewViewModel", "Sprint weather result: $result")
                             result
                         } catch (e: Exception) {

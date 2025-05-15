@@ -3,7 +3,7 @@
         {
             "id": 1,
             "name": "Chang International Circuit",
-            "gp": "GP de Tailandia",
+            "gp": "GP Tailandia",
             "image": "/motogp/images/circuits/tha-info.webp",
             "flag": "/motogp/images/flags/thailand.webp",
             "lapRecord": "1:30.637 (Marc Marquez, Ducati Lenovo, 2025)",
@@ -14,7 +14,7 @@
         {
             "id": 2,
             "name": "Termas de Rio Hondo",
-            "gp": "GP de Argentina",
+            "gp": "GP Argentina",
             "image": "/motogp/images/circuits/arg-info.webp",
             "flag": "/motogp/images/flags/argentina.webp",
             "lapRecord": "1:38.243 (Marc Márquez, Ducati Lenovo, 2025)",
