@@ -1,0 +1,18 @@
+{
+    "constructors": [
+        {
+            "id": 1,
+            "name": "Chevrolet",
+            "teamId": 1,
+            "team": "Chevrolet",
+            "portrait": "/indycar/images/constructors/CHEVRO01.webp"
+        },
+        {
+            "id": 2,
+            "name": "Honda",
+            "teamId": 2,
+            "team": "Honda",
+            "portrait": "/indycar/images/constructors/HONDA01.webp"
+        }
+    ]
+}

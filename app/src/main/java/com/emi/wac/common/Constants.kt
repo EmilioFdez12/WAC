@@ -26,6 +26,8 @@ object Constants {
 
     const val CATEGORY_MOTOGP = "motogp"
     const val CATEGORY_F1 = "f1"
+    const val CATEGORY_INDYCAR = "indycar"
+
     const val BCKG_IMG = "file:///android_asset/background.webp"
 
     const val DOMAIN = "autosport.com"

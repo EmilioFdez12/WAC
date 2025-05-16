@@ -2,9 +2,9 @@ package com.emi.wac.ui.screens.app
 
 import android.app.Application
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -40,6 +40,7 @@ import coil3.compose.rememberAsyncImagePainter
 import com.emi.wac.R
 import com.emi.wac.common.Constants.BCKG_IMG
 import com.emi.wac.common.Constants.CATEGORY_F1
+import com.emi.wac.common.Constants.CATEGORY_INDYCAR
 import com.emi.wac.common.Constants.CATEGORY_MOTOGP
 import com.emi.wac.common.Constants.CAT_DETAILS
 import com.emi.wac.ui.components.home.RaceCard
@@ -138,7 +139,7 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.height(32.dp))
             }
 
-            items(2) { index ->
+            item {
                 AnimatedVisibility(
                     visible = nextMotoGPRace is DataState.Success,
                     enter = fadeIn(animationSpec = tween(300)),
@@ -166,6 +167,36 @@ fun HomeScreen(
                         else -> {}
                     }
                 }
+                Spacer(modifier = Modifier.height(32.dp))
+            }
+
+            item {
+                AnimatedVisibility(
+                    visible = nextF1Race is DataState.Success,
+                    enter = fadeIn(animationSpec = tween(300)),
+                    exit = fadeOut(animationSpec = tween(300))
+                ) {
+                    when (val state = nextF1Race) {
+                        is DataState.Success -> {
+                            RaceCard(
+                                logo = CATEGORY_INDYCAR,
+                                raceInfo = state.data.grandPrix,
+                                onCardClick = { navController.navigate("$CAT_DETAILS/$CATEGORY_INDYCAR") },
+                                imageOffset = Offset(-24f, 0f),
+                                category = CATEGORY_INDYCAR
+                            )
+                        }
+                        is DataState.Error -> {
+                            Text(
+                                text = "Error F1: ${state.message}",
+                                color = Color.Red,
+                                modifier = Modifier.align(Alignment.CenterHorizontally as Alignment),
+                            )
+                        }
+                        else -> {}
+                    }
+                }
+
                 Spacer(modifier = Modifier.height(32.dp))
             }
         }
