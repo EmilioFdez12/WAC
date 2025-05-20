@@ -43,8 +43,11 @@ import coil3.request.ImageRequest
 import com.emi.wac.data.model.circuit.Circuits
 import com.emi.wac.data.model.sessions.GrandPrix
 import com.emi.wac.data.repository.RacingRepository
+import com.emi.wac.data.repository.StandingsRepository
 import com.emi.wac.ui.theme.AlataTypography
 import com.emi.wac.ui.theme.getPrimaryColorForCategory
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 
 @Composable
 fun RaceScheduleCard(
@@ -61,7 +64,9 @@ fun RaceScheduleCard(
     )
 
     val context = LocalContext.current
-    val racingRepository = remember { RacingRepository(context) }
+    val db = Firebase.firestore
+    val standingsRepository = remember { StandingsRepository(db) }
+    val racingRepository = remember { RacingRepository(standingsRepository, context) }
 
     LaunchedEffect(category) {
         circuitsData = racingRepository.getCircuits(category)

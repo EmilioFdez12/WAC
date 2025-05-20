@@ -40,27 +40,28 @@ import coil3.request.crossfade
 import com.emi.wac.common.Constants.ASSETS
 import com.emi.wac.common.Constants.CATEGORY_MOTOGP
 import com.emi.wac.data.model.contructor.Constructor
-import com.emi.wac.data.model.contructor.Constructors
 import com.emi.wac.data.model.drivers.Driver
-import com.emi.wac.data.model.drivers.DriverStanding
-import com.emi.wac.data.model.drivers.Drivers
-import com.emi.wac.data.repository.RacingRepository
+import com.emi.wac.data.repository.StandingsRepository
 import com.emi.wac.ui.theme.AlataTypography
 import com.emi.wac.ui.theme.PrimaryBlack
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 
 @Composable
 fun TopThreeDrivers(
-    standings: List<DriverStanding>,
+    standings: List<Driver>,
     category: String
 ) {
-    val context = LocalContext.current
-    val racingRepository = remember { RacingRepository(context) }
-    var driversData by remember { mutableStateOf<Drivers?>(null) }
-    var constructorsData by remember { mutableStateOf<Constructors?>(null) }
+    val db = Firebase.firestore
+    val standingsRepository = remember { StandingsRepository(db) }
+    var constructorsList by remember { mutableStateOf<List<Constructor>?>(null) }
 
     LaunchedEffect(category) {
-        driversData = racingRepository.getDrivers(category)
-        constructorsData = racingRepository.getConstructors(category)
+        // Obtenemos los constructores directamente desde Firebase
+        val constructorsResult = standingsRepository.getConstructorStandings(category)
+        if (constructorsResult.isSuccess) {
+            constructorsList = constructorsResult.getOrNull()
+        }
     }
 
     val firstPlaceColor = Color(0xFFFFD700)
@@ -80,8 +81,7 @@ fun TopThreeDrivers(
                 standing = standings[1],
                 position = "2°",
                 color = secondPlaceColor,
-                driversList = driversData?.drivers,
-                constructorList = constructorsData?.constructors,
+                constructorList = constructorsList,
                 category = category,
                 modifier = Modifier.weight(1f)
             )
@@ -93,8 +93,7 @@ fun TopThreeDrivers(
                 standing = standings[0],
                 position = "1°",
                 color = firstPlaceColor,
-                driversList = driversData?.drivers,
-                constructorList = constructorsData?.constructors,
+                constructorList = constructorsList,
                 category = category,
                 modifier = Modifier.weight(1f)
             )
@@ -106,8 +105,7 @@ fun TopThreeDrivers(
                 standing = standings[2],
                 position = "3°",
                 color = thirdPlaceColor,
-                driversList = driversData?.drivers,
-                constructorList = constructorsData?.constructors,
+                constructorList = constructorsList,
                 category = category,
                 modifier = Modifier.weight(1f)
             )
@@ -117,21 +115,18 @@ fun TopThreeDrivers(
 
 @Composable
 private fun TopDriverCard(
-    standing: DriverStanding,
+    standing: Driver,
     position: String,
     color: Color,
-    driversList: List<Driver>?,
     constructorList: List<Constructor>?,
     category: String,
     modifier: Modifier = Modifier
 ) {
-    // Find the driver in the drivers list to get the portrait
-    val driver = driversList?.find { it.name.contains(standing.driver, ignoreCase = true) }
-    val portraitPath = driver?.portrait ?: ""
+    val portraitPath = standing.portrait
     // Find constructor logo
-    val teamLogo = driver?.teamId?.let { teamId ->
-        constructorList?.find { it.teamId == teamId }?.logo
-    } ?: ""
+    val teamLogo = standing.teamId.let { teamId ->
+        constructorList?.find { it.teamId == teamId }?.logo ?: ""
+    }
 
     Column(
         modifier = modifier.padding(4.dp),
@@ -144,7 +139,7 @@ private fun TopDriverCard(
                     .data("$ASSETS$teamLogo")
                     .crossfade(true)
                     .build(),
-                contentDescription = "${driver?.team} logo",
+                contentDescription = "${standing.team} logo",
                 modifier = Modifier
                     .size(width = 124.dp, height = 56.dp)
                     .background(PrimaryBlack, RoundedCornerShape(8.dp))
@@ -178,7 +173,7 @@ private fun TopDriverCard(
                                 .data(imagePath)
                                 .build()
                         ),
-                        contentDescription = "Driver ${standing.driver}",
+                        contentDescription = "Driver ${standing.name}",
                         modifier = Modifier
                             .fillMaxSize()
                             .scale(if (category == CATEGORY_MOTOGP) 2f else 1f)
@@ -191,7 +186,7 @@ private fun TopDriverCard(
 
                 // Driver number
                 Text(
-                    text = driver?.number?.toString() ?: "",
+                    text = standing.number.toString(),
                     style = AlataTypography.titleLarge,
                     color = Color.White.copy(alpha = 0.5f),
                     modifier = Modifier

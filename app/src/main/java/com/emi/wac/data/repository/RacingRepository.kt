@@ -5,8 +5,6 @@ import android.util.Log
 import com.emi.wac.common.Constants.LOADING_RACE_INFO
 import com.emi.wac.data.model.RaceInfo
 import com.emi.wac.data.model.circuit.Circuits
-import com.emi.wac.data.model.contructor.Constructors
-import com.emi.wac.data.model.drivers.Drivers
 import com.emi.wac.data.model.sessions.GrandPrix
 import com.emi.wac.data.model.sessions.Schedule
 import com.emi.wac.data.model.sessions.Session
@@ -17,14 +15,13 @@ import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
 import java.util.Calendar
+import java.util.Date
 
-class RacingRepository(context: Context) {
+class RacingRepository(private val standingsRepository: StandingsRepository, context: Context) {
     private val tag = "RacingRepository"
     private val jsonParser = JsonParser(context)
 
     private val circuits = Circuits::class.java
-    private val drivers = Drivers::class.java
-    private val constructors = Constructors::class.java
 
     suspend fun getSchedule(category: String): Schedule? {
         try {
@@ -88,6 +85,7 @@ class RacingRepository(context: Context) {
         var day = sessionMap["day"] as? String ?: ""
         var time = sessionMap["time"] as? String ?: ""
 
+        // Si day o time están vacíos, intentamos extraerlos del formato ISO
         if (day.isEmpty() || time.isEmpty()) {
             val isoDateTime = sessionMap["isoDateTime"] as? String
             if (isoDateTime != null && isoDateTime.isNotEmpty()) {
@@ -123,12 +121,16 @@ class RacingRepository(context: Context) {
                     }
                 } catch (e: Exception) {
                     Log.e(tag, "Error parsing isoDateTime: $isoDateTime", e)
-                    return null
                 }
             }
         }
 
-        if (day.isEmpty() || time.isEmpty()) return null
+        // Verificamos si después de intentar extraer del formato ISO, aún tenemos valores vacíos
+        if (day.isEmpty() || time.isEmpty()) {
+            Log.w(tag, "Session skipped: day=$day, time=$time, map=$sessionMap")
+            return null
+        }
+
         return Session(day, time)
     }
 
@@ -139,32 +141,32 @@ class RacingRepository(context: Context) {
         }
     }
 
-    fun getDrivers(category: String): Drivers? {
-        return jsonParser.parseJson("$category/drivers.json", drivers) ?: run {
-            Log.e(tag, "Error loading drivers")
-            null
-        }
-    }
-
-    fun getConstructors(category: String): Constructors? {
-        return jsonParser.parseJson("$category/constructors.json", constructors) ?: run {
-            Log.e(tag, "Error loading constructors")
-            null
-        }
-    }
-
     suspend fun getNextGrandPrixObject(category: String): GrandPrix? {
         val categorySchedule = getSchedule(category) ?: return null
         val currentDate = Calendar.getInstance()
         val currentYear = DateUtils.getCurrentYear()
 
         return categorySchedule.schedule.find { grandPrix ->
-            DateUtils.isDateAfter(
-                currentDate,
-                grandPrix.sessions.race.day,
-                grandPrix.sessions.race.time,
-                currentYear
+            // Verificar cualquier sesión disponible, no solo la carrera
+            val sessions = listOfNotNull(
+                grandPrix.sessions.race.takeIf { it?.day?.isNotEmpty() == true && it.time.isNotEmpty() },
+                grandPrix.sessions.qualifying?.takeIf { it.day.isNotEmpty() && it.time.isNotEmpty() },
+                grandPrix.sessions.practice3?.takeIf { it.day.isNotEmpty() && it.time.isNotEmpty() },
+                grandPrix.sessions.practice2?.takeIf { it.day.isNotEmpty() && it.time.isNotEmpty() },
+                grandPrix.sessions.practice1.takeIf { it.day.isNotEmpty() && it.time.isNotEmpty() },
+                grandPrix.sessions.sprint?.takeIf { it.day.isNotEmpty() && it.time.isNotEmpty() },
+                grandPrix.sessions.sprintQualifying?.takeIf { it.day.isNotEmpty() && it.time.isNotEmpty() }
             )
+            
+            // Si hay al menos una sesión válida, verificar si alguna es después de la fecha actual
+            sessions.isNotEmpty() && sessions.any { session ->
+                DateUtils.isDateAfter(
+                    currentDate,
+                    session.day,
+                    session.time,
+                    currentYear
+                )
+            }
         }
     }
 
@@ -174,27 +176,48 @@ class RacingRepository(context: Context) {
         val nextRace = getNextGrandPrixObject(category)
 
         return nextRace?.let { race ->
-            val raceDateTime = DateUtils.parseDate(
-                race.sessions.race.day,
-                race.sessions.race.time,
+            // Buscar la primera sesión disponible (carrera u otra)
+            val sessions = listOfNotNull(
+                race.sessions.race.takeIf { it?.day?.isNotEmpty() == true && it.time.isNotEmpty() },
+                race.sessions.qualifying?.takeIf { it.day.isNotEmpty() && it.time.isNotEmpty() },
+                race.sessions.practice3?.takeIf { it.day.isNotEmpty() && it.time.isNotEmpty() },
+                race.sessions.practice2?.takeIf { it.day.isNotEmpty() && it.time.isNotEmpty() },
+                race.sessions.practice1.takeIf { it.day.isNotEmpty() && it.time.isNotEmpty() },
+                race.sessions.sprint?.takeIf { it.day.isNotEmpty() && it.time.isNotEmpty() },
+                race.sessions.sprintQualifying?.takeIf { it.day.isNotEmpty() && it.time.isNotEmpty() }
+            )
+            
+            // Ordenar sesiones por fecha y tomar la primera
+            val nextSession = sessions.minByOrNull { session ->
+                val sessionDate = DateUtils.parseDate(session.day, session.time, currentYear) ?: Date(Long.MAX_VALUE)
+                sessionDate.time
+            } ?: return LOADING_RACE_INFO
+            
+            val sessionDateTime = DateUtils.parseDate(
+                nextSession.day,
+                nextSession.time,
                 currentYear
             ) ?: return LOADING_RACE_INFO
 
             RaceInfo(
                 gpName = race.gp,
                 flagPath = race.flag,
-                timeRemaining = DateUtils.calculateTimeRemaining(raceDateTime, currentDate),
+                timeRemaining = DateUtils.calculateTimeRemaining(sessionDateTime, currentDate),
                 leaderImagePath = getDriverPortrait(category, leaderName),
                 leaderName = leaderName
             )
         } ?: LOADING_RACE_INFO
     }
 
-    private fun getDriverPortrait(category: String, driverName: String): String {
+    private suspend fun getDriverPortrait(category: String, driverName: String): String {
         try {
             if (driverName.isEmpty()) return ""
-            val drivers = getDrivers(category)
-            return drivers?.drivers?.find { it.name == driverName }?.portrait ?: ""
+            val driversResult = standingsRepository.getDriverStandings(category)
+            if (driversResult.isSuccess) {
+                val drivers = driversResult.getOrNull()
+                return drivers?.find { it.name == driverName }?.portrait ?: ""
+            }
+            return ""
         } catch (e: Exception) {
             Log.e(tag, "Error finding driver portrait", e)
             return ""

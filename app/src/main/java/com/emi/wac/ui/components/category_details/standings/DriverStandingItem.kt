@@ -24,14 +24,13 @@ import coil3.request.crossfade
 import com.emi.wac.common.Constants.ASSETS
 import com.emi.wac.data.model.contructor.Constructor
 import com.emi.wac.data.model.drivers.Driver
-import com.emi.wac.data.model.drivers.DriverStanding
 import com.emi.wac.ui.theme.AlataTypography
 import com.emi.wac.ui.theme.PrimaryWhite
 import com.emi.wac.ui.theme.getPrimaryColorForCategory
 
 @Composable
 fun DriverStandingItem(
-    standing: DriverStanding,
+    standing: Driver,
     category: String,
     drivers: List<Driver>?,
     constructors: List<Constructor>?
@@ -40,7 +39,7 @@ fun DriverStandingItem(
     val context = LocalContext.current
 
     // Search the driver and the team logo
-    val driver = drivers?.find { it.name.contains(standing.driver, ignoreCase = true) }
+    val driver = drivers?.find { it.name.contains(standing.name, ignoreCase = true) }
     val teamLogo = driver?.teamId?.let { teamId ->
         constructors?.find { it.teamId == teamId }?.logo
     } ?: ""
@@ -60,7 +59,7 @@ fun DriverStandingItem(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = standing.position,
+                text = standing.position.toString(),
                 style = AlataTypography.bodyLarge,
                 fontWeight = FontWeight.Bold,
                 color = PrimaryWhite
@@ -69,7 +68,7 @@ fun DriverStandingItem(
 
         // Driver name
         Text(
-            text = standing.driver,
+            text = standing.name,
             style = AlataTypography.titleSmall,
             color = Color.White,
             modifier = Modifier.weight(1f)

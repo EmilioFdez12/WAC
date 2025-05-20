@@ -39,15 +39,10 @@ fun OverViewComponent(
     ) {
         when (val state = leaderInfo) {
             is DataState.Success -> {
-                val (standing, driver) = state.data
-                Log.d(
-                    "OverViewComponent",
-                    "Rendering LeaderDriverCard: standing=$standing, driver=$driver"
-                )
+                val driverStanding = state.data
                 LeaderDriverCard(
                     modifier = Modifier.padding(top = 16.dp),
-                    driverStanding = standing,
-                    driverLogo = driver?.portrait ?: "",
+                    driver = driverStanding,
                     imageScale = if (category == "f1") 1f else 2f,
                     offsetX = if (category == "f1") 60.dp else 60.dp,
                     offsetY = if (category == "f1") 0.dp else 24.dp,
@@ -70,13 +65,13 @@ fun OverViewComponent(
 
         when (val state = constructorLeaderInfo) {
             is DataState.Success -> {
-                val (standing, constructor) = state.data
+                val constructorStanding = state.data
                 ConstructorLeaderCard(
                     modifier = Modifier.padding(top = 16.dp),
-                    constructorStanding = standing,
-                    car = constructor?.car ?: "",
+                    constructor = constructorStanding,
+                    car = constructorStanding.car,
                     imageScale = if (category == "f1") 1f else 1.2f,
-                    offsetX = if (category == "f1") (-20).dp else 20.dp,
+                    offsetX = if (category == "f1") (-10).dp else 20.dp,
                     offsetY = if (category == "f1") 20.dp else 20.dp,
                     rotation = if (category == "f1") 0f else 25f,
                     category = category

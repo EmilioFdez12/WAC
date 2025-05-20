@@ -1,22 +1,22 @@
 package com.emi.wac.data.model.contructor
 
 /**
- * Class that represents a F1 team
+ * Represents a constructor's standing in the championship.
  *
- * @property teamId The unique identifier of the team
- * @property team The name of the team
- * @property car The path to the car image of the team
+ * @property team The name of the constructor/team
+ * @property points The total points accumulated by the constructor
+ * @property position The current position in the championship standings
  */
 data class Constructor(
-    val teamId: Int,
-    val team: String,
-    val car: String,
-    val logo: String,
+    val car: String = "",
+    val id: Int = 0,
+    val logo: String = "",
+    val points: Int = 0,
+    val position: Int = 0,
+    val team: String = "",
+    val teamId: Int = 0,
 )
 
-/**
- * Class that represents a list of teams.
- */
 data class Constructors(
     val constructors: List<Constructor>
 )

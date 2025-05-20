@@ -1,7 +1,17 @@
 package com.emi.wac.ui.components.category_details.overview
 
+import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -20,16 +30,14 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import com.emi.wac.data.model.drivers.DriverStanding
+import com.emi.wac.data.model.drivers.Driver
 import com.emi.wac.ui.theme.AlataTypography
 import com.emi.wac.ui.theme.getPrimaryColorForCategory
-import kotlin.Float
 
 @Composable
 fun LeaderDriverCard(
     modifier: Modifier = Modifier,
-    driverStanding: DriverStanding,
-    driverLogo: String,
+    driver: Driver,
     offsetX: Dp = 60.dp,
     offsetY: Dp = 0.dp,
     imageScale: Float = 1f,
@@ -64,6 +72,7 @@ fun LeaderDriverCard(
                     )
                     .clip(RoundedCornerShape(8.dp))
             ) {
+                Log.d("LeaderDriverCard", "Driver: $driver")
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -71,7 +80,7 @@ fun LeaderDriverCard(
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = driverStanding.driver,
+                        text = driver.name,
                         style = AlataTypography.titleLarge,
                         color = Color.White
                     )
@@ -85,7 +94,7 @@ fun LeaderDriverCard(
                                 .padding(horizontal = 8.dp, vertical = 4.dp)
                         ) {
                             Text(
-                                text = "${driverStanding.position}º",
+                                text = "${driver.position}º",
                                 style = AlataTypography.bodyLarge,
                                 color = Color.Black
                             )
@@ -97,7 +106,7 @@ fun LeaderDriverCard(
                                 .padding(horizontal = 8.dp, vertical = 4.dp)
                         ) {
                             Text(
-                                text = "${driverStanding.points} pts",
+                                text = "${driver.points} pts",
                                 style = AlataTypography.bodyLarge,
                                 color = Color.White
                             )
@@ -106,7 +115,7 @@ fun LeaderDriverCard(
                 }
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data("file:///android_asset$driverLogo")
+                        .data("file:///android_asset${driver.portrait}")
                         .crossfade(true)
                         .build(),
                     contentDescription = "Driver Portrait",

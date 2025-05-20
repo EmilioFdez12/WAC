@@ -26,8 +26,6 @@ class WeatherRepository(private val racingRepository: RacingRepository) {
             }
 
             val (lat, lon, isoDate, targetTime) = weatherParams
-            Log.d(tag, "Weather API call with: lat=$lat, lon=$lon, date=$isoDate, time=$targetTime")
-
             return withContext(Dispatchers.IO) {
                 try {
                     val response = WeatherClient.weatherApiService.getHourlyWeather(
@@ -36,7 +34,6 @@ class WeatherRepository(private val racingRepository: RacingRepository) {
                         startDate = isoDate,
                         endDate = isoDate
                     )
-                    Log.d(tag, "Raw API response: $response")
 
                     if (response.hourly == null) {
                         Log.e(tag, "Weather API response has no hourly data")
@@ -54,7 +51,6 @@ class WeatherRepository(private val racingRepository: RacingRepository) {
                     ) {
                         val temp = response.hourly.temperature_2m[index]
                         val code = response.hourly.weathercode[index]
-                        Log.d(tag, "Weather data found: temp=$temp, code=$code")
                         Pair(temp, code)
                     } else {
                         Log.e(

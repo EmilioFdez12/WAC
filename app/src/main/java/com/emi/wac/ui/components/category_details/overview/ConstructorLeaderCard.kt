@@ -1,5 +1,6 @@
 package com.emi.wac.ui.components.category_details.overview
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,14 +31,14 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import com.emi.wac.data.model.contructor.ConstructorStanding
+import com.emi.wac.data.model.contructor.Constructor
 import com.emi.wac.ui.theme.AlataTypography
 import com.emi.wac.ui.theme.getPrimaryColorForCategory
 
 @Composable
 fun ConstructorLeaderCard(
     modifier: Modifier = Modifier,
-    constructorStanding: ConstructorStanding,
+    constructor: Constructor,
     car: String,
     offsetX: Dp = 60.dp,
     offsetY: Dp = 0.dp,
@@ -46,7 +47,8 @@ fun ConstructorLeaderCard(
     category: String,
 ) {
     val primaryColor = getPrimaryColorForCategory(category)
-    
+
+    Log.d("ConstructorLeaderCard", "Constructor: $constructor")
     Box(modifier = modifier.fillMaxWidth()) {
         Card(
             modifier = Modifier
@@ -81,7 +83,7 @@ fun ConstructorLeaderCard(
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = constructorStanding.team,
+                        text = constructor.team,
                         style = AlataTypography.titleLarge,
                         color = Color.White
                     )
@@ -96,7 +98,7 @@ fun ConstructorLeaderCard(
                                 .padding(horizontal = 8.dp, vertical = 4.dp)
                         ) {
                             Text(
-                                text = "${constructorStanding.position}º",
+                                text = "${constructor.position}º",
                                 style = AlataTypography.bodyLarge,
                                 color = Color.Black
                             )
@@ -108,7 +110,7 @@ fun ConstructorLeaderCard(
                                 .padding(horizontal = 8.dp, vertical = 4.dp)
                         ) {
                             Text(
-                                text = "${constructorStanding.points} pts",
+                                text = "${constructor.points} pts",
                                 style = AlataTypography.bodyLarge,
                                 color = Color.White
                             )

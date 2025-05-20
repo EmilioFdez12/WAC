@@ -1,5 +1,6 @@
 package com.emi.wac.ui.components.home
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -97,6 +98,7 @@ fun RaceCard(
                     .padding(horizontal = 8.dp, vertical = 4.dp),
             )
 
+            Log.d("RaceCard", "Leader image path: ${raceInfo.leaderImagePath}")
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data("$ASSETS${raceInfo.leaderImagePath}")

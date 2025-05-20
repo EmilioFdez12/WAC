@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -29,9 +30,12 @@ import coil3.request.crossfade
 import com.emi.wac.data.model.circuit.Circuit
 import com.emi.wac.data.model.sessions.GrandPrix
 import com.emi.wac.data.repository.RacingRepository
+import com.emi.wac.data.repository.StandingsRepository
 import com.emi.wac.ui.theme.AlataTypography
 import com.emi.wac.ui.theme.PrimaryWhite
 import com.emi.wac.ui.theme.getPrimaryColorForCategory
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 
 @Composable
 fun CircuitInfo(
@@ -40,14 +44,21 @@ fun CircuitInfo(
     circuit: Circuit? = null
 ) {
     val context = LocalContext.current
-    val racingRepository = remember { RacingRepository(context) }
+    val db = Firebase.firestore
+    val standingsRepository = remember { StandingsRepository(db) }
+    val racingRepository = remember { RacingRepository(standingsRepository, context) }
     var nextRace by remember { mutableStateOf<GrandPrix?>(null)}
     var circuitInfo by remember { mutableStateOf<Circuit?>(circuit) }
     val primaryColor = getPrimaryColorForCategory(category)
-    val imgBackground = if (category == "f1") Color.Transparent else Color(0xFF151515)
+    val imgBackground = when(category) {
+        "f1" -> Color.Transparent
+        "indycar" -> Color.Transparent
+        else -> Color(0xFF151515)
+    }
     val imgPadding = if (category == "f1") 0.dp else 8.dp
+    val imgScale = if (category == "indycar") 1.4f else 1f
 
-    // Cargar el próximo Gran Premio
+    // Load next GP
     LaunchedEffect(category) {
         nextRace = racingRepository.getNextGrandPrixObject(category)
     }
@@ -84,7 +95,8 @@ fun CircuitInfo(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(imgBackground, shape = RoundedCornerShape(8.dp))
-                    .padding(imgPadding),
+                    .padding(imgPadding)
+                    .scale(imgScale),
                 contentScale = ContentScale.Fit
             )
 

@@ -13,17 +13,15 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.emi.wac.data.model.contructor.ConstructorStanding
+import com.emi.wac.data.model.contructor.Constructor
 import com.emi.wac.ui.theme.getPrimaryColorForCategory
-import com.emi.wac.ui.components.category_details.standings.ConstructorStandingItem
 
 @Composable
 fun ConstructorStandingsList(
-    standings: List<ConstructorStanding>,
+    standings: List<Constructor>,
     category: String
 ) {
     Card(

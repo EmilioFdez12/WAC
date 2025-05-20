@@ -32,6 +32,7 @@ import com.emi.wac.common.Constants
 import com.emi.wac.data.model.sessions.GrandPrix
 import com.emi.wac.data.repository.AuthRepository
 import com.emi.wac.data.repository.RacingRepository
+import com.emi.wac.data.repository.StandingsRepository
 import com.emi.wac.ui.components.BottomBar
 import com.emi.wac.ui.screens.app.CategoryDetailsScreen
 import com.emi.wac.ui.screens.app.HomeScreen
@@ -41,6 +42,8 @@ import com.emi.wac.utils.TransitionsUtils
 import com.emi.wac.viewmodel.DataState
 import com.emi.wac.viewmodel.OverviewViewModel
 import com.emi.wac.viewmodel.StandingsViewModel
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 
 @Composable
 fun MainScreen(
@@ -133,7 +136,9 @@ fun MainScreen(
                     val overviewViewModel: OverviewViewModel = viewModel()
                     val standingsViewModel: StandingsViewModel = viewModel()
                     val context = LocalContext.current
-                    val racingRepository = RacingRepository(context)
+                    val db = Firebase.firestore
+                    val standingRepository = StandingsRepository(db)
+                    val racingRepository = RacingRepository(standingRepository, context)
 
                     val circuitInfo by overviewViewModel.circuitInfo.collectAsState()
                     val leaderInfo by overviewViewModel.leaderInfo.collectAsState()
@@ -154,6 +159,7 @@ fun MainScreen(
                         weatherInfo is DataState.Success &&
                         standingsState is StandingsViewModel.StandingsState.Success &&
                         schedule != null
+
 
                     AnimatedVisibility(
                         visible = !isDataReady,

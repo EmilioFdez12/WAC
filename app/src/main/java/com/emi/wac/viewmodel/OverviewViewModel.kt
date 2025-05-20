@@ -6,9 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.emi.wac.data.model.circuit.Circuit
 import com.emi.wac.data.model.contructor.Constructor
-import com.emi.wac.data.model.contructor.ConstructorStanding
 import com.emi.wac.data.model.drivers.Driver
-import com.emi.wac.data.model.drivers.DriverStanding
 import com.emi.wac.data.model.weather.WeatherData
 import com.emi.wac.data.repository.RacingRepository
 import com.emi.wac.data.repository.StandingsRepository
@@ -20,16 +18,16 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class OverviewViewModel(application: Application) : AndroidViewModel(application) {
-    private val racingRepository = RacingRepository(application)
-    private val weatherRepository = WeatherRepository(racingRepository)
     private val standingsRepository = StandingsRepository(Firebase.firestore)
+    private val racingRepository = RacingRepository(standingsRepository, application)
+    private val weatherRepository = WeatherRepository(racingRepository)
 
     private val _leaderInfo =
-        MutableStateFlow<DataState<Pair<DriverStanding, Driver?>>>(DataState.Loading)
+        MutableStateFlow<DataState<Driver>>(DataState.Loading)
     val leaderInfo = _leaderInfo.asStateFlow()
 
     private val _constructorLeaderInfo =
-        MutableStateFlow<DataState<Pair<ConstructorStanding, Constructor?>>>(DataState.Loading)
+        MutableStateFlow<DataState<Constructor>>(DataState.Loading)
     val constructorLeaderInfo = _constructorLeaderInfo.asStateFlow()
 
     private val _circuitInfo = MutableStateFlow<DataState<Circuit?>>(DataState.Loading)
@@ -51,9 +49,8 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
                 if (leaderStandingResult.isSuccess) {
                     val leaderStanding = leaderStandingResult.getOrNull()
                     if (leaderStanding != null) {
-                        val drivers = racingRepository.getDrivers(category)
-                        val leaderDriver = findDriver(drivers?.drivers, leaderStanding.driver)
-                        _leaderInfo.value = DataState.Success(Pair(leaderStanding, leaderDriver))
+                        // Ya no necesitamos buscar el piloto en otra lista, toda la info está en leaderStanding
+                        _leaderInfo.value = DataState.Success(leaderStanding)
                     } else {
                         _leaderInfo.value = DataState.Error("No leader standing found")
                     }
@@ -65,29 +62,24 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
                 Log.e("OverviewViewModel", "Error loading leader info", e)
                 _leaderInfo.value = DataState.Error("Error loading leader: ${e.message}")
             }
-
+            
             try {
-                val constructorStandingResult = standingsRepository.getLeaderConstructor(category)
-                if (constructorStandingResult.isSuccess) {
-                    val constructorStanding = constructorStandingResult.getOrNull()
-                    if (constructorStanding != null) {
-                        val constructors = racingRepository.getConstructors(category)
-                        val leaderConstructor =
-                            findConstructor(constructors?.constructors, constructorStanding.team)
-                        _constructorLeaderInfo.value =
-                            DataState.Success(Pair(constructorStanding, leaderConstructor))
+                val constructorLeaderStandingResult = standingsRepository.getLeaderConstructor(category)
+                if (constructorLeaderStandingResult.isSuccess) {
+                    val constructorLeaderStanding = constructorLeaderStandingResult.getOrNull()
+                    if (constructorLeaderStanding != null) {
+                        // Ya no necesitamos buscar el piloto en otra lista, toda la info está en leaderStanding
+                        _constructorLeaderInfo.value = DataState.Success(constructorLeaderStanding)
                     } else {
-                        _constructorLeaderInfo.value =
-                            DataState.Error("No constructor standing found")
+                        _constructorLeaderInfo.value = DataState.Error("No leader standing found")
                     }
                 } else {
                     _constructorLeaderInfo.value =
-                        DataState.Error("Failed to load constructor: ${constructorStandingResult.exceptionOrNull()?.message}")
+                        DataState.Error("Failed to load leader: ${constructorLeaderStandingResult.exceptionOrNull()?.message}")
                 }
             } catch (e: Exception) {
-                Log.e("OverviewViewModel", "Error loading constructor leader", e)
-                _constructorLeaderInfo.value =
-                    DataState.Error("Error loading constructor: ${e.message}")
+                Log.e("OverviewViewModel", "Error loading leader info", e)
+                _constructorLeaderInfo.value = DataState.Error("Error loading leader: ${e.message}")
             }
 
             // Circuit info
@@ -98,13 +90,6 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
                 )
                 val nextRace = racingRepository.getNextGrandPrixObject(category)
                 if (nextRace != null) {
-                    Log.d(
-                        "OverviewViewModel", "Next race found: gp=${nextRace.gp}, " +
-                            "race day=${nextRace.sessions.race.day}, " +
-                            "race time=${nextRace.sessions.race.time}, " +
-                            "qualifying day=${nextRace.sessions.qualifying?.day}, " +
-                            "sprint day=${nextRace.sessions.sprint?.day}"
-                    )
                     val circuits = racingRepository.getCircuits(category)
                     val nextCircuit = findCircuit(circuits?.circuits, nextRace.gp)
                     _circuitInfo.value = DataState.Success(nextCircuit)
@@ -125,15 +110,8 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
                 )
                 val nextRace = racingRepository.getNextGrandPrixObject(category)
                 if (nextRace != null) {
-                    Log.d(
-                        "OverviewViewModel", "Next race for weather: gp=${nextRace.gp}, " +
-                            "race=${nextRace.sessions.race.day}/${nextRace.sessions.race.time}, " +
-                            "qualifying=${nextRace.sessions.qualifying?.day}/${nextRace.sessions.qualifying?.time}, " +
-                            "sprint=${nextRace.sessions.sprint?.day}/${nextRace.sessions.sprint?.time}"
-                    )
-
                     // Race weather
-                    val weatherRace = if (nextRace.sessions.race.day.isNotEmpty() &&
+                    val weatherRace = if (nextRace.sessions.race?.day?.isNotEmpty() == true &&
                         nextRace.sessions.race.time.isNotEmpty()
                     ) {
                         Log.d("OverviewViewModel", "Fetching weather for race session")
@@ -150,10 +128,6 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
                             null
                         }
                     } else {
-                        Log.e(
-                            "OverviewViewModel",
-                            "Race session invalid: day=${nextRace.sessions.race.day}, time=${nextRace.sessions.race.time}"
-                        )
                         null
                     }
 
@@ -228,19 +202,6 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
                 Log.e("OverviewViewModel", "Error loading weather info: ${e.message}", e)
                 _weatherInfo.value = DataState.Error("Error loading weather: ${e.message}")
             }
-        }
-    }
-
-    private fun findDriver(drivers: List<Driver>?, driverName: String): Driver? {
-        return drivers?.find { it.name == driverName }
-    }
-
-    private fun findConstructor(constructors: List<Constructor>?, teamName: String): Constructor? {
-        return constructors?.find {
-            it.team.contains(teamName, ignoreCase = true) || teamName.contains(
-                it.team,
-                ignoreCase = true
-            )
         }
     }
 

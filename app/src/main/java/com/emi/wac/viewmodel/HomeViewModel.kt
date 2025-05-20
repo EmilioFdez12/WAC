@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.emi.wac.common.Constants.CATEGORY_F1
+import com.emi.wac.common.Constants.CATEGORY_INDYCAR
 import com.emi.wac.common.Constants.CATEGORY_MOTOGP
 import com.emi.wac.common.Constants.DATE_FORMAT
 import com.emi.wac.common.Constants.RACE_DURATION
@@ -28,19 +29,16 @@ import java.util.TimeZone
 /**
  * ViewModel responsible for managing race data and session timing for F1 and MotoGP.
  * Provides live updates for upcoming races and sessions, including countdowns and LIVE status.
- *
  * @param application The application context used to initialize repositories.
  */
-class HomeViewModel(application: Application) : AndroidViewModel(application) {
-
-    // Repositories for fetching race and standings data
-    private val repository = RacingRepository(application)
+class HomeViewModel(application: Application) :
+    AndroidViewModel(application) { // Repositories for fetching race and standings data
     private val db = Firebase.firestore
     private val standingsRepository = StandingsRepository(db)
+    private val repository = RacingRepository(standingsRepository, application)
 
     /**
      * Data class holding race information and its associated sessions.
-     *
      * @property grandPrix The race details including name, leader, and timing.
      * @property sessions List of sessions for the race (e.g., FP1, Qualy, Race).
      */
@@ -48,7 +46,6 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     /**
      * Data class representing a single race session with its timing and duration.
-     *
      * @property name The name of the session (e.g., "FP 1", "Race").
      * @property dateTime The start time of the session.
      * @property duration Duration in milliseconds (2 hours for Race, 1 hour otherwise).
@@ -62,18 +59,25 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     // State flows for F1 and MotoGP race data
     private val _f1RaceData = MutableStateFlow<DataState<RaceData>>(DataState.Loading)
     private val _motoGPRaceData = MutableStateFlow<DataState<RaceData>>(DataState.Loading)
+    private val _indycarRaceData = MutableStateFlow<DataState<RaceData>>(DataState.Loading)
 
-    /** Public flow exposing the next race data. */
+    /**
+     * Public flow exposing the next race data.
+     *
+     */
     val nextMotoGPRace = _motoGPRaceData.asStateFlow()
     val nextF1Race = _f1RaceData.asStateFlow()
-
-    // Job to manage the update timer
+    val nextIndycarRace = _indycarRaceData.asStateFlow() // Job to manage the update timer
     private var updateJob: Job? = null
 
     init {
         // Start fetching race data and updating timer on initialization
         viewModelScope.launch {
-            listOf(CATEGORY_F1 to _f1RaceData, CATEGORY_MOTOGP to _motoGPRaceData).forEach { (category, flow) ->
+            listOf(
+                CATEGORY_F1 to _f1RaceData,
+                CATEGORY_MOTOGP to _motoGPRaceData,
+                CATEGORY_INDYCAR to _indycarRaceData
+            ).forEach { (category, flow) ->
                 updateRaceData(category, flow)
             }
             startRaceUpdateTimer()
@@ -96,7 +100,6 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     /**
      * Updates race data for a given category and emits it to the provided flow.
-     *
      * @param category The race category (e.g., "f1", "motogp").
      * @param raceDataFlow The MutableStateFlow to emit the race data state.
      */
@@ -108,7 +111,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         raceDataFlow.value = DataState.Loading
         try {
             // Fetch leader name
-            val leaderName = standingsRepository.getLeaderDriver(category).getOrNull()?.driver ?: ""
+            val leaderName = standingsRepository.getLeaderDriver(category).getOrNull()?.name ?: ""
             // Find next GP
             val grandPrixObject = repository.getNextGrandPrixObject(category)
                 ?: throw IllegalStateException("No Grand Prix found")
@@ -154,6 +157,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             raceDataFlow.value =
                 DataState.Error("Error loading race data: ${e.message}")
         }
+
     }
 
     /**
@@ -162,7 +166,11 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private fun updateTimeRemaining() {
         val currentTime =
             Calendar.getInstance(TimeZone.getTimeZone("UTC")).time // Current time in UTC
-        listOf(_f1RaceData to "f1", _motoGPRaceData to "motogp").forEach { (flow, category) ->
+        listOf(
+            _f1RaceData to CATEGORY_F1,
+            _motoGPRaceData to CATEGORY_MOTOGP,
+            _indycarRaceData to CATEGORY_INDYCAR
+        ).forEach { (flow, category) ->
             (flow.value as? DataState.Success)?.let { state ->
                 val (sessionName, timeRemaining) = calculateSessionAndTimeRemaining(
                     state.data.sessions,
@@ -188,7 +196,6 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     /**
      * Calculates the current session and time remaining based on the session list.
-     *
      * @param sessions List of session data sorted by date.
      * @param currentTime The current time to compare against (defaults to current UTC time).
      * @return Pair of session name and time remaining (e.g., "FP 1" to "● LIVE" or "25 Apr").
@@ -200,9 +207,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         // Check if any session is currently live
         val currentSession =
             sessions.find { currentTime in it.dateTime..Date(it.dateTime.time + it.duration) }
-        if (currentSession != null) return currentSession.name to "● LIVE"
-
-        // Find the next upcoming session
+        if (currentSession != null) return currentSession.name to "● LIVE" // Find the next upcoming session
         val nextSession = sessions.find { it.dateTime > currentTime }
         return nextSession?.let {
             // Hours until next session
@@ -216,6 +221,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                 Calendar.getInstance(TimeZone.getTimeZone("UTC"))
             )
         } ?: (null to "No sessions")
+
     }
 
     /**

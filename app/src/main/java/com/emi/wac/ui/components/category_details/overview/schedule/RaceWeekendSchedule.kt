@@ -21,10 +21,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.emi.wac.data.model.sessions.GrandPrix
 import com.emi.wac.data.repository.RacingRepository
-import com.emi.wac.utils.DateUtils
+import com.emi.wac.data.repository.StandingsRepository
 import com.emi.wac.ui.theme.AlataTypography
 import com.emi.wac.ui.theme.getHardColorForCategory
 import com.emi.wac.ui.theme.getSoftColorForCategory
+import com.emi.wac.utils.DateUtils
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 
 @Composable
 fun RaceWeekendSchedule(
@@ -32,7 +35,9 @@ fun RaceWeekendSchedule(
     category: String
 ) {
     val context = LocalContext.current
-    val racingRepository = remember { RacingRepository(context) }
+    val db = Firebase.firestore
+    val standingsRepository = remember { StandingsRepository(db) }
+    val racingRepository = remember { RacingRepository(standingsRepository, context) }
     var nextRace by remember { mutableStateOf<GrandPrix?>(null) }
     val softColor = getSoftColorForCategory(category)
     val hardColor = getHardColorForCategory(category)
@@ -72,7 +77,7 @@ fun RaceWeekendSchedule(
                 val sessions = mutableListOf<SessionInfo>()
 
                 race.sessions.race.let {
-                    sessions.add(SessionInfo("RACE", it.day, it.time, true))
+                    sessions.add(SessionInfo("RACE", it?.day ?: "", it?.time ?: "", true))
                 }
 
                 race.sessions.qualifying?.let {
@@ -96,7 +101,7 @@ fun RaceWeekendSchedule(
                 }
 
                 race.sessions.practice1.let {
-                    sessions.add(SessionInfo("PRACTICE 1", it.day, it.time, false))
+                    sessions.add(SessionInfo("PRACTICE 1", it?.day ?: "", it?.time ?: "", false))
                 }
 
                 // Order sessions by date and time

@@ -1,13 +1,16 @@
 package com.emi.wac.ui.components.category_details.schedule
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -25,7 +28,7 @@ fun SessionsList(
     grandPrix: GrandPrix,
     primaryColor: Color,
     modifier: Modifier,
-    circuitsData: Circuits? // Nuevo parámetro para los datos de circuitos
+    circuitsData: Circuits?
 ) {
     Column(
         modifier = modifier
@@ -47,7 +50,7 @@ fun SessionsList(
 
         // Add each session to the list
         grandPrix.sessions.race.let {
-            sessions.add(Triple("RACE", it.day, it.time))
+            sessions.add(Triple("RACE", it?.day ?: "", it?.time ?: ""))
         }
 
         grandPrix.sessions.qualifying?.let {
@@ -90,6 +93,16 @@ fun SessionsList(
         // Circuit image
         circuitsData?.circuits?.find { it.gp.contains(grandPrix.gp, ignoreCase = true) }?.let { circuit ->
             if (circuit.image.isNotEmpty()) {
+                val category = getCategory(circuit.image)
+
+                // Configurar el fondo y escala según la categoría
+                val imgBackground = when(category) {
+                    "indycar" -> Color.White
+                    else -> Color.Transparent
+                }
+                val imgScale = 1f
+                val imgPadding = if (category == "f1") 0.dp else 8.dp
+
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data("file:///android_asset${circuit.image}")
@@ -98,10 +111,27 @@ fun SessionsList(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 16.dp)
-                        .size(200.dp),
+                        .background(imgBackground, shape = RoundedCornerShape(8.dp))
+                        .padding(imgPadding)
+                        .size(200.dp)
+                        .scale(imgScale),
                     contentScale = ContentScale.Fit
                 )
             }
         }
+    }
+}
+
+/**
+ * Determina la categoría basada en la ruta de la imagen del circuito
+ * @param imagePath Ruta de la imagen del circuito
+ * @return Categoría identificada (f1, motogp, indycar, o cadena vacía si no se identifica)
+ */
+private fun getCategory(imagePath: String): String {
+    return when {
+        imagePath.contains("/f1/") -> "f1"
+        imagePath.contains("/motogp/") -> "motogp"
+        imagePath.contains("/indycar/") -> "indycar"
+        else -> ""
     }
 }

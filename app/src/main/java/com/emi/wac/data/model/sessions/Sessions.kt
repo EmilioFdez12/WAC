@@ -18,7 +18,7 @@ data class Sessions(
     val sprintQualifying: Session? = null,
     val sprint: Session? = null,
     val qualifying: Session? = null,
-    val race: Session
+    val race: Session? = null,
 )
 
 /**
@@ -29,5 +29,5 @@ data class Sessions(
  */
 data class Session(
     val day: String,
-    val time: String
+    val time: String,
 )

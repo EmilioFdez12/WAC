@@ -58,6 +58,7 @@ fun HomeScreen(
 ) {
     val nextF1Race by viewModel.nextF1Race.collectAsState()
     val nextMotoGPRace by viewModel.nextMotoGPRace.collectAsState()
+    val nextIndycarRace by viewModel.nextIndycarRace.collectAsState()
     val backgroundPainter: Painter = rememberAsyncImagePainter(model = BCKG_IMG)
 
     Box(modifier = modifier.fillMaxSize()) {
@@ -111,7 +112,7 @@ fun HomeScreen(
 
             item {
                 AnimatedVisibility(
-                    visible = nextF1Race is DataState.Success,
+                    visible = true,
                     enter = fadeIn(animationSpec = tween(300)),
                     exit = fadeOut(animationSpec = tween(300))
                 ) {
@@ -126,13 +127,9 @@ fun HomeScreen(
                             )
                         }
                         is DataState.Error -> {
-                            Text(
-                                text = "Error F1: ${state.message}",
-                                color = Color.Red,
-                                modifier = Modifier.align(Alignment.CenterHorizontally as Alignment),
-                            )
                         }
-                        else -> {}
+                        is DataState.Loading -> {
+                        }
                     }
                 }
 
@@ -141,7 +138,7 @@ fun HomeScreen(
 
             item {
                 AnimatedVisibility(
-                    visible = nextMotoGPRace is DataState.Success,
+                    visible = true,
                     enter = fadeIn(animationSpec = tween(300)),
                     exit = fadeOut(animationSpec = tween(300))
                 ) {
@@ -158,25 +155,22 @@ fun HomeScreen(
                             )
                         }
                         is DataState.Error -> {
-                            Text(
-                                text = "Error MotoGP: ${state.message}",
-                                color = Color.Red,
-                                modifier = Modifier.align(Alignment.CenterHorizontally as Alignment)
-                            )
                         }
-                        else -> {}
+                        is DataState.Loading -> {
+                        }
                     }
                 }
+
                 Spacer(modifier = Modifier.height(32.dp))
             }
 
             item {
                 AnimatedVisibility(
-                    visible = nextF1Race is DataState.Success,
+                    visible = true,
                     enter = fadeIn(animationSpec = tween(300)),
                     exit = fadeOut(animationSpec = tween(300))
                 ) {
-                    when (val state = nextF1Race) {
+                    when (val state = nextIndycarRace) {
                         is DataState.Success -> {
                             RaceCard(
                                 logo = CATEGORY_INDYCAR,
@@ -187,13 +181,9 @@ fun HomeScreen(
                             )
                         }
                         is DataState.Error -> {
-                            Text(
-                                text = "Error F1: ${state.message}",
-                                color = Color.Red,
-                                modifier = Modifier.align(Alignment.CenterHorizontally as Alignment),
-                            )
                         }
-                        else -> {}
+                        is DataState.Loading -> {
+                        }
                     }
                 }
 
