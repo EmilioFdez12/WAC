@@ -14,3 +14,23 @@
 .cxx
 local.properties
 app/google-services.json
+
+# Archivos de configuración de Firebase adicionales
+.firebaserc
+firebase-debug.log
+firebase-debug.*.log
+firebase-adminsdk*.json
+serviceAccountKey.json
+
+# Archivos de configuración de claves API
+**/apikey.properties
+**/keys.xml
+**/secrets.xml
+
+# Archivos de configuración local
+**/*.local
+**/*.env
+
+# Archivos de compilación y caché
+**/build/
+**/.firebase/

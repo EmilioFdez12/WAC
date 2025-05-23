@@ -75,6 +75,7 @@ dependencies {
     // Add the dependency for the Firebase SDK for Google Analytics
     implementation(libs.firebase.analytics)
     implementation(libs.google.firebase.firestore)
+    implementation(libs.firebase.messaging)
 
     implementation (libs.androidx.credentials)
     implementation (libs.androidx.credentials.play.services.auth)

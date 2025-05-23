@@ -43,7 +43,8 @@ fun CustomButton(
     gradientColors: List<Color> = listOf(PrimaryRed, Color(0xFFB71C1C)),
     textColor: Color = Color.White,
     borderColor: Color? = null,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier? = null,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
