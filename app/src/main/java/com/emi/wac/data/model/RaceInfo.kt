@@ -1,7 +1,7 @@
 package com.emi.wac.data.model
 
 /**
- * Class containing general information about the next Grand Prix.
+ * Data class containing general information about the next Grand Prix.
  *
  * @property gpName Name of the Grand Prix
  * @property flagPath Path to the flag image of the next Grand Prix

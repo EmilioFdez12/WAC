@@ -22,6 +22,7 @@ import com.emi.wac.common.Constants
 import com.emi.wac.common.Constants.CATEGORY_F1
 import com.emi.wac.common.Constants.CATEGORY_INDYCAR
 import com.emi.wac.common.Constants.CATEGORY_MOTOGP
+import com.emi.wac.data.model.auth.UserPreference
 import com.emi.wac.data.model.drivers.Driver
 import com.emi.wac.data.repository.AuthRepository
 import com.emi.wac.data.repository.StandingsRepository
@@ -118,7 +119,7 @@ fun ProfileScreen(
     fun savePreferences() {
         currentUser?.uid?.let { userId ->
             val prefsToSave = categoryPreferences.map { pref ->
-                UserPreferencesRepository.UserPreference(
+                UserPreference(
                     category = pref.name,
                     notificationsEnabled = pref.enabled,
                     favoriteDriver = pref.favoriteDriver.takeIf { it.isNotEmpty() }

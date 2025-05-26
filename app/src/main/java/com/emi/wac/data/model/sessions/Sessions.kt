@@ -1,7 +1,7 @@
 package com.emi.wac.data.model.sessions
 
 /**
- * Class representing the sessions of a Grand Prix.
+ * Data class representing the sessions of a Grand Prix.
  *
  * @property practice1 The first practice session
  * @property practice2 The second practice session (may not exist in sprint weekends)
@@ -22,7 +22,7 @@ data class Sessions(
 )
 
 /**
- * Class representing a session.
+ * Data class representing a session.
  *
  * @property day The day of the session
  * @property time The time of the session

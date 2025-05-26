@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 class NewsViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository = NewsRepository(application)
+    private val repository = NewsRepository()
 
     private val _newsState = MutableStateFlow<NewsState>(NewsState.Loading)
     val newsState: StateFlow<NewsState> = _newsState

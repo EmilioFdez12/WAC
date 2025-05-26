@@ -48,7 +48,8 @@ import com.emi.wac.common.Constants.LEXENDBOLD
 import com.emi.wac.common.Constants.LEXENDREGULAR
 import com.emi.wac.common.Constants.backgroundImages
 import com.emi.wac.data.repository.AuthRepository
-import com.emi.wac.ui.components.login.CustomButton
+import com.emi.wac.ui.components.common.WACButton
+import com.emi.wac.ui.components.common.WACButtonStyle
 import com.emi.wac.ui.theme.PrimaryRed
 import com.emi.wac.ui.theme.PrimaryWhite
 import com.emi.wac.utils.GoogleSignInUtils
@@ -236,10 +237,8 @@ fun LoginScreen(
 
                     Spacer(modifier = Modifier.height(32.dp))
 
-                    CustomButton(
+                    WACButton(
                         text = "CONTINUE",
-                        gradientColors = listOf(PrimaryRed, PrimaryRed),
-                        textColor = Color.White,
                         onClick = {
                             errorMessage = validateInputs()
                             scope.launch {
@@ -258,17 +257,18 @@ fun LoginScreen(
                                     errorMessage = "Error al iniciar sesión: ${e.message}"
                                 }
                             }
-                        }
+                        },
+                        style = WACButtonStyle.PRIMARY,
+                        gradientColors = listOf(PrimaryRed, PrimaryRed),
+                        textColor = Color.White,
+                        modifier = Modifier.fillMaxWidth(0.96f)
                     )
 
                     Separator()
 
                     // Google Sign-In button
-                    CustomButton(
+                    WACButton(
                         text = "Continue with Google",
-                        icon = R.drawable.google,
-                        gradientColors = listOf(Color.White, Color.White),
-                        textColor = Color.Black,
                         onClick = {
                             errorMessage = null
                             GoogleSignInUtils.doGoogleSignIn(
@@ -279,7 +279,12 @@ fun LoginScreen(
                                     onLoginSuccess()
                                 }
                             )
-                        }
+                        },
+                        style = WACButtonStyle.SECONDARY,
+                        gradientColors = listOf(Color.White, Color.White),
+                        textColor = Color.Black,
+                        iconRes = R.drawable.google,
+                        modifier = Modifier.fillMaxWidth(0.96f)
                     )
 
                     Spacer(modifier = Modifier.height(32.dp))

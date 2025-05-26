@@ -13,6 +13,18 @@ import retrofit2.http.Query
  * which is used to display weather information for race weekends.
  */
 interface WeatherAPIService {
+
+    /**
+     * Retrieves hourly weather forecast data for a specific location and time period.
+     *
+     * @param latitude The latitude coordinate of the location.
+     * @param longitude The longitude coordinate of the location.
+     * @param hourly The specific hourly data to retrieve.
+     * @param startDate The start date for the time period.
+     * @param endDate The end date for the time period.
+     *
+     * @return A [WeatherResponse] containing the retrieved weather forecast data.
+     */
     @GET("v1/forecast")
     suspend fun getHourlyWeather(
         @Query("latitude") latitude: Double,
@@ -21,5 +33,4 @@ interface WeatherAPIService {
         @Query("start_date") startDate: String,
         @Query("end_date") endDate: String
     ): WeatherResponse
-
 }

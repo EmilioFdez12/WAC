@@ -48,7 +48,8 @@ import com.emi.wac.common.Constants.LEXENDBOLD
 import com.emi.wac.common.Constants.LEXENDREGULAR
 import com.emi.wac.common.Constants.backgroundImages
 import com.emi.wac.data.repository.AuthRepository
-import com.emi.wac.ui.components.login.CustomButton
+import com.emi.wac.ui.components.common.WACButton
+import com.emi.wac.ui.components.common.WACButtonStyle
 import com.emi.wac.ui.theme.PrimaryWhite
 import com.emi.wac.utils.GoogleSignInUtils
 import kotlinx.coroutines.launch
@@ -71,7 +72,8 @@ fun RegisterScreen(
     var errorMessage by remember { mutableStateOf<String?>(null) }
     var showPassword by remember { mutableStateOf(false) }
     var showConfirmPassword by remember { mutableStateOf(false) }
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
+    val launcher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
 
     // Selects a random image
     val randomImage by remember { mutableIntStateOf(backgroundImages.random()) }
@@ -283,23 +285,26 @@ fun RegisterScreen(
                         )
                     }
 
-                    CustomButton(
+                    WACButton(
                         text = "REGISTER",
-                        gradientColors = listOf(PrimaryBlue, DarkBlue),
-                        textColor = Color.White,
                         onClick = {
                             errorMessage = validateInputs()
                             if (errorMessage == null) {
                                 scope.launch {
                                     try {
                                         // Proceed with registration
-                                        val result = authRepository.createUserWithEmail(email, password, displayName)
+                                        val result = authRepository.createUserWithEmail(
+                                            email,
+                                            password,
+                                            displayName
+                                        )
                                         result.onSuccess {
                                             onRegisterSuccess()
                                         }.onFailure { e ->
                                             errorMessage = when {
                                                 e.message?.contains("email already exists") == true ->
                                                     "An account with this email already exists"
+
                                                 else -> e.message ?: "Registration failed"
                                             }
                                         }
@@ -308,16 +313,18 @@ fun RegisterScreen(
                                     }
                                 }
                             }
-                        }
+                        },
+                        style = WACButtonStyle.PRIMARY,
+                        gradientColors = listOf(PrimaryBlue, DarkBlue),
+                        textColor = Color.White,
+                        modifier = Modifier.fillMaxWidth(0.96f)
                     )
 
                     Separator()
 
-                    CustomButton(
+                    // Replace Google Sign-In button
+                    WACButton(
                         text = "Continue with Google",
-                        icon = R.drawable.google,
-                        gradientColors = listOf(Color.White, Color.White),
-                        textColor = Color.Black,
                         onClick = {
                             errorMessage = null
                             GoogleSignInUtils.doGoogleSignIn(
@@ -326,7 +333,12 @@ fun RegisterScreen(
                                 launcher = launcher,
                                 login = { onRegisterSuccess() }
                             )
-                        }
+                        },
+                        style = WACButtonStyle.SECONDARY,
+                        gradientColors = listOf(Color.White, Color.White),
+                        textColor = Color.Black,
+                        iconRes = R.drawable.google,
+                        modifier = Modifier.fillMaxWidth(0.96f)
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))

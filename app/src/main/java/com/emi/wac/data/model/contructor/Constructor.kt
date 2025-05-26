@@ -3,9 +3,13 @@ package com.emi.wac.data.model.contructor
 /**
  * Represents a constructor's standing in the championship.
  *
- * @property team The name of the constructor/team
- * @property points The total points accumulated by the constructor
- * @property position The current position in the championship standings
+ * @property car The name of the car associated with the constructor.
+ * @property id Unique identifier for the constructor.
+ * @property logo URL or path to the constructor's logo image.
+ * @property points Total points accumulated by the constructor in the championship.
+ * @property position Current position of the constructor in the championship standings.
+ * @property team Name of the constructor/team.
+ * @property teamId Unique identifier for the team.
  */
 data class Constructor(
     val car: String = "",
@@ -15,8 +19,4 @@ data class Constructor(
     val position: Int = 0,
     val team: String = "",
     val teamId: Int = 0,
-)
-
-data class Constructors(
-    val constructors: List<Constructor>
 )

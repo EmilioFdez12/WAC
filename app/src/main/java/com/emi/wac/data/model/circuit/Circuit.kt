@@ -1,7 +1,7 @@
 package com.emi.wac.data.model.circuit
 
 /**
- * Class representing a Formula 1 circuit.
+ * Data class representing a circuit.
  * 
  * @property id The unique identifier of the circuit
  * @property name The name of the circuit

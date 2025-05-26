@@ -3,10 +3,16 @@ package com.emi.wac.data.model.drivers
 /**
  * Represents a driver's standing in the championship.
  *
- * @property name The name of the driver
- * @property points The total points accumulated by the driver
- * @property position The current position in the championship standings
- * @property team The name of the team the driver belongs to
+ * @property id Unique identifier for the driver.
+ * @property name The name of the driver.
+ * @property number The racing number assigned to the driver.
+ * @property points Total points accumulated by the driver in the championship.
+ * @property portrait URL or path to the driver's portrait image.
+ * @property position Current position of the driver in the championship standings.
+ * @property team Name of the team the driver belongs to.
+ * @property teamCar The car model associated with the driver's team.
+ * @property teamId Unique identifier for the team.
+ * @property teamLogo URL or path to the team's logo image.
  */
 data class Driver(
     val id: Int = 0,
@@ -19,8 +25,4 @@ data class Driver(
     val teamCar: String = "",
     val teamId: Int = 0,
     val teamLogo: String = "",
-)
-
-data class Drivers(
-    val drivers: List<Driver>
 )
