@@ -1,6 +1,7 @@
 package com.emi.wac.ui.screens.app
 
 import android.app.Application
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -176,9 +177,10 @@ fun HomeScreen(
                                 logo = CATEGORY_INDYCAR,
                                 raceInfo = state.data.grandPrix,
                                 onCardClick = { navController.navigate("$CAT_DETAILS/$CATEGORY_INDYCAR") },
-                                imageOffset = Offset(-24f, 0f),
+                                imageOffset = Offset(-40f, 0f),
                                 category = CATEGORY_INDYCAR
                             )
+                            Log.d("HomeScreen", "RaceCard: ${state.data.grandPrix}")
                         }
                         is DataState.Error -> {
                         }

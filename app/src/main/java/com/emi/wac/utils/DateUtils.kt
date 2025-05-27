@@ -72,8 +72,16 @@ object DateUtils {
     }
 
     fun parseSessionDate(day: String, time: String): Date {
+        // If day or hour is "TBD" or empty, return a date far in the future
+        // in order to sort it to the end of the list
+        if (day.trim().isEmpty() || time.trim().isEmpty() ||
+            day.equals("TBD", ignoreCase = true) || time.equals("TBD", ignoreCase = true)
+        ) {
+            return Date(Long.MAX_VALUE)
+        }
+
         val year = getCurrentYear()
-        return parseDate(day, time, year) ?: Date(0)
+        return parseDate(day.trim(), time.trim(), year) ?: Date(Long.MAX_VALUE)
     }
 
     /**

@@ -33,6 +33,7 @@ fun OverViewComponent(
     val constructorLeaderInfo by viewModel.constructorLeaderInfo.collectAsState()
     val circuitInfo by viewModel.circuitInfo.collectAsState()
     val weatherInfo by viewModel.weatherInfo.collectAsState()
+    val imageScale = if (category == "indycar") 1.5f else if (category == "motogp") 2f else 1f
 
     Column(
         modifier = modifier.fillMaxWidth()
@@ -43,12 +44,13 @@ fun OverViewComponent(
                 LeaderDriverCard(
                     modifier = Modifier.padding(top = 16.dp),
                     driver = driverStanding,
-                    imageScale = if (category == "f1") 1f else 2f,
+                    imageScale = imageScale,
                     offsetX = if (category == "f1") 60.dp else 60.dp,
                     offsetY = if (category == "f1") 0.dp else 24.dp,
                     category = category
                 )
             }
+
             is DataState.Error -> {
                 Log.d("OverViewComponent", "LeaderInfo Error: ${state.message}")
                 Text(
@@ -57,9 +59,8 @@ fun OverViewComponent(
                     color = Red
                 )
             }
+
             is DataState.Loading -> {
-                Log.d("OverViewComponent", "LeaderInfo Loading")
-                // No renderizar nada en Loading
             }
         }
 
@@ -77,6 +78,7 @@ fun OverViewComponent(
                     category = category
                 )
             }
+
             is DataState.Error -> {
                 Text(
                     text = "Error: ${state.message}",
@@ -84,8 +86,8 @@ fun OverViewComponent(
                     color = Red
                 )
             }
+
             is DataState.Loading -> {
-                // No renderizar nada en Loading
             }
         }
 
@@ -102,7 +104,6 @@ fun OverViewComponent(
                         .padding(top = 8.dp, start = 32.dp, end = 32.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // Solo mostrar las sesiones que tienen datos de clima disponibles
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
@@ -115,13 +116,7 @@ fun OverViewComponent(
                                 category = category,
                                 modifier = Modifier.width(160.dp)
                             )
-                        } ?: Text(
-                            text = "Carrera: No hay datos disponibles",
-                            modifier = Modifier
-                                .width(120.dp)
-                                .padding(vertical = 4.dp),
-                            color = Red
-                        )
+                        } ?: ""
 
                         weatherData.qualifying?.let { (temperature, weatherCode) ->
                             WeatherRow(
@@ -131,16 +126,10 @@ fun OverViewComponent(
                                 category = category,
                                 modifier = Modifier.width(160.dp)
                             )
-                        } ?: Text(
-                            text = "Clasificación: No hay datos disponibles",
-                            modifier = Modifier
-                                .width(120.dp)
-                                .padding(vertical = 4.dp),
-                            color = Red
-                        )
+                        } ?: ""
                     }
 
-                    // Solo mostrar el sprint si existe para este fin de semana
+                    // Only show the sprint if it exists for this weekend
                     weatherData.sprint?.let { (temperature, weatherCode) ->
                         WeatherRow(
                             sessionName = "SPRINT",
@@ -154,11 +143,12 @@ fun OverViewComponent(
                     }
                 }
             }
+
             is DataState.Error -> {
-                // No mostrar nada en caso de error
+                // If there is an error, don't show anything
             }
+
             is DataState.Loading -> {
-                // No renderizar nada en Loading
             }
         }
 
@@ -175,6 +165,7 @@ fun OverViewComponent(
                     circuit = state.data
                 )
             }
+
             is DataState.Error -> {
                 Text(
                     text = "Error: ${state.message}",
@@ -182,8 +173,8 @@ fun OverViewComponent(
                     color = Red
                 )
             }
+
             is DataState.Loading -> {
-                // No renderizar nada en Loading
             }
         }
     }

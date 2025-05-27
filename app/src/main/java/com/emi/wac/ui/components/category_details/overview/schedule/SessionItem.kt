@@ -40,8 +40,8 @@ fun SessionItem(
     }
 
     val parts = day.split(" ")
-    val dayNumber = parts[0]
-    val monthName = parts[1].uppercase()
+    val dayNumber = if (parts.isNotEmpty()) parts[0] else "TBD"
+    val monthName = if (parts.size > 1) parts[1].uppercase() else "TBD"
     val localtime = DateUtils.convertToLocalTime(time)
 
     Row(

@@ -30,8 +30,9 @@ import com.emi.wac.viewmodel.NewsViewModel
 
 @Composable
 fun NewsScreen(
+    modifier: Modifier = Modifier,
     viewModel: NewsViewModel = viewModel(),
-    modifier: Modifier = Modifier
+
 ) {
     val newsState by viewModel.newsState.collectAsState()
     val context = LocalContext.current

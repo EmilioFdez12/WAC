@@ -138,7 +138,7 @@ fun RaceCard(
                 )
 
                 Text(
-                    text = raceInfo.sessionName.uppercase(),
+                    text = raceInfo.sessionName?.uppercase() ?: "No name",
                     color = PrimaryWhite,
                     modifier = Modifier.padding(top = 12.dp),
                     style = MaterialTheme.typography.titleLarge

@@ -28,6 +28,7 @@ import com.emi.wac.ui.theme.getSoftColorForCategory
 import com.emi.wac.utils.DateUtils
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+import java.util.Date
 
 @Composable
 fun RaceWeekendSchedule(
@@ -76,40 +77,135 @@ fun RaceWeekendSchedule(
                 // List of all sessions with their information
                 val sessions = mutableListOf<SessionInfo>()
 
+                // Solo añadir la carrera si existe
                 race.sessions.race.let {
-                    sessions.add(SessionInfo("RACE", it?.day ?: "", it?.time ?: "", true))
+                    val day = it?.day?.takeIf { day ->
+                        day.isNotEmpty() && !day.equals(
+                            "TBD",
+                            ignoreCase = true
+                        )
+                    } ?: "TBD"
+                    val time = it?.time?.takeIf { time ->
+                        time.isNotEmpty() && !time.equals(
+                            "TBD",
+                            ignoreCase = true
+                        )
+                    } ?: "TBD"
+                    sessions.add(SessionInfo("RACE", day, time, true))
                 }
 
-                race.sessions.qualifying?.let {
-                    sessions.add(SessionInfo("QUALIFYING", it.day, it.time, false))
-                }
-
+                // Solo añadir sprint si existe
                 race.sessions.sprint?.let {
-                    sessions.add(SessionInfo("SPRINT", it.day, it.time, false))
+                    val day = it.day.takeIf { day ->
+                        day.isNotEmpty() && !day.equals(
+                            "TBD",
+                            ignoreCase = true
+                        )
+                    } ?: "TBD"
+                    val time = it.time.takeIf { time ->
+                        time.isNotEmpty() && !time.equals(
+                            "TBD",
+                            ignoreCase = true
+                        )
+                    } ?: "TBD"
+                    sessions.add(SessionInfo("SPRINT", day, time, false))
                 }
 
+                // Solo añadir sprintQualifying si existe
                 race.sessions.sprintQualifying?.let {
-                    sessions.add(SessionInfo("SPRINT Q", it.day, it.time, false))
+                    val day = it.day.takeIf { day ->
+                        day.isNotEmpty() && !day.equals(
+                            "TBD",
+                            ignoreCase = true
+                        )
+                    } ?: "TBD"
+                    val time = it.time.takeIf { time ->
+                        time.isNotEmpty() && !time.equals(
+                            "TBD",
+                            ignoreCase = true
+                        )
+                    } ?: "TBD"
+                    sessions.add(SessionInfo("SPRINT QUALY", day, time, false))
                 }
 
+                // Solo añadir qualifying si existe
+                race.sessions.qualifying?.let {
+                    val day = it.day.takeIf { day ->
+                        day.isNotEmpty() && !day.equals(
+                            "TBD",
+                            ignoreCase = true
+                        )
+                    } ?: "TBD"
+                    val time = it.time.takeIf { time ->
+                        time.isNotEmpty() && !time.equals(
+                            "TBD",
+                            ignoreCase = true
+                        )
+                    } ?: "TBD"
+                    sessions.add(SessionInfo("QUALIFYING", day, time, false))
+                }
+
+                // Solo añadir practice3 si existe
                 race.sessions.practice3?.let {
-                    sessions.add(SessionInfo("PRACTICE 3", it.day, it.time, false))
+                    val day = it.day.takeIf { day ->
+                        day.isNotEmpty() && !day.equals(
+                            "TBD",
+                            ignoreCase = true
+                        )
+                    } ?: "TBD"
+                    val time = it.time.takeIf { time ->
+                        time.isNotEmpty() && !time.equals(
+                            "TBD",
+                            ignoreCase = true
+                        )
+                    } ?: "TBD"
+                    sessions.add(SessionInfo("PRACTICE 3", day, time, false))
                 }
 
+                // Solo añadir practice2 si existe
                 race.sessions.practice2?.let {
-                    sessions.add(SessionInfo("PRACTICE 2", it.day, it.time, false))
+                    val day = it.day.takeIf { day ->
+                        day.isNotEmpty() && !day.equals(
+                            "TBD",
+                            ignoreCase = true
+                        )
+                    } ?: "TBD"
+                    val time = it.time.takeIf { time ->
+                        time.isNotEmpty() && !time.equals(
+                            "TBD",
+                            ignoreCase = true
+                        )
+                    } ?: "TBD"
+                    sessions.add(SessionInfo("PRACTICE 2", day, time, false))
                 }
 
-                race.sessions.practice1.let {
-                    sessions.add(SessionInfo("PRACTICE 1", it?.day ?: "", it?.time ?: "", false))
+                // Solo añadir practice1 si existe
+                race.sessions.practice1?.let {
+                    val day = it.day.takeIf { day ->
+                        day.isNotEmpty() && !day.equals(
+                            "TBD",
+                            ignoreCase = true
+                        )
+                    } ?: "TBD"
+                    val time = it.time.takeIf { time ->
+                        time.isNotEmpty() && !time.equals(
+                            "TBD",
+                            ignoreCase = true
+                        )
+                    } ?: "TBD"
+                    sessions.add(SessionInfo("PRACTICE 1", day, time, false))
                 }
 
                 // Order sessions by date and time
                 val sortedSessions = sessions.sortedWith(compareByDescending {
-                    DateUtils.parseSessionDate(
-                        it.day,
-                        it.time
-                    )
+                    try {
+                        DateUtils.parseSessionDate(
+                            it.day,
+                            it.time
+                        )
+                    } catch (_: Exception) {
+                        Date(Long.MAX_VALUE)
+                    }
                 })
 
                 // Show ordered sessions

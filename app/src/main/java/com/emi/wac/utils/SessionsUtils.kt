@@ -86,7 +86,7 @@ object SessionsUtils {
                                 "11" -> "${dateParts[2]} NOV"
                                 "12" -> "${dateParts[2]} DEC"
                                 else -> "${dateParts[2]} ${dateParts[1]}"
-                            }
+                            }.trim()
                         }
 
                         val timePart = dateTime[1].split("+")[0].split(".")[0]
@@ -104,11 +104,15 @@ object SessionsUtils {
         }
 
         // Check if after attempting to extract from ISO format, we still have empty values
+        // If so, set default values instead of returning null
         if (day.isEmpty() || time.isEmpty()) {
-            Log.w(TAG, "Session skipped: day=$day, time=$time, map=$sessionMap")
-            return null
+            Log.w(TAG, "Session with incomplete data: day=$day, time=$time, using TBD")
+            return Session(
+                day = if (day.isEmpty()) "TBD" else day.trim(),
+                time = if (time.isEmpty()) "TBD" else time
+            )
         }
 
-        return Session(day, time)
+        return Session(day.trim(), time)
     }
 }

@@ -74,7 +74,7 @@ fun SessionsList(
         }
 
         grandPrix.sessions.practice1.let {
-            sessions.add(Triple("PRACTICE 1", it.day, it.time))
+            sessions.add(Triple("PRACTICE 1", it?.day ?: "", it?.time ?: ""))
         }
 
         val sortedSessions = SessionsUtils.sortSessionsByDateDesc(sessions)

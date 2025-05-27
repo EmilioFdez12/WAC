@@ -12,7 +12,7 @@ package com.emi.wac.data.model.sessions
  * @property race The main race
  */
 data class Sessions(
-    val practice1: Session,
+    val practice1: Session? = null,
     val practice2: Session? = null,
     val practice3: Session? = null,
     val sprintQualifying: Session? = null,

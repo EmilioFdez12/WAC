@@ -7,7 +7,6 @@ import com.emi.wac.data.model.RaceInfo
 import com.emi.wac.data.model.circuit.Circuits
 import com.emi.wac.data.model.sessions.GrandPrix
 import com.emi.wac.data.model.sessions.Schedule
-import com.emi.wac.data.model.sessions.Session
 import com.emi.wac.data.model.sessions.Sessions
 import com.emi.wac.utils.DateUtils
 import com.emi.wac.utils.JsonParser
@@ -16,7 +15,6 @@ import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
 import java.util.Calendar
-import java.util.Date
 
 /**
  * Repository class responsible for managing racing data.
@@ -26,20 +24,28 @@ import java.util.Date
  * @param standingsRepository The repository for retrieving driver standings.
  * @param context The application context.
  */
-class RacingRepository(private val standingsRepository: StandingsRepository, context: Context) {
+class RacingRepository(
+    private val standingsRepository: StandingsRepository,
+    private val context: Context
+) {
     private val tag = "RacingRepository"
     private val jsonParser = JsonParser(context)
-    private val circuits = Circuits::class.java
+    private val circuitsClass = Circuits::class.java
 
-    private inline fun <reified T> Any?.safeCastTo(): T? {
-        return this as? T
-    }
+    /**
+     * Safely casts an Any? type to a specified reified type T.
+     * @return The casted object of type T, or null if the cast fails.
+     */
+    private inline fun <reified T> Any?.safeCastTo(): T? = this as? T
 
-    private fun Map<*, *>.toStringAnyMap(): Map<String, Any>? {
-        return this.entries.associate { (key, value) ->
+    /**
+     * Converts a Map<*, *> to a Map<String, Any> if all keys are Strings and values are non-null.
+     * @return A Map<String, Any> or null if conversion is not possible.
+     */
+    private fun Map<*, *>.toStringAnyMap(): Map<String, Any>? =
+        this.entries.associate { (key, value) ->
             (key as? String ?: return null) to (value ?: return null)
         }
-    }
 
     /**
      * Fetches the schedule for a given category from Firebase.
@@ -47,47 +53,55 @@ class RacingRepository(private val standingsRepository: StandingsRepository, con
      * @param category The category of the race (e.g., F1, MotoGP).
      * @return A Schedule object containing the list of Grand Prix, or null if an error occurs.
      */
-    suspend fun getSchedule(category: String): Schedule? {
-        try {
-            val scheduleList = mutableListOf<GrandPrix>()
-            val collectionRef = Firebase.firestore.collection("${category}_schedule")
-            val documents = collectionRef.get().await()
+    suspend fun getSchedule(category: String): Schedule? = try {
+        val collectionRef = Firebase.firestore.collection("${category}_schedule")
+        val documents = collectionRef.get().await()
 
-            for (scheduleDocument in documents) {
-                try {
-                    val data = scheduleDocument.data
-                    val gp = data["gp"] as? String ?: continue
-                    val dates = data["dates"] as? String ?: ""
-                    val flag = data["flag"] as? String ?: ""
+        val scheduleList = documents.mapNotNull { scheduleDocument ->
+            try {
+                val data = scheduleDocument.data
+                val gp = data["gp"] as? String
+                val dates = data["dates"] as? String
+                val flag = data["flag"] as? String
+                val sessionsMap = data["sessions"] as? Map<*, *>
 
-                    val sessionsMap = data["sessions"] as? Map<*, *> ?: continue
-                    val sessions = createSessionsFromMap(sessionsMap) ?: continue
-
-                    scheduleList.add(
-                        GrandPrix(
-                            gp = gp,
-                            dates = dates,
-                            flag = flag,
-                            sessions = sessions
-                        )
-                    )
-                } catch (e: Exception) {
-                    Log.e(
+                if (gp == null || sessionsMap == null) {
+                    Log.w(
                         tag,
-                        "Error processing scheduleDocument ${scheduleDocument.id}: ${e.message}",
-                        e
+                        "Skipping document ${scheduleDocument.id}: Missing 'gp' or 'sessions' data."
                     )
+                    return@mapNotNull null
                 }
-            }
-            if (scheduleList.isNotEmpty()) {
-                return Schedule(scheduleList)
-            }
-        } catch (e: Exception) {
-            Log.e(tag, "Error loading schedule from Firebase: ${e.message}", e)
-        }
-        return null
-    }
 
+                val sessions = createSessionsFromMap(sessionsMap)
+                if (sessions == null) {
+                    Log.w(
+                        tag,
+                        "Skipping document ${scheduleDocument.id}: Could not create sessions from map."
+                    )
+                    return@mapNotNull null
+                }
+
+                GrandPrix(
+                    gp = gp,
+                    dates = dates ?: "",
+                    flag = flag ?: "",
+                    sessions = sessions
+                )
+            } catch (e: Exception) {
+                Log.e(
+                    tag,
+                    "Error processing scheduleDocument ${scheduleDocument.id}: ${e.message}",
+                    e
+                )
+                null
+            }
+        }
+        if (scheduleList.isNotEmpty()) Schedule(scheduleList) else null
+    } catch (e: Exception) {
+        Log.e(tag, "Error loading schedule from Firebase: ${e.message}", e)
+        null
+    }
 
     /**
      * Retrieves the circuits for a given category.
@@ -95,12 +109,11 @@ class RacingRepository(private val standingsRepository: StandingsRepository, con
      * @param category The category of the race.
      * @return A Circuits object or null if an error occurs.
      */
-    fun getCircuits(category: String): Circuits? {
-        return jsonParser.parseJson("$category/circuits.json", circuits) ?: run {
-            Log.e(tag, "Error loading circuits")
+    fun getCircuits(category: String): Circuits? =
+        jsonParser.parseJson("$category/circuits.json", circuitsClass) ?: run {
+            Log.e(tag, "Error loading circuits for category: $category")
             null
         }
-    }
 
     /**
      * Finds the next Grand Prix object for a given category.
@@ -113,19 +126,26 @@ class RacingRepository(private val standingsRepository: StandingsRepository, con
         val currentDate = Calendar.getInstance()
         val currentYear = DateUtils.getCurrentYear()
 
-        return categorySchedule.schedule.find { grandPrix ->
-            // Check for session race
-            val sessions = listOfNotNull(
-                grandPrix.sessions.race.takeIf { it?.day?.isNotEmpty() == true && it.time.isNotEmpty() },
-            )
-            // Check if any is after the current date
-            sessions.isNotEmpty() && sessions.any { session ->
-                DateUtils.isDateAfter(
-                    currentDate,
-                    session.day,
-                    session.time,
-                    currentYear
-                )
+        return categorySchedule.schedule.firstOrNull { grandPrix ->
+            // Check if ANY session has valid data and is in the future
+            listOf(
+                grandPrix.sessions.practice1,
+                grandPrix.sessions.practice2,
+                grandPrix.sessions.practice3,
+                grandPrix.sessions.sprintQualifying,
+                grandPrix.sessions.sprint,
+                grandPrix.sessions.qualifying,
+                grandPrix.sessions.race
+            ).any { session ->
+                session?.let {
+                    it.day.isNotEmpty() && it.time.isNotEmpty() &&
+                        DateUtils.isDateAfter(
+                            currentDate,
+                            it.day,
+                            it.time,
+                            currentYear
+                        )
+                } == true
             }
         }
     }
@@ -143,24 +163,41 @@ class RacingRepository(private val standingsRepository: StandingsRepository, con
         val nextRace = getNextGrandPrixObject(category)
 
         return nextRace?.let { race ->
-            // Find the first available session race
-            val sessions = listOfNotNull(
-                race.sessions.race.takeIf { it?.day?.isNotEmpty() == true && it.time.isNotEmpty() },
-            )
+            // Find any valid session instead of just race session
+            val validSession = listOf(
+                race.sessions.practice1,
+                race.sessions.practice2,
+                race.sessions.practice3,
+                race.sessions.sprintQualifying,
+                race.sessions.sprint,
+                race.sessions.qualifying,
+                race.sessions.race
+            ).firstOrNull { session ->
+                session?.let {
+                    it.day.isNotEmpty() && it.time.isNotEmpty() &&
+                        DateUtils.isDateAfter(
+                            currentDate,
+                            it.day,
+                            it.time,
+                            currentYear
+                        )
+                } == true
+            }
 
-            // Sort sessions by date and take the first
-            val nextSession = sessions.minByOrNull { session ->
-                val sessionDate = DateUtils.parseDate(session.day, session.time, currentYear)
-                    ?: Date(Long.MAX_VALUE)
-                sessionDate.time
-            } ?: return LOADING_RACE_INFO
+            if (validSession == null) {
+                Log.w(tag, "No valid future sessions found for GP: ${race.gp}")
+                return LOADING_RACE_INFO
+            }
 
             val sessionDateTime = DateUtils.parseDate(
-                nextSession.day,
-                nextSession.time,
+                validSession.day,
+                validSession.time,
                 currentYear
-            ) ?: return LOADING_RACE_INFO
-            // Create a RaceInfo object
+            ) ?: run {
+                Log.e(tag, "Failed to parse date for session: ${race.gp}")
+                return LOADING_RACE_INFO
+            }
+
             RaceInfo(
                 gpName = race.gp,
                 flagPath = race.flag,
@@ -168,26 +205,31 @@ class RacingRepository(private val standingsRepository: StandingsRepository, con
                 leaderImagePath = getDriverPortrait(category, leaderName),
                 leaderName = leaderName
             )
-            // If no race is found, return LOADING_RACE_INFO
         } ?: LOADING_RACE_INFO
     }
 
-    // Retrieves the portrait of a driver given the category and driver name
-    private suspend fun getDriverPortrait(category: String, driverName: String): String {
-        try {
-            if (driverName.isEmpty()) return ""
-            val driversResult = standingsRepository.getDriverStandings(category)
-            if (driversResult.isSuccess) {
-                val drivers = driversResult.getOrNull()
-                return drivers?.find { it.name == driverName }?.portrait ?: ""
-            }
-            return ""
-        } catch (e: Exception) {
-            Log.e(tag, "Error finding driver portrait", e)
-            return ""
-        }
+    /**
+     * Retrieves the portrait of a driver given the category and driver name.
+     *
+     * @param category The category of the race.
+     * @param driverName The name of the driver.
+     * @return The URL of the driver's portrait, or an empty string if not found or an error occurs.
+     */
+    private suspend fun getDriverPortrait(category: String, driverName: String): String = try {
+        if (driverName.isEmpty()) ""
+        else standingsRepository.getDriverStandings(category).getOrNull()
+            ?.find { it.name == driverName }?.portrait ?: ""
+    } catch (e: Exception) {
+        Log.e(tag, "Error finding driver portrait for $driverName in $category", e)
+        ""
     }
 
+    /**
+     * Creates a Sessions object from a map of session data.
+     *
+     * @param sessionsMap The map containing session data.
+     * @return A Sessions object, or null if the race session is missing.
+     */
     private fun createSessionsFromMap(sessionsMap: Map<*, *>): Sessions? {
         val practice1 = sessionsMap["practice1"].safeCastTo<Map<*, *>>()?.toStringAnyMap()
             ?.let { createSession(it) }
@@ -202,11 +244,20 @@ class RacingRepository(private val standingsRepository: StandingsRepository, con
         val sprintQualifying =
             sessionsMap["sprintQualifying"].safeCastTo<Map<*, *>>()?.toStringAnyMap()
                 ?.let { createSession(it) }
-        val race = sessionsMap["race"].safeCastTo<Map<*, *>>()?.toStringAnyMap()
-            ?.let { createSession(it) } ?: return null
+        val race =
+            sessionsMap["race"].safeCastTo<Map<*, *>>()?.toStringAnyMap()?.let { createSession(it) }
+
+        val hasValidSession =
+            listOf(practice1, practice2, practice3, qualifying, sprint, sprintQualifying, race)
+                .any { it != null }
+
+        if (!hasValidSession) {
+            Log.w("RacingRepository", "No valid sessions found in sessionsMap: $sessionsMap")
+            return null
+        }
 
         return Sessions(
-            practice1 = practice1 ?: Session("", ""),
+            practice1 = practice1,
             practice2 = practice2,
             practice3 = practice3,
             qualifying = qualifying,

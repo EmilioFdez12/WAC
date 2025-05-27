@@ -5,6 +5,7 @@ import com.emi.wac.data.model.auth.UserPreference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.tasks.await
+import kotlin.collections.map
 
 /**
  * Repository class responsible for managing user preferences in Firestore.
@@ -68,19 +69,26 @@ class UserPreferencesRepository(private val db: FirebaseFirestore) {
                 .await()
 
             if (document.exists()) {
-                val preferencesData = document.get(PREFERENCES_FIELD) as? List<Map<String, Any>>
-                preferencesData?.map { prefMap ->
-                    UserPreference(
-                        category = prefMap["category"] as String,
-                        notificationsEnabled = prefMap["notificationsEnabled"] as Boolean,
-                        favoriteDriver = prefMap["favoriteDriver"] as? String
-                    )
+                val preferencesData = document.get(PREFERENCES_FIELD) as? List<*>
+                preferencesData?.mapNotNull { prefItem ->
+                    val prefMap = prefItem as? Map<*, *>
+                    if (prefMap != null) {
+                        UserPreference(
+                            category = prefMap["category"] as? String ?: return@mapNotNull null,
+                            notificationsEnabled = prefMap["notificationsEnabled"] as? Boolean == true,
+                            favoriteDriver = prefMap["favoriteDriver"] as? String
+                        )
+                    } else {
+                        Log.w(TAG, "Invalid preference data format for user $userId: $prefItem")
+                        null
+                    }
                 }
             } else {
+                Log.d(TAG, "No user preferences document found for user $userId")
                 null
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Error retrieving preferences: ${e.message}", e)
+            Log.e(TAG, "Error retrieving preferences for user $userId: ${e.message}", e)
             null
         }
     }

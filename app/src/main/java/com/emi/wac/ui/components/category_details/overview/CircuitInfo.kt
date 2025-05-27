@@ -56,7 +56,7 @@ fun CircuitInfo(
         else -> Color(0xFF151515)
     }
     val imgPadding = if (category == "f1") 0.dp else 8.dp
-    val imgScale = if (category == "indycar") 1.4f else 1f
+    val imgScale = if (category == "indycar") 2f else 1f
 
     // Load next GP
     LaunchedEffect(category) {

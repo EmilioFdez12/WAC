@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import com.emi.wac.common.Constants.ASSETS
 import com.emi.wac.data.model.drivers.Driver
 import com.emi.wac.ui.theme.AlataTypography
 import com.emi.wac.ui.theme.getPrimaryColorForCategory
@@ -115,7 +116,7 @@ fun LeaderDriverCard(
                 }
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data("file:///android_asset${driver.portrait}")
+                        .data("$ASSETS${driver.portrait}")
                         .crossfade(true)
                         .build(),
                     contentDescription = "Driver Portrait",

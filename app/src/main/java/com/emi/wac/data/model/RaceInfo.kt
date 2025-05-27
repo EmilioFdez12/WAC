@@ -17,5 +17,5 @@ data class RaceInfo(
     val timeRemaining: String,
     val leaderImagePath: String,
     val leaderName: String,
-    val sessionName: String = "Race"
+    val sessionName: String? = null
 )

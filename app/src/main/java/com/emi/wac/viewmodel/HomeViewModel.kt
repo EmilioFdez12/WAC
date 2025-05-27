@@ -1,6 +1,7 @@
 package com.emi.wac.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.emi.wac.common.Constants.CATEGORY_F1
@@ -63,11 +64,12 @@ class HomeViewModel(application: Application) :
 
     /**
      * Public flow exposing the next race data.
-     *
      */
     val nextMotoGPRace = _motoGPRaceData.asStateFlow()
     val nextF1Race = _f1RaceData.asStateFlow()
-    val nextIndycarRace = _indycarRaceData.asStateFlow() // Job to manage the update timer
+    val nextIndycarRace = _indycarRaceData.asStateFlow()
+
+    // Job to manage the update timer
     private var updateJob: Job? = null
 
     init {
@@ -107,17 +109,19 @@ class HomeViewModel(application: Application) :
         category: String,
         raceDataFlow: MutableStateFlow<DataState<RaceData>>
     ) {
-        // Set loading state
         raceDataFlow.value = DataState.Loading
         try {
-            // Fetch leader name
             val leaderName = standingsRepository.getLeaderDriver(category).getOrNull()?.name ?: ""
-            // Find next GP
             val grandPrixObject = repository.getNextGrandPrixObject(category)
-                ?: throw IllegalStateException("No Grand Prix found")
+
+            if (grandPrixObject == null) {
+                Log.w("HomeViewModel", "No upcoming Grand Prix found for category: $category")
+                raceDataFlow.value = DataState.Error("No upcoming races found for $category")
+                return
+            }
+
             val raceInfo = repository.getNextGrandPrix(category, leaderName)
 
-            // Map session types to SessionData objects and sort by date
             val sessions: List<SessionData> = SESSION_TYPES.mapNotNull { (key, name) ->
                 val session = grandPrixObject.sessions.run {
                     when (key) {
@@ -131,7 +135,6 @@ class HomeViewModel(application: Application) :
                         else -> null
                     }
                 }
-                // Filter valid sessions
                 session?.takeIf { it.day.isNotEmpty() && it.time.isNotEmpty() }
                     ?.let { DateUtils.parseDate(it.day, it.time, DateUtils.getCurrentYear()) }
                     ?.let {
@@ -139,29 +142,36 @@ class HomeViewModel(application: Application) :
                     }
             }.sortedBy { it.dateTime }
 
-            if (sessions.isEmpty()) throw IllegalStateException("No valid sessions found")
+            if (sessions.isEmpty()) {
+                Log.w(
+                    "HomeViewModel",
+                    "No valid sessions found for Grand Prix ${grandPrixObject.gp} in category: $category"
+                )
+                raceDataFlow.value =
+                    DataState.Error("No valid sessions found for upcoming race in $category")
+                return
+            }
 
-            // Calculate initial session and time remaining
             val (sessionName, timeRemaining) = calculateSessionAndTimeRemaining(sessions)
             raceDataFlow.value = DataState.Success(
                 RaceData(
                     grandPrix = raceInfo.copy(
-                        sessionName = sessionName
-                            ?: sessions.first().name,
+                        sessionName = sessionName ?: sessions.first().name,
                         timeRemaining = timeRemaining
                     ),
                     sessions = sessions
                 )
             )
         } catch (e: Exception) {
-            raceDataFlow.value =
-                DataState.Error("Error loading race data: ${e.message}")
+            val errorMessage = "Error loading race data for category $category: ${e.message}"
+            Log.e("HomeViewModel", errorMessage, e)
+            raceDataFlow.value = DataState.Error(errorMessage)
         }
-
     }
 
     /**
-     * Updates the time remaining for both F1 and MotoGP races.
+     * Updates the time remaining for all race categories (F1, MotoGP, IndyCar).
+     * This function is called periodically to provide live countdowns or status.
      */
     private fun updateTimeRemaining() {
         val currentTime =
@@ -177,10 +187,10 @@ class HomeViewModel(application: Application) :
                     currentTime
                 )
                 if (sessionName == null) {
-                    // No next session, refresh race data
+                    // If no next session is found, it means the race might be over or data needs refresh
                     viewModelScope.launch { updateRaceData(category, flow) }
                 } else {
-                    // Update existing race data with new time remaining
+                    // Update existing race data with new time remaining and session name
                     flow.value = DataState.Success(
                         state.data.copy(
                             grandPrix = state.data.grandPrix.copy(
@@ -194,11 +204,13 @@ class HomeViewModel(application: Application) :
         }
     }
 
+
     /**
-     * Calculates the current session and time remaining based on the session list.
-     * @param sessions List of session data sorted by date.
+     * Calculates the current session and time remaining based on the provided list of sessions.
+     * It determines if a session is currently live, or calculates the time until the next upcoming session.
+     * @param sessions List of session data sorted by date and time.
      * @param currentTime The current time to compare against (defaults to current UTC time).
-     * @return Pair of session name and time remaining (e.g., "FP 1" to "● LIVE" or "25 Apr").
+     * @return A Pair where the first element is the name of the current/next session (or null if none) and the second is the formatted time remaining string.
      */
     private fun calculateSessionAndTimeRemaining(
         sessions: List<SessionData>,
@@ -207,21 +219,21 @@ class HomeViewModel(application: Application) :
         // Check if any session is currently live
         val currentSession =
             sessions.find { currentTime in it.dateTime..Date(it.dateTime.time + it.duration) }
-        if (currentSession != null) return currentSession.name to "● LIVE" // Find the next upcoming session
+        if (currentSession != null) return currentSession.name to "● LIVE"
+
+        // Find the next upcoming session
         val nextSession = sessions.find { it.dateTime > currentTime }
         return nextSession?.let {
-            // Hours until next session
-            val timeToNext =
-                (it.dateTime.time - currentTime.time) / (1000 * 60 * 60)
-            // Show date if > 24 hours
-            it.name to if (timeToNext >= 24) DATE_FORMAT.format(it.dateTime)
-            // Show countdown
+            // Calculate hours until next session
+            val timeToNextHours = (it.dateTime.time - currentTime.time) / (1000 * 60 * 60)
+            // Show date if more than 24 hours away, otherwise show countdown
+            it.name to if (timeToNextHours >= 24) DATE_FORMAT.format(it.dateTime)
             else DateUtils.calculateTimeRemaining(
                 it.dateTime,
                 Calendar.getInstance(TimeZone.getTimeZone("UTC"))
             )
+            // If no sessions are found or all are in the past
         } ?: (null to "No sessions")
-
     }
 
     /**
