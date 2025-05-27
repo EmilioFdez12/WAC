@@ -10,9 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class NewsViewModel(application: Application) : AndroidViewModel(application) {
-
     private val repository = NewsRepository()
-
     private val _newsState = MutableStateFlow<NewsState>(NewsState.Loading)
     val newsState: StateFlow<NewsState> = _newsState
 
@@ -28,7 +26,9 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
                 if (result.isSuccess) {
                     val newsResponse = result.getOrNull()
                     if (newsResponse != null && newsResponse.articles.isNotEmpty()) {
-                        _newsState.value = NewsState.Success(newsResponse.articles)
+                        // Deduplicate articles by URL
+                        val uniqueArticle = newsResponse.articles.distinctBy { it.url }
+                        _newsState.value = NewsState.Success(uniqueArticle)
                     } else {
                         _newsState.value = NewsState.Error("No news found")
                     }
