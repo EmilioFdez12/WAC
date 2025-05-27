@@ -1,10 +1,8 @@
 package com.emi.wac.ui.components.category_details.overview.schedule
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -23,6 +21,15 @@ import com.emi.wac.ui.theme.PrimaryWhite
 import com.emi.wac.ui.theme.getPrimaryColorForCategory
 import com.emi.wac.utils.DateUtils
 
+/**
+ * Displays a single session in a Grand Prix weekend schedule.
+ *
+ * @param day The date of the session in "day month" format (e.g., "15 May") or "TBD".
+ * @param name The name of the session (e.g., "RACE", "PRACTICE 1").
+ * @param time The session time in UTC (e.g., "14:00") or "TBD".
+ * @param isPrimary Whether this is the main race session (affects background color).
+ * @param category The racing category (e.g., "F1", "F2") to determine styling.
+ */
 @Composable
 fun SessionItem(
     day: String,
@@ -32,55 +39,39 @@ fun SessionItem(
     category: String,
 ) {
     val primaryColor = getPrimaryColorForCategory(category)
-
-    val backgroundColor = if (isPrimary) {
-        primaryColor
-    } else {
-        PrimaryBlack
-    }
-
-    val parts = day.split(" ")
-    val dayNumber = if (parts.isNotEmpty()) parts[0] else "TBD"
-    val monthName = if (parts.size > 1) parts[1].uppercase() else "TBD"
-    val localtime = DateUtils.convertToLocalTime(time)
+    val backgroundColor = if (isPrimary) primaryColor else PrimaryBlack
+    val (dayNumber, monthName) = parseDay(day)
+    val localTime = DateUtils.convertToLocalTime(time).takeIf { it.isNotEmpty() } ?: "TBD"
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp)
             .height(48.dp)
-            .background(backgroundColor, RoundedCornerShape(4.dp)),
+            .background(backgroundColor, RoundedCornerShape(4.dp))
+            .padding(vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Box(
-            modifier = Modifier
-                .width(100.dp)
-                .fillMaxHeight(),
-            contentAlignment = Alignment.Center
+        Row(
+            modifier = Modifier.width(100.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = dayNumber,
-                    style = AlataTypography.titleMedium,
-                    color = Color.White
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = monthName,
-                    style = AlataTypography.bodyMedium,
-                    color = PrimaryWhite,
-                    modifier = Modifier
-                        .background(
-                            Color.White.copy(alpha = 0.30f),
-                            RoundedCornerShape(50.dp)
-                        )
-                        .padding(horizontal = 8.dp)
-                )
-            }
+            Spacer(modifier = Modifier.width(6.dp))
+            Text(
+                text = dayNumber,
+                style = AlataTypography.titleMedium,
+                color = Color.White
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = monthName,
+                style = AlataTypography.bodyMedium,
+                color = PrimaryWhite,
+                modifier = Modifier
+                    .background(Color.White.copy(alpha = 0.30f), RoundedCornerShape(50.dp))
+                    .padding(horizontal = 8.dp)
+            )
         }
-        // Session name
+
         Text(
             text = name,
             style = AlataTypography.titleMedium,
@@ -88,15 +79,23 @@ fun SessionItem(
             modifier = Modifier
                 .weight(1f)
                 .padding(end = 12.dp),
-            textAlign = TextAlign.Center,
+            textAlign = TextAlign.Center
         )
 
-        // Time
         Text(
-            text = localtime,
+            text = localTime,
             style = AlataTypography.titleMedium,
             color = Color.White,
             modifier = Modifier.padding(end = 16.dp)
         )
     }
+}
+
+// Parses the day string into day number and month name
+private fun parseDay(day: String): Pair<String, String> {
+    val parts = day.split(" ")
+    return Pair(
+        parts.firstOrNull() ?: "TBD",
+        if (parts.size > 1) parts[1].uppercase() else "TBD"
+    )
 }
