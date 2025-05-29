@@ -17,6 +17,9 @@ import com.emi.wac.data.model.sessions.GrandPrix
 import com.emi.wac.data.repository.RacingRepository
 import com.emi.wac.ui.components.category_details.schedule.RaceScheduleCard
 
+/**
+ * Composable function to display the schedule component
+ */
 @Composable
 fun ScheduleComponent(
     modifier: Modifier = Modifier,

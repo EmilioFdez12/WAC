@@ -1,6 +1,5 @@
 package com.emi.wac.ui.screens.app
 
-import android.app.Application
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -18,8 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -30,13 +27,11 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import coil3.compose.rememberAsyncImagePainter
 import com.emi.wac.R
 import com.emi.wac.common.Constants.BCKG_IMG
@@ -44,13 +39,37 @@ import com.emi.wac.common.Constants.CATEGORY_F1
 import com.emi.wac.common.Constants.CATEGORY_INDYCAR
 import com.emi.wac.common.Constants.CATEGORY_MOTOGP
 import com.emi.wac.common.Constants.CAT_DETAILS
+import com.emi.wac.common.Constants.LEXENDBOLD
 import com.emi.wac.ui.components.home.RaceCard
-import com.emi.wac.ui.theme.AlataTypography
 import com.emi.wac.ui.theme.PrimaryOrange
-import com.emi.wac.ui.theme.WACTheme
 import com.emi.wac.viewmodel.DataState
 import com.emi.wac.viewmodel.HomeViewModel
 
+/**
+ * Data class to hold category-specific configuration for the home screen.
+ *
+ * @param category The category identifier (e.g., CATEGORY_F1)
+ * @param dataState The state of the race data for this category
+ * @param countdownColor Optional color for the countdown timer
+ * @param imageOffset Offset for the race card image
+ * @param imageScale Scale for the race card image
+ */
+private data class CategoryConfig<T>(
+    val category: String,
+    val dataState: DataState<T>,
+    val countdownColor: Color? = null,
+    val imageOffset: Offset,
+    val imageScale: Float = 1f
+)
+
+/**
+ * Composable function to display the home screen.
+ * Shows upcoming races for each category (F1, MotoGP, IndyCar) if a race is scheduled.
+ *
+ * @param modifier Modifier for the composable layout
+ * @param viewModel ViewModel providing race data
+ * @param navController Navigation controller for handling navigation to category details
+ */
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
@@ -62,6 +81,27 @@ fun HomeScreen(
     val nextIndycarRace by viewModel.nextIndycarRace.collectAsState()
     val backgroundPainter: Painter = rememberAsyncImagePainter(model = BCKG_IMG)
 
+    // List of category configurations
+    val categories = listOf(
+        CategoryConfig(
+            category = CATEGORY_F1,
+            dataState = nextF1Race,
+            imageOffset = Offset(-24f, 0f)
+        ),
+        CategoryConfig(
+            category = CATEGORY_MOTOGP,
+            dataState = nextMotoGPRace,
+            countdownColor = PrimaryOrange,
+            imageOffset = Offset(-24f, 36f),
+            imageScale = 1.6f
+        ),
+        CategoryConfig(
+            category = CATEGORY_INDYCAR,
+            dataState = nextIndycarRace,
+            imageOffset = Offset(-40f, 0f)
+        )
+    )
+
     Box(modifier = modifier.fillMaxSize()) {
         Image(
             painter = backgroundPainter,
@@ -71,14 +111,12 @@ fun HomeScreen(
         )
 
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 0.dp),
+            modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
             item {
-                // Logos de WAC y WAC Text
+                // WAC and WAC Text logos
                 Row(
                     horizontalArrangement = Arrangement.spacedBy((-60).dp),
                     modifier = Modifier.padding(end = 36.dp)
@@ -87,21 +125,22 @@ fun HomeScreen(
                         painter = painterResource(id = R.drawable.wac_logo),
                         contentDescription = "WAC Logo",
                         modifier = Modifier
-                            .size(156.dp)
+                            .size(132.dp)
                             .padding(end = 40.dp),
                         contentScale = ContentScale.Fit
                     )
                     Image(
                         painter = painterResource(id = R.drawable.wac_text),
                         contentDescription = "WAC Text",
-                        modifier = Modifier.size(156.dp),
+                        modifier = Modifier.size(132.dp),
                         contentScale = ContentScale.Fit
                     )
                 }
 
                 Text(
-                    text = "Upcoming Races",
-                    style = AlataTypography.titleLarge,
+                    text = "UPCOMING RACES",
+                    fontFamily = LEXENDBOLD,
+                    fontSize = 16.sp,
                     modifier = Modifier
                         .background(Color(0xFFACFF86), shape = RoundedCornerShape(8.dp))
                         .padding(horizontal = 16.dp, vertical = 8.dp),
@@ -111,99 +150,41 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.height(32.dp))
             }
 
-            item {
+            // Display race cards for each category
+            items(categories.size) { index ->
+                val config = categories[index]
                 AnimatedVisibility(
                     visible = true,
                     enter = fadeIn(animationSpec = tween(300)),
                     exit = fadeOut(animationSpec = tween(300))
                 ) {
-                    when (val state = nextF1Race) {
+                    when (val state = config.dataState) {
                         is DataState.Success -> {
                             RaceCard(
-                                logo = CATEGORY_F1,
+                                logo = config.category,
                                 raceInfo = state.data.grandPrix,
-                                onCardClick = { navController.navigate("$CAT_DETAILS/$CATEGORY_F1") },
-                                imageOffset = Offset(-24f, 0f),
-                                category = CATEGORY_F1
+                                countdownColor = config.countdownColor,
+                                imageOffset = config.imageOffset,
+                                imageScale = config.imageScale,
+                                onCardClick = { navController.navigate("$CAT_DETAILS/${config.category}") },
+                                category = config.category
                             )
+                            if (config.category == CATEGORY_INDYCAR) {
+                                Log.d("HomeScreen", "RaceCard: ${state.data.grandPrix}")
+                            }
                         }
+
                         is DataState.Error -> {
+                            // Optionally handle error state (e.g., show error message)
                         }
+
                         is DataState.Loading -> {
+                            // Optionally handle loading state (e.g., show loading indicator)
                         }
                     }
                 }
-
                 Spacer(modifier = Modifier.height(32.dp))
             }
-
-            item {
-                AnimatedVisibility(
-                    visible = true,
-                    enter = fadeIn(animationSpec = tween(300)),
-                    exit = fadeOut(animationSpec = tween(300))
-                ) {
-                    when (val state = nextMotoGPRace) {
-                        is DataState.Success -> {
-                            RaceCard(
-                                logo = CATEGORY_MOTOGP,
-                                raceInfo = state.data.grandPrix,
-                                countdownColor = PrimaryOrange,
-                                imageOffset = Offset(-24f, 36f),
-                                imageScale = 1.6f,
-                                onCardClick = { navController.navigate("$CAT_DETAILS/$CATEGORY_MOTOGP") },
-                                category = CATEGORY_MOTOGP
-                            )
-                        }
-                        is DataState.Error -> {
-                        }
-                        is DataState.Loading -> {
-                        }
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(32.dp))
-            }
-
-            item {
-                AnimatedVisibility(
-                    visible = true,
-                    enter = fadeIn(animationSpec = tween(300)),
-                    exit = fadeOut(animationSpec = tween(300))
-                ) {
-                    when (val state = nextIndycarRace) {
-                        is DataState.Success -> {
-                            RaceCard(
-                                logo = CATEGORY_INDYCAR,
-                                raceInfo = state.data.grandPrix,
-                                onCardClick = { navController.navigate("$CAT_DETAILS/$CATEGORY_INDYCAR") },
-                                imageOffset = Offset(-40f, 0f),
-                                category = CATEGORY_INDYCAR
-                            )
-                            Log.d("HomeScreen", "RaceCard: ${state.data.grandPrix}")
-                        }
-                        is DataState.Error -> {
-                        }
-                        is DataState.Loading -> {
-                        }
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(32.dp))
-            }
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun HomeScreenPreview() {
-    WACTheme {
-        Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-            HomeScreen(
-                viewModel = HomeViewModel(LocalContext.current.applicationContext as Application),
-                navController = rememberNavController()
-            )
         }
     }
 }

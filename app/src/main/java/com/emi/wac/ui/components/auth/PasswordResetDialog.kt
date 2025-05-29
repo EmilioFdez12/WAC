@@ -21,6 +21,9 @@ import com.emi.wac.data.repository.AuthRepository
 import com.emi.wac.ui.theme.PrimaryRed
 import kotlinx.coroutines.launch
 
+/**
+ * Dialog to show password reset
+ */
 @Composable
 fun PasswordResetDialog(
     authRepository: AuthRepository,

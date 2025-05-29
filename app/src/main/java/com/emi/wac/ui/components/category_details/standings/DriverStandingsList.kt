@@ -28,6 +28,9 @@ import com.emi.wac.ui.theme.getPrimaryColorForCategory
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 
+/**
+ * Composable function to display a list of driver standings items.
+ */
 @Composable
 fun DriverStandingsList(
     standings: List<Driver>,
@@ -38,7 +41,6 @@ fun DriverStandingsList(
     var constructorsList by remember { mutableStateOf<List<Constructor>?>(null) }
 
     LaunchedEffect(category) {
-        // Reemplazamos los métodos antiguos con los nuevos que usan Firebase
         val constructorsResult = standingsRepository.getConstructorStandings(category)
         if (constructorsResult.isSuccess) {
             constructorsList = constructorsResult.getOrNull()

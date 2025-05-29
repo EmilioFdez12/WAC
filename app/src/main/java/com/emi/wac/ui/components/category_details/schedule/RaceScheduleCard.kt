@@ -49,6 +49,9 @@ import com.emi.wac.ui.theme.getPrimaryColorForCategory
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 
+/**
+ * Composable function to display a card with race schedule details.
+ */
 @Composable
 fun RaceScheduleCard(
     grandPrix: GrandPrix,
@@ -56,8 +59,11 @@ fun RaceScheduleCard(
     modifier: Modifier,
 ) {
     val primaryColor = getPrimaryColorForCategory(category)
+    // State to track if the card is expanded
     var expanded by remember { mutableStateOf(false) }
+    // State to hold the circuits data
     var circuitsData by remember { mutableStateOf<Circuits?>(null) }
+    // Animation to rotate the arrow
     val rotationState by animateFloatAsState(
         targetValue = if (expanded) 180f else 0f,
         label = "rotation"
@@ -65,6 +71,7 @@ fun RaceScheduleCard(
 
     val context = LocalContext.current
     val db = Firebase.firestore
+    // Repositories
     val standingsRepository = remember { StandingsRepository(db) }
     val racingRepository = remember { RacingRepository(standingsRepository, context) }
 

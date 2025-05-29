@@ -20,6 +20,14 @@ import com.emi.wac.ui.components.common.WACButton
 import com.emi.wac.ui.components.common.WACButtonStyle
 import com.emi.wac.ui.theme.PrimaryRed
 
+/**
+ * Composable that displays a logout button and a confirmation dialog for signing out.
+ *
+ * @param showLogoutDialog Whether to show the logout confirmation dialog
+ * @param onShowLogoutDialog Callback to toggle the visibility of the logout dialog
+ * @param onLogout Callback to execute when the user confirms logout
+ * @param modifier Optional modifier for the composable layout
+ */
 @Composable
 fun LogoutSection(
     showLogoutDialog: Boolean,
@@ -27,6 +35,7 @@ fun LogoutSection(
     onLogout: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    // Card containing the logout button with a gradient background
     BaseCard(
         modifier = modifier.padding(vertical = 16.dp),
         gradientColors = listOf(
@@ -40,6 +49,7 @@ fun LogoutSection(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxWidth()
         ) {
+            // Button to trigger the logout confirmation dialog
             WACButton(
                 text = "Logout",
                 onClick = { onShowLogoutDialog(true) },
@@ -49,6 +59,7 @@ fun LogoutSection(
         }
     }
 
+    // Confirmation dialog shown when the user clicks the logout button
     if (showLogoutDialog) {
         AlertDialog(
             onDismissRequest = { onShowLogoutDialog(false) },
@@ -69,6 +80,7 @@ fun LogoutSection(
                 )
             },
             confirmButton = {
+                // Button to confirm logout action
                 Button(
                     onClick = onLogout,
                     colors = ButtonDefaults.buttonColors(
@@ -83,6 +95,7 @@ fun LogoutSection(
                 }
             },
             dismissButton = {
+                // Button to cancel and dismiss the dialog
                 Button(
                     onClick = { onShowLogoutDialog(false) },
                     colors = ButtonDefaults.buttonColors(

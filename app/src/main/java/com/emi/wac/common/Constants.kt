@@ -20,15 +20,20 @@ object Constants {
         leaderName = ""
     )
 
-    const val HOME = "home"
+    const val HOME_ROUTE = "home"
+    const val PROFILE_ROUTE = "profile"
+    const val NEWS_ROUTE = "news"
+
+
     const val CAT_DETAILS = "category_details"
     const val ASSETS = "file:///android_asset"
+    const val BCKG_IMG = "file:///android_asset/background.webp"
+
 
     const val CATEGORY_MOTOGP = "motogp"
     const val CATEGORY_F1 = "f1"
     const val CATEGORY_INDYCAR = "indycar"
 
-    const val BCKG_IMG = "file:///android_asset/background.webp"
 
     const val DOMAIN = "autosport.com"
     const val SORT = "publishedAt"

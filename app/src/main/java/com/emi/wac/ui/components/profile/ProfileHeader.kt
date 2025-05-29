@@ -27,6 +27,13 @@ import com.emi.wac.data.model.auth.User
 import com.emi.wac.ui.components.common.BaseCard
 import com.emi.wac.ui.theme.PrimaryBlue
 
+/**
+ * Composable function to display the header of the profile screen
+ * It shows the user's profile picture and name
+ *
+ * @param currentUser The current user
+ * @param modifier The modifier to be applied to the composable
+ */
 @Composable
 fun ProfileHeader(
     currentUser: User?,

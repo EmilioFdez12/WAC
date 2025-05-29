@@ -28,6 +28,9 @@ import com.emi.wac.ui.theme.AlataTypography
 import com.emi.wac.ui.theme.PrimaryWhite
 import com.emi.wac.ui.theme.getPrimaryColorForCategory
 
+/**
+ * Composable function to display an item(driver) inside the drivers list.
+ */
 @Composable
 fun DriverStandingItem(
     standing: Driver,

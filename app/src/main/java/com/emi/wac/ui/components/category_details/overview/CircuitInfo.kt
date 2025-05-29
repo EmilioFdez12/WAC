@@ -51,10 +51,13 @@ fun CircuitInfo(
     category: String,
     circuit: Circuit? = null
 ) {
+    // State to hold the next race and circuit
     var nextRace by remember { mutableStateOf<GrandPrix?>(null) }
+    // State to hold the circuit info
     var circuitInfo by remember { mutableStateOf<Circuit?>(circuit) }
     val context = LocalContext.current
     val db = Firebase.firestore
+    // Repositories
     val standingsRepository = remember { StandingsRepository(db) }
     val racingRepository = remember { RacingRepository(standingsRepository, context) }
     val primaryColor = getPrimaryColorForCategory(category)

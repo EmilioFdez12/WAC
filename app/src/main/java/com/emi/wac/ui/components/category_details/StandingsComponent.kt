@@ -27,9 +27,13 @@ import com.emi.wac.ui.components.category_details.standings.ConstructorStandings
 import com.emi.wac.ui.components.category_details.standings.DriverStandingsList
 import com.emi.wac.ui.components.category_details.standings.TopThreeDrivers
 import com.emi.wac.ui.theme.AlataTypography
+import com.emi.wac.ui.theme.PrimaryRed
 import com.emi.wac.ui.theme.getPrimaryColorForCategory
 import com.emi.wac.viewmodel.StandingsViewModel
 
+/**
+ * Composable function to display the standings component.
+ */
 @Composable
 fun StandingsComponent(
     category: String,
@@ -49,7 +53,7 @@ fun StandingsComponent(
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        // Solo el contenido de las standings se anima con Crossfade
+        // Only the content of the standings is animated with Crossfade
         Crossfade(targetState = selectedTabIndex) { tabIndex ->
             when (tabIndex) {
                 0 -> {
@@ -61,7 +65,7 @@ fun StandingsComponent(
                                     .height(200.dp),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Text("Loading drivers...", color = Color.White)
+                                Text("Loading drivers...", color = PrimaryRed)
                             }
                         }
 
@@ -125,7 +129,7 @@ fun StandingsComponent(
             }
         }
 
-        // Tabs para cambiar entre drivers y constructors (fuera del Crossfade)
+        // Tabs to change between drivers and constructors standings
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -139,6 +143,7 @@ fun StandingsComponent(
                         ) else Color(0xFF303030),
                         contentColor = Color.White
                     ),
+                    // Rounded corners for the tabs
                     shape = when (index) {
                         0 -> RoundedCornerShape(bottomStart = 8.dp)
                         1 -> RoundedCornerShape(bottomEnd = 8.dp)

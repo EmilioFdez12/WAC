@@ -23,6 +23,10 @@ import coil3.compose.rememberAsyncImagePainter
 import com.emi.wac.R
 import com.emi.wac.common.Constants
 
+/**
+ * Composable function to display a loading screen.
+ * Shows an animated logo while loading data.
+ */
 @Composable
 fun LoadingScreen(modifier: Modifier = Modifier) {
     val infiniteTransition = rememberInfiniteTransition()

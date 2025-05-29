@@ -25,6 +25,14 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import kotlinx.coroutines.launch
 
+/**
+ * Composable function to display the login screen.
+ * Handles user authentication and navigation.
+ *
+ * @param authRepository Repository for authentication operations
+ * @param onLoginSuccess Callback invoked when login is successful
+ * @param onNavigateToRegister Callback invoked to navigate to the register screen
+ */
 @Composable
 fun LoginScreen(
     authRepository: AuthRepository,

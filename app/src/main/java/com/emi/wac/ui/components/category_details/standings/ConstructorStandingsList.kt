@@ -19,6 +19,9 @@ import androidx.compose.ui.unit.dp
 import com.emi.wac.data.model.contructor.Constructor
 import com.emi.wac.ui.theme.getPrimaryColorForCategory
 
+/**
+ * Composable function to display a list of constructor standings items.
+ */
 @Composable
 fun ConstructorStandingsList(
     standings: List<Constructor>,

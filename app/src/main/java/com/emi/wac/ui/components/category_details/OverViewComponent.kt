@@ -23,12 +23,16 @@ import com.emi.wac.ui.components.category_details.weather.WeatherRow
 import com.emi.wac.viewmodel.DataState
 import com.emi.wac.viewmodel.OverviewViewModel
 
+/**
+ * Composable function to display the overview component in the standings.
+ */
 @Composable
 fun OverViewComponent(
     category: String,
     viewModel: OverviewViewModel,
     modifier: Modifier = Modifier
 ) {
+    // Collects the data from the view models
     val leaderInfo by viewModel.leaderInfo.collectAsState()
     val constructorLeaderInfo by viewModel.constructorLeaderInfo.collectAsState()
     val circuitInfo by viewModel.circuitInfo.collectAsState()
@@ -143,11 +147,9 @@ fun OverViewComponent(
                     }
                 }
             }
-
             is DataState.Error -> {
-                // If there is an error, don't show anything
+            // If there is an error, don't show anything
             }
-
             is DataState.Loading -> {
             }
         }
@@ -165,15 +167,8 @@ fun OverViewComponent(
                     circuit = state.data
                 )
             }
-
             is DataState.Error -> {
-                Text(
-                    text = "Error: ${state.message}",
-                    modifier = Modifier.padding(top = 16.dp),
-                    color = Red
-                )
             }
-
             is DataState.Loading -> {
             }
         }

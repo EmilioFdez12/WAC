@@ -16,8 +16,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.core.app.NotificationCompat.getCategory
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
+import com.emi.wac.common.Constants.CATEGORY_INDYCAR
 import com.emi.wac.data.model.circuit.Circuits
 import com.emi.wac.data.model.sessions.GrandPrix
 import com.emi.wac.ui.theme.AlataTypography
@@ -94,10 +96,9 @@ fun SessionsList(
         circuitsData?.circuits?.find { it.gp.contains(grandPrix.gp, ignoreCase = true) }?.let { circuit ->
             if (circuit.image.isNotEmpty()) {
                 val category = getCategory(circuit.image)
-
-                // Configurar el fondo y escala según la categoría
+                // Different configurations for different categories
                 val imgBackground = when(category) {
-                    "indycar" -> Color.White
+                    CATEGORY_INDYCAR -> Color.White
                     else -> Color.Transparent
                 }
                 val imgScale = 1f
@@ -122,11 +123,8 @@ fun SessionsList(
     }
 }
 
-/**
- * Determina la categoría basada en la ruta de la imagen del circuito
- * @param imagePath Ruta de la imagen del circuito
- * @return Categoría identificada (f1, motogp, indycar, o cadena vacía si no se identifica)
- */
+
+// Determines the category based on the image path of the circuit
 private fun getCategory(imagePath: String): String {
     return when {
         imagePath.contains("/f1/") -> "f1"

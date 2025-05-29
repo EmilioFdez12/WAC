@@ -6,6 +6,9 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.style.TextAlign
 
+/**
+ * Dialog to show email confirmation
+ */
 @Composable
 fun EmailConfirmationDialog(
     showDialog: Boolean,

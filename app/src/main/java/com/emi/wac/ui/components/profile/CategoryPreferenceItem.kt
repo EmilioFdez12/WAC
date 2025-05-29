@@ -51,6 +51,21 @@ import com.emi.wac.common.Constants.CATEGORY_MOTOGP
 import com.emi.wac.common.Constants.LEXENDREGULAR
 import com.emi.wac.data.model.drivers.Driver
 
+/**
+ * Composable function to display a category preference item
+ * You can toggle the switch to enable or disable notifications
+ * You can select a favourite driver
+ *
+ * @param categoryName The name of the category
+ * @param isEnabled Whether notifications are enabled for this category
+ * @param favoriteDriver The name of the favourite driver for this category
+ * @param categoryColor The color of the category
+ * @param isDropdownExpanded Whether the dropdown menu is expanded
+ * @param availableDrivers The list of available drivers for this category
+ * @param onToggleEnabled Callback to be invoked when the switch is toggled
+ * @param onExpandDropdown Callback to be invoked when the dropdown is expanded
+ * @param onDriverSelected Callback to be invoked when a driver is selected
+ */
 @Composable
 fun CategoryPreferenceItem(
     categoryName: String,
@@ -63,12 +78,15 @@ fun CategoryPreferenceItem(
     onExpandDropdown: () -> Unit,
     onDriverSelected: (String) -> Unit
 ) {
+    // Animated rotation of the arrow
     val rotationState by animateFloatAsState(
         targetValue = if (isDropdownExpanded) 180f else 0f,
         label = "rotation"
     )
+    // Defines the POST_NOTIFICATIONS permission required to send notifications
     val postNotifications = android.Manifest.permission.POST_NOTIFICATIONS
     val context = LocalContext.current
+    // Asks for notifications permission
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
         onResult = { isGranted ->
@@ -76,7 +94,7 @@ fun CategoryPreferenceItem(
             if (!isGranted) {
                 Toast.makeText(
                     context,
-                    "Se requieren permisos de notificación para recibir alertas",
+                    "It is required to allow notifications to receive alerts",
                     Toast.LENGTH_LONG
                 ).show()
             }

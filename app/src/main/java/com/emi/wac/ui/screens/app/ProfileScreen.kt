@@ -34,29 +34,47 @@ import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import com.google.firebase.messaging.FirebaseMessaging
 
+/**
+ * Data class to represent a category preference for notifications and favorite driver.
+ *
+ * @param name The category identifier (e.g., CATEGORY_F1)
+ * @param enabled Whether notifications are enabled for the category
+ * @param favoriteDriver The name of the favorite driver for the category
+ */
 data class CategoryPreference(
     val name: String,
     val enabled: Boolean = false,
     val favoriteDriver: String = ""
 )
 
+/**
+ * Composable function to display the profile screen.
+ * Shows user profile information, notification preferences, and a logout option.
+ *
+ * @param authRepository Repository for authentication operations
+ * @param onLogout Callback invoked when the user logs out
+ * @param modifier Modifier for the composable layout
+ */
 @Composable
 fun ProfileScreen(
     authRepository: AuthRepository,
     onLogout: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val backgroundPainter = rememberAsyncImagePainter(model = Constants.BCKG_IMG)
-    val currentUser = authRepository.getCurrentUser()
-    var showLogoutDialog by remember { mutableStateOf(false) }
-    val scrollState = rememberScrollState()
 
-    // Firebase
+    val backgroundPainter = rememberAsyncImagePainter(model = Constants.BCKG_IMG)
+    // Get the current authenticated user
+    val currentUser = authRepository.getCurrentUser()
+    // State to control the logout dialog visibility
+    var showLogoutDialog by remember { mutableStateOf(false) }
+    // Scroll state for the vertical column
+    val scrollState = rememberScrollState()
     val db = Firebase.firestore
+    // Repositories for standings and user preferences
     val standingsRepository = remember { StandingsRepository(db) }
     val userPreferencesRepository = remember { UserPreferencesRepository(db) }
 
-    // Estado para las preferencias de categorías
+    // State for category preferences (notifications and favorite drivers)
     var categoryPreferences by remember {
         mutableStateOf(
             listOf(
@@ -67,20 +85,21 @@ fun ProfileScreen(
         )
     }
 
-    // Estado para los pilotos disponibles por categoría
+    // State for available drivers per category
     var driversMap by remember { mutableStateOf<Map<String, List<Driver>>>(emptyMap()) }
 
-    // Estado para controlar los dropdowns de selección de pilotos
+    // State to track which category's driver dropdown is expanded
     var expandedDropdownCategory by remember { mutableStateOf<String?>(null) }
 
+    // Load user preferences and update FCM token when user is authenticated
     LaunchedEffect(currentUser?.uid) {
         currentUser?.uid?.let { userId ->
-            // Actualizar FCM token
+            // Update FCM token for push notifications
             FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
                 userPreferencesRepository.updateFcmToken(userId, token)
             }
 
-            // Cargar preferencias
+            // Load user preferences from repository
             val userPrefs = userPreferencesRepository.getUserPreferences(userId)
             if (userPrefs != null) {
                 categoryPreferences = categoryPreferences.map { pref ->
@@ -98,7 +117,7 @@ fun ProfileScreen(
         }
     }
 
-    // Cargar los pilotos de cada categoría
+    // Load drivers for each category
     LaunchedEffect(Unit) {
         val categories = listOf(CATEGORY_F1, CATEGORY_MOTOGP, CATEGORY_INDYCAR)
         val driversResult = mutableMapOf<String, List<Driver>>()
@@ -115,7 +134,7 @@ fun ProfileScreen(
         driversMap = driversResult
     }
 
-    // Función para guardar las preferencias
+    // Function to save user preferences to the repository
     fun savePreferences() {
         currentUser?.uid?.let { userId ->
             val prefsToSave = categoryPreferences.map { pref ->
@@ -130,7 +149,7 @@ fun ProfileScreen(
     }
 
     Box(modifier = modifier.fillMaxSize()) {
-        // Fondo de la aplicación
+        // Application background image
         Image(
             painter = backgroundPainter,
             contentDescription = "App Background",
@@ -145,10 +164,10 @@ fun ProfileScreen(
                 .verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Componente de cabecera del perfil
+            // Profile header component
             ProfileHeader(currentUser = currentUser)
 
-            // Componente de preferencias de notificaciones
+            // Notification preferences component
             NotificationPreferencesCard(
                 categoryPreferences = categoryPreferences,
                 driversMap = driversMap,
@@ -168,7 +187,7 @@ fun ProfileScreen(
                 }
             )
 
-            // Componente de cierre de sesión
+            // Logout section component
             LogoutSection(
                 showLogoutDialog = showLogoutDialog,
                 onShowLogoutDialog = { show -> showLogoutDialog = show },

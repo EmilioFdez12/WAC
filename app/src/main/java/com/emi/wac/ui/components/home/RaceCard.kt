@@ -43,6 +43,10 @@ import com.emi.wac.ui.theme.getHardColorForCategory
 import com.emi.wac.ui.theme.getPrimaryColorForCategory
 import com.emi.wac.ui.theme.getSoftColorForCategory
 
+/**
+ * Composable function to display a race card
+ * Displays the leader image, session name, time remaining, and the country flag of the GP
+ */
 @Composable
 fun RaceCard(
     modifier: Modifier = Modifier,
@@ -55,7 +59,7 @@ fun RaceCard(
         Color(0xFF151515)
     ),
     category: String,
-    countdownColor: Color = getPrimaryColorForCategory(logo),
+    countdownColor: Color? = getPrimaryColorForCategory(logo),
     imageAlignment: Alignment = Alignment.CenterEnd,
     imagePadding: PaddingValues = PaddingValues(start = 100.dp),
     imageOffset: Offset = Offset(0f, 0f),
@@ -148,7 +152,7 @@ fun RaceCard(
                     modifier = Modifier
                         .padding(top = 8.dp)
                         .background(
-                            if (raceInfo.timeRemaining == "LIVE") Color.Green else countdownColor,
+                            if (raceInfo.timeRemaining == "LIVE") Color.Green else countdownColor ?: getPrimaryColorForCategory(category),
                             RoundedCornerShape(4.dp)
                         )
                 ) {

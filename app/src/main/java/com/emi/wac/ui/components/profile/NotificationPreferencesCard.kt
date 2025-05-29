@@ -24,6 +24,11 @@ import com.emi.wac.ui.screens.app.CategoryPreference
 import com.emi.wac.ui.theme.PrimaryBlue
 import com.emi.wac.ui.theme.getPrimaryColorForCategory
 
+/**
+ * Composable function to display a card with a list of category preferences
+ * Each preference can be toggled to enable or disable notifications
+ * You can select a favourite driver for each category
+ */
 @Composable
 fun NotificationPreferencesCard(
     categoryPreferences: List<CategoryPreference>,

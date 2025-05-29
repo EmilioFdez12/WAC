@@ -28,28 +28,39 @@ import com.emi.wac.ui.theme.PrimaryBlack
 import com.emi.wac.ui.theme.PrimaryRed
 import com.emi.wac.viewmodel.NewsViewModel
 
+/**
+ * Composable function to display the news screen.
+ * Shows a list of news articles
+ *
+ * @param modifier Modifier for the composable layout
+ * @param viewModel ViewModel providing news data and state
+ */
 @Composable
 fun NewsScreen(
     modifier: Modifier = Modifier,
     viewModel: NewsViewModel = viewModel(),
-
 ) {
+    // Collect the news state from the ViewModel
     val newsState by viewModel.newsState.collectAsState()
     val context = LocalContext.current
-    
+
     Box(
         modifier = modifier
             .fillMaxSize()
             .padding(top = 16.dp),
         contentAlignment = Alignment.Center
     ) {
+        // Handle different states of news data
         when (val state = newsState) {
+            // Display a loading indicator while news is being fetched
             is NewsViewModel.NewsState.Loading -> {
                 CircularProgressIndicator(color = PrimaryRed)
             }
-            
+
+            // Display a list of news articles when data is successfully loaded
             is NewsViewModel.NewsState.Success -> {
                 Column(modifier = Modifier.fillMaxSize()) {
+                    // Title for the news section
                     Text(
                         text = "Latest News",
                         style = AlataTypography.titleLarge,
@@ -59,11 +70,13 @@ fun NewsScreen(
                             .padding(16.dp)
                             .align(Alignment.CenterHorizontally)
                     )
-                    
+
                     Spacer(modifier = Modifier.height(8.dp))
-                    
+
+                    // LazyColumn to display news articles efficiently
                     LazyColumn {
                         items(state.articles) { article ->
+                            // Individual news card with click handler to open article URL
                             NewsCard(
                                 article = article,
                                 onCardClick = { url ->
@@ -72,27 +85,31 @@ fun NewsScreen(
                                 }
                             )
                         }
-                        
+
+                        // Add bottom padding to avoid overlap with bottom navigation
                         item {
                             Spacer(modifier = Modifier.height(80.dp))
                         }
                     }
                 }
             }
-            
+
+            // Display error message if news loading fails
             is NewsViewModel.NewsState.Error -> {
                 Column(
                     modifier = Modifier.padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    // Error title
                     Text(
                         text = "Error loading news",
                         style = AlataTypography.titleMedium,
                         color = Color.White
                     )
-                    
+
                     Spacer(modifier = Modifier.height(8.dp))
-                    
+
+                    // Detailed error message
                     Text(
                         text = state.message,
                         style = AlataTypography.bodyMedium,

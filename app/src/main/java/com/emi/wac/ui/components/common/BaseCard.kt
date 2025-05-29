@@ -15,16 +15,17 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 /**
- * Componente base reutilizable para todas las cards de la aplicación.
- * Proporciona un diseño consistente con gradiente y comportamiento de click.
- * 
- * @param modifier Modificador para personalizar el diseño
- * @param onClick Acción a ejecutar cuando se hace click en la card
- * @param gradientColors Lista de colores para el gradiente de fondo
- * @param cornerRadius Radio de las esquinas redondeadas
- * @param elevation Elevación de la card
- * @param padding Padding interno del contenido
- * @param content Contenido de la card
+ * Base composable for every card on the app
+ * Provides a consistent design with gradient and click behavior
+ *
+ * @param modifier Modifier for the card
+ * @param onClick Optional click action
+ * @param gradientColors List of colors for the gradient
+ * @param cornerRadius Radius of the card's corners
+ * @param elevation Elevation of the card
+ * @param padding Padding inside the card
+ * @param content Content of the card
+ *
  */
 @Composable
 fun BaseCard(

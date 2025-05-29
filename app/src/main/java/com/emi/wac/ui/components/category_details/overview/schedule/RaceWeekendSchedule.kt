@@ -47,8 +47,10 @@ fun RaceWeekendSchedule(
 ) {
     val context = LocalContext.current
     val db = Firebase.firestore
+    // Repositories
     val standingsRepository = remember { StandingsRepository(db) }
     val racingRepository = remember { RacingRepository(standingsRepository, context) }
+    // State to hold the next race weekend
     var nextRace by remember { mutableStateOf<GrandPrix?>(null) }
     val softColor = getSoftColorForCategory(category)
     val hardColor = getHardColorForCategory(category)

@@ -44,6 +44,14 @@ import com.emi.wac.ui.theme.PrimaryWhite
 import com.emi.wac.utils.GoogleSignInUtils
 import kotlinx.coroutines.launch
 
+/**
+ * Composable function to display the register screen.
+ * Handles user registration and navigation.
+ *
+ * @param authRepository Repository for authentication operations
+ * @param onRegisterSuccess Callback invoked when registration is successful
+ * @param onNavigateToLogin Callback invoked to navigate to the login screen
+ */
 @Composable
 fun RegisterScreen(
     authRepository: AuthRepository,

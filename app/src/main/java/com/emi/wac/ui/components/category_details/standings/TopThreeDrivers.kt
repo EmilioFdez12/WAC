@@ -47,27 +47,28 @@ import com.emi.wac.ui.theme.PrimaryBlack
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 
+/**
+ * Composable function to display the top three drivers in the standings.
+ */
 @Composable
 fun TopThreeDrivers(
     standings: List<Driver>,
     category: String
 ) {
+
+    var constructorsList by remember { mutableStateOf<List<Constructor>?>(null) }
     val db = Firebase.firestore
     val standingsRepository = remember { StandingsRepository(db) }
-    var constructorsList by remember { mutableStateOf<List<Constructor>?>(null) }
+    val firstPlaceColor = Color(0xFFFFD700)
+    val secondPlaceColor = Color(0xFFC0C0C0)
+    val thirdPlaceColor = Color(0xFFE28E19)
 
     LaunchedEffect(category) {
-        // Obtenemos los constructores directamente desde Firebase
         val constructorsResult = standingsRepository.getConstructorStandings(category)
         if (constructorsResult.isSuccess) {
             constructorsList = constructorsResult.getOrNull()
         }
     }
-
-    val firstPlaceColor = Color(0xFFFFD700)
-    val secondPlaceColor = Color(0xFFC0C0C0)
-    val thirdPlaceColor = Color(0xFFE28E19)
-
 
     Row(
         modifier = Modifier
@@ -113,6 +114,7 @@ fun TopThreeDrivers(
     }
 }
 
+// Composable function to display a driver card in the standings.
 @Composable
 private fun TopDriverCard(
     standing: Driver,

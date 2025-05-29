@@ -30,6 +30,15 @@ import com.emi.wac.ui.theme.AlataTypography
 import com.emi.wac.ui.theme.PrimaryRed
 import com.emi.wac.utils.DateUtils
 
+/**
+ * Composable function to display a news card
+ * Displays the article title, description, author, and date of publication
+ * You can click it to open the article in a web browser
+ *
+ * @param article The article to display
+ * @param onCardClick Callback to be invoked when the card is clicked
+ * @param modifier Modifier for styling
+ */
 @Composable
 fun NewsCard(
     article: Article,

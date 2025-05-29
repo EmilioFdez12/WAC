@@ -1,6 +1,5 @@
 package com.emi.wac.ui.screens.app
 
-import android.util.Log
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -30,6 +29,10 @@ import com.emi.wac.ui.components.category_details.overview.CategoryTabs
 import com.emi.wac.viewmodel.OverviewViewModel
 import com.emi.wac.viewmodel.StandingsViewModel
 
+/**
+ * Composable function to display the details of a category
+ * Screen that includes tabs for overview, standings, and schedule
+ */
 @Composable
 fun CategoryDetailsScreen(
     modifier: Modifier = Modifier,
@@ -42,8 +45,6 @@ fun CategoryDetailsScreen(
     val backgroundPainter = rememberAsyncImagePainter(model = Constants.BCKG_IMG)
     var selectedTab by remember { mutableIntStateOf(0) }
     val scrollState = rememberScrollState()
-
-    Log.d("CategoryDetailsScreen", "Category: $category")
 
     Box(modifier = modifier.fillMaxSize()) {
         Image(

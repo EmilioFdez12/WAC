@@ -20,6 +20,15 @@ import com.emi.wac.utils.WeatherUtils
 import com.emi.wac.ui.theme.AlataTypography
 import com.emi.wac.ui.theme.getPrimaryColorForCategory
 
+/**
+ * Composable function to display the weather row in the standings.
+ *
+ * @param sessionName The name of the session.
+ * @param temperature The temperature in the session.
+ * @param weatherCode The weather code for the session.
+ * @param modifier The modifier for the composable.
+ * @param category The category of the Grand Prix.
+ */
 @Composable
 fun WeatherRow(
     sessionName: String,
@@ -28,6 +37,7 @@ fun WeatherRow(
     modifier: Modifier = Modifier,
     category: String
 ) {
+    // Gets weather description based on the weather code
     val weatherDescription = WeatherUtils.getWeatherDescription(weatherCode)
     Box(
         modifier = modifier

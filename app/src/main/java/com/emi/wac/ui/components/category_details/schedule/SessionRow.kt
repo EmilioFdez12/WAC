@@ -15,6 +15,15 @@ import com.emi.wac.ui.theme.AlataTypography
 import com.emi.wac.ui.theme.PrimaryBlack
 import com.emi.wac.ui.theme.PrimaryWhite
 
+/**
+ * Composable function to display a row representing a session.
+ *
+ * @param sessionName The name of the session.
+ * @param day The day of the session.
+ * @param time The time of the session.
+ * @param isRace Flag to indicate if the session is a race.
+ * @param primaryColor The primary color used for styling.
+ */
 @Composable
 fun SessionRow(
     sessionName: String,
