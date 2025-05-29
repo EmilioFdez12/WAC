@@ -40,6 +40,8 @@ fun LoginScreen(
     val launcher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
 
+    var showPasswordResetDialog by remember { mutableStateOf(false) }
+
     // Validation function
     fun validateInputs(): String? {
         return when {
@@ -169,10 +171,16 @@ fun LoginScreen(
                         fontFamily = LEXENDREGULAR,
                         color = PrimaryRed,
                         fontSize = 16.sp,
-                        modifier = Modifier.clickable { /* TODO: Navigate to password recovery */ }
+                        modifier = Modifier.clickable { showPasswordResetDialog = true }
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
+
+                    PasswordResetDialog(
+                        authRepository,
+                        showPasswordResetDialog,
+                        onDismiss = { showPasswordResetDialog = false }
+                    )
                 }
             }
         }

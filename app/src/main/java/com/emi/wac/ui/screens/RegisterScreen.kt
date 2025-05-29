@@ -1,5 +1,6 @@
 package com.emi.wac.ui.screens
 
+import android.util.Patterns
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
@@ -31,18 +32,17 @@ import com.emi.wac.ui.components.auth.AuthBackground
 import com.emi.wac.ui.components.auth.AuthFormContainer
 import com.emi.wac.ui.components.auth.AuthHeader
 import com.emi.wac.ui.components.auth.AuthSeparator
+import com.emi.wac.ui.components.auth.EmailConfirmationDialog
 import com.emi.wac.ui.components.auth.EmailField
 import com.emi.wac.ui.components.auth.ErrorMessage
 import com.emi.wac.ui.components.auth.PasswordField
 import com.emi.wac.ui.components.auth.UsernameField
 import com.emi.wac.ui.components.common.WACButton
 import com.emi.wac.ui.components.common.WACButtonStyle
+import com.emi.wac.ui.theme.PrimaryBlue
 import com.emi.wac.ui.theme.PrimaryWhite
 import com.emi.wac.utils.GoogleSignInUtils
 import kotlinx.coroutines.launch
-
-private val PrimaryBlue = Color(0xFF1976D2)
-private val DarkBlue = Color(0xFF0D47A1)
 
 @Composable
 fun RegisterScreen(
@@ -59,6 +59,9 @@ fun RegisterScreen(
     var errorMessage by remember { mutableStateOf<String?>(null) }
     var showPassword by remember { mutableStateOf(false) }
     var showConfirmPassword by remember { mutableStateOf(false) }
+    var showVerificationDialog by remember { mutableStateOf(false) }
+    var verificationSent by remember { mutableStateOf(false) }
+    var verificationErrorMessage by remember { mutableStateOf<String?>(null) }
     val launcher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
 
@@ -66,7 +69,7 @@ fun RegisterScreen(
     fun validateInputs(): String? {
         return when {
             displayName.length < 3 -> "Username must be at least 3 characters long"
-            !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() -> "Invalid email format"
+            !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> "Invalid email format"
             password.length < 6 -> "Password must be at least 6 characters long"
             !password.any { it.isUpperCase() } -> "Password must contain at least one uppercase letter"
             !password.any { it.isDigit() } -> "Password must contain at least one number"
@@ -147,7 +150,16 @@ fun RegisterScreen(
                                         displayName
                                     )
                                     result.onSuccess {
-                                        onRegisterSuccess()
+                                        val verificationResult =
+                                            authRepository.sendEmailVerification()
+                                        verificationResult.onSuccess {
+                                            verificationSent = true
+                                            showVerificationDialog = true
+                                        }.onFailure { e ->
+                                            verificationErrorMessage =
+                                                "Could not send verification email: ${e.message}"
+                                            showVerificationDialog = true
+                                        }
                                     }.onFailure { e ->
                                         errorMessage = when {
                                             e.message?.contains("email already exists") == true ->
@@ -163,7 +175,7 @@ fun RegisterScreen(
                         }
                     },
                     style = WACButtonStyle.PRIMARY,
-                    gradientColors = listOf(PrimaryBlue, DarkBlue),
+                    gradientColors = listOf(PrimaryBlue, PrimaryBlue),
                     textColor = Color.White,
                     modifier = Modifier.fillMaxWidth(0.96f)
                 )
@@ -218,5 +230,18 @@ fun RegisterScreen(
                 }
             }
         }
+
+        EmailConfirmationDialog(
+            showDialog = showVerificationDialog,
+            verificationSent = verificationSent,
+            email = email,
+            verificationErrorMessage = verificationErrorMessage,
+            onDismiss = {
+                showVerificationDialog = false
+                if (verificationSent) {
+                    onRegisterSuccess()
+                }
+            }
+        )
     }
 }

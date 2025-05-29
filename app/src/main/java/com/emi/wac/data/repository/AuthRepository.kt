@@ -30,7 +30,11 @@ class AuthRepository @Inject constructor(
      * @param displayName The display name to be set for the user.
      * @return Result containing the User object if successful, or an error if failed.
      */
-    suspend fun createUserWithEmail(email: String, password: String, displayName: String): Result<User> {
+    suspend fun createUserWithEmail(
+        email: String,
+        password: String,
+        displayName: String
+    ): Result<User> {
         return try {
             val authResult = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
             val user = authResult.user
@@ -93,6 +97,71 @@ class AuthRepository @Inject constructor(
     }
 
     /**
+     * Sends a password reset email to the specified email address.
+     *
+     * @param email The email address to send the password reset link to.
+     * @return Result indicating success or failure of the operation.
+     */
+    suspend fun sendPasswordResetEmail(email: String): Result<Unit> {
+        return try {
+            firebaseAuth.sendPasswordResetEmail(email).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+
+    /**
+     * Sends an email verification to the currently logged in user.
+     *
+     * @return Result indicating success or failure of the operation.
+     */
+    suspend fun sendEmailVerification(): Result<Unit> {
+        val user = firebaseAuth.currentUser
+        return if (user != null) {
+            try {
+                user.sendEmailVerification().await()
+                Result.success(Unit)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        } else {
+            Result.failure(Exception("No user is currently logged in"))
+        }
+    }
+
+    /**
+     * Checks if the current user's email is verified.
+     *
+     * @return Boolean indicating if the email is verified.
+     */
+    fun isEmailVerified(): Boolean {
+        return firebaseAuth.currentUser?.isEmailVerified == true
+    }
+
+    /**
+     * Reloads the current user to get the latest user data from Firebase.
+     * Useful for checking if email has been verified after user follows verification link.
+     *
+     * @return Result indicating success or failure of the operation.
+     */
+    suspend fun reloadUser(): Result<Unit> {
+        val user = firebaseAuth.currentUser
+        return if (user != null) {
+            try {
+                user.reload().await()
+                Result.success(Unit)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        } else {
+            Result.failure(Exception("No user is currently logged in"))
+        }
+    }
+
+
+    /**
      * Signs out the currently authenticated user.
      */
     fun signOut() {
@@ -118,6 +187,7 @@ class AuthRepository @Inject constructor(
         }
     }
 
+
     // Saves or updates the user information in Firestore.
     private suspend fun saveUserToFirestore(user: User) {
         // Get the user's UID
@@ -127,7 +197,11 @@ class AuthRepository @Inject constructor(
                     .set(user)
                     .await()
             } catch (e: Exception) {
-                Log.e("AuthRepository", "Error while trying to save user to Firestore: ${e.message}", e)
+                Log.e(
+                    "AuthRepository",
+                    "Error while trying to save user to Firestore: ${e.message}",
+                    e
+                )
             }
         }
     }
