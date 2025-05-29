@@ -1,6 +1,5 @@
 package com.emi.wac.ui.components.category_details.overview
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,36 +30,38 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import com.emi.wac.data.model.contructor.Constructor
 import com.emi.wac.ui.theme.AlataTypography
 import com.emi.wac.ui.theme.getPrimaryColorForCategory
 
+/**
+ * Base composable for displaying a leader card with a title, position, points, and image.
+ */
 @Composable
-fun ConstructorLeaderCard(
+fun BaseLeaderCard(
     modifier: Modifier = Modifier,
-    constructor: Constructor,
-    car: String,
+    title: String,
+    position: Int,
+    points: Int,
+    imageUrl: String,
+    imageDescription: String,
+    category: String,
     offsetX: Dp = 60.dp,
     offsetY: Dp = 0.dp,
     imageScale: Float = 1f,
+    imageSize: Dp = 120.dp,
     rotation: Float = 0f,
-    category: String,
+    imageAlignment: Alignment = Alignment.BottomCenter
 ) {
     val primaryColor = getPrimaryColorForCategory(category)
 
-    Log.d("ConstructorLeaderCard", "Constructor: $constructor")
     Box(modifier = modifier.fillMaxWidth()) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(120.dp)
                 .padding(horizontal = 32.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = Color.Transparent
-            ),
-            elevation = CardDefaults.cardElevation(
-                defaultElevation = 4.dp
-            )
+            colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
         ) {
             Box(
                 modifier = Modifier
@@ -83,11 +84,10 @@ fun ConstructorLeaderCard(
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = constructor.team,
+                        text = title,
                         style = AlataTypography.titleLarge,
                         color = Color.White
                     )
-                    
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -98,39 +98,37 @@ fun ConstructorLeaderCard(
                                 .padding(horizontal = 8.dp, vertical = 4.dp)
                         ) {
                             Text(
-                                text = "${constructor.position}º",
+                                text = "${position}º",
                                 style = AlataTypography.bodyLarge,
                                 color = Color.Black
                             )
                         }
-
                         Box(
                             modifier = Modifier
                                 .background(primaryColor, RoundedCornerShape(4.dp))
                                 .padding(horizontal = 8.dp, vertical = 4.dp)
                         ) {
                             Text(
-                                text = "${constructor.points} pts",
+                                text = "$points pts",
                                 style = AlataTypography.bodyLarge,
                                 color = Color.White
                             )
                         }
                     }
                 }
-
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data("file:///android_asset$car")
+                        .data(imageUrl)
                         .crossfade(true)
                         .build(),
-                    contentDescription = "Constructor Car",
-                    contentScale = ContentScale.Fit,
+                    contentDescription = imageDescription,
                     modifier = Modifier
-                        .scale(imageScale)
-                        .size(200.dp)
-                        .rotate(rotation)
+                        .size(imageSize)
+                        .align(imageAlignment)
                         .offset(x = offsetX, y = offsetY)
-                        .align(Alignment.CenterEnd),
+                        .scale(imageScale)
+                        .rotate(rotation),
+                    contentScale = ContentScale.Fit
                 )
             }
         }

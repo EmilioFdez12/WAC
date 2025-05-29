@@ -17,6 +17,14 @@ import com.emi.wac.ui.theme.AlataTypography
 import com.emi.wac.ui.theme.PrimaryBlack
 import com.emi.wac.ui.theme.getPrimaryColorForCategory
 
+/**
+ * Composable function to display a row of category tabs.
+ *
+ * @param selectedTab The index of the currently selected tab.
+ * @param onTabSelected A callback to be invoked when a tab is selected.
+ * @param modifier The modifier to be applied to the composable.
+ * @param category The racing category (e.g., "F1", "Indycar") to determine styling.
+ */
 @Composable
 fun CategoryTabs(
     selectedTab: Int,
@@ -27,7 +35,6 @@ fun CategoryTabs(
     val primaryColor = getPrimaryColorForCategory(category)
 
     Row(modifier = modifier) {
-
         listOf("OVERVIEW", "STANDINGS", "SCHEDULE").forEachIndexed { index, title ->
             Button(
                 onClick = { onTabSelected(index) },
@@ -52,4 +59,3 @@ fun CategoryTabs(
         }
     }
 }
-

@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import com.emi.wac.common.Constants.ASSETS
 import com.emi.wac.data.model.circuit.Circuit
 import com.emi.wac.data.model.sessions.GrandPrix
 import com.emi.wac.data.repository.RacingRepository
@@ -37,24 +38,27 @@ import com.emi.wac.ui.theme.getPrimaryColorForCategory
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 
+/**
+ * Composable function to display circuit information for every category
+ *
+ * @param modifier Modifier to be applied to the composable
+ * @param category The racing category (e.g., "F1", "Indycar") to determine styling
+ * @param circuit The circuit object to display
+ */
 @Composable
 fun CircuitInfo(
     modifier: Modifier = Modifier,
     category: String,
     circuit: Circuit? = null
 ) {
+    var nextRace by remember { mutableStateOf<GrandPrix?>(null) }
+    var circuitInfo by remember { mutableStateOf<Circuit?>(circuit) }
     val context = LocalContext.current
     val db = Firebase.firestore
     val standingsRepository = remember { StandingsRepository(db) }
     val racingRepository = remember { RacingRepository(standingsRepository, context) }
-    var nextRace by remember { mutableStateOf<GrandPrix?>(null)}
-    var circuitInfo by remember { mutableStateOf<Circuit?>(circuit) }
     val primaryColor = getPrimaryColorForCategory(category)
-    val imgBackground = when(category) {
-        "f1" -> Color.Transparent
-        "indycar" -> Color.Transparent
-        else -> Color(0xFF151515)
-    }
+    val imgBackground = if (category == "motogp") Color(0xFF151515) else Color.Transparent
     val imgPadding = if (category == "f1") 0.dp else 8.dp
     val imgScale = if (category == "indycar") 2f else 1f
 
@@ -85,10 +89,10 @@ fun CircuitInfo(
                     .padding(horizontal = 12.dp, vertical = 6.dp)
             )
 
-            // Large circuit image
+            // Circuit image
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data("file:///android_asset${circuit.image}")
+                    .data("$ASSETS${circuit.image}")
                     .crossfade(true)
                     .build(),
                 contentDescription = "Circuit layout for ${circuit.name}",

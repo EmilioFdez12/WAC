@@ -28,7 +28,7 @@ import com.emi.wac.utils.DateUtils
  * @param name The name of the session (e.g., "RACE", "PRACTICE 1").
  * @param time The session time in UTC (e.g., "14:00") or "TBD".
  * @param isPrimary Whether this is the main race session (affects background color).
- * @param category The racing category (e.g., "F1", "F2") to determine styling.
+ * @param category The racing category (e.g., "F1", "Indycar") to determine styling.
  */
 @Composable
 fun SessionItem(
