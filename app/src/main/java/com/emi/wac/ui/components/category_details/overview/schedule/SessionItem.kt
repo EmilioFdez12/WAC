@@ -55,13 +55,17 @@ fun SessionItem(
             modifier = Modifier.width(100.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Spacer(modifier = Modifier.width(6.dp))
+
+            Spacer(modifier = Modifier.width(16.dp))
+
             Text(
                 text = dayNumber,
                 style = AlataTypography.titleMedium,
                 color = Color.White
             )
+
             Spacer(modifier = Modifier.width(4.dp))
+
             Text(
                 text = monthName,
                 style = AlataTypography.bodyMedium,

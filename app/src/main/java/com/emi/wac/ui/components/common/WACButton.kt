@@ -8,11 +8,21 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,40 +31,32 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.emi.wac.ui.theme.AlataTypography
+import com.emi.wac.common.Constants.LEXENDBOLD
 import com.emi.wac.ui.theme.PrimaryRed
 
 /**
- * Enumeración para los diferentes estilos de botón disponibles
+ * Enum for the different button styles available
  */
 enum class WACButtonStyle {
-    PRIMARY,    // Botón principal con gradiente
-    SECONDARY,  // Botón secundario con borde
-    OUTLINED,   // Botón con solo borde
-    TEXT        // Botón de solo texto
+    PRIMARY,
+    SECONDARY,
+    OUTLINED,
+    TEXT
 }
 
 /**
- * Componente de botón unificado para toda la aplicación WAC.
- * Proporciona diferentes estilos y animaciones consistentes.
+ *
+ * Button component that provides consistent styles and animations for all WAC buttons.
  * 
- * @param text Texto a mostrar en el botón
- * @param onClick Acción a ejecutar cuando se presiona el botón
- * @param modifier Modificador para personalizar el diseño
- * @param style Estilo del botón (PRIMARY, SECONDARY, OUTLINED, TEXT)
- * @param enabled Si el botón está habilitado
- * @param leadingIcon Icono a mostrar antes del texto
- * @param trailingIcon Icono a mostrar después del texto
- * @param iconRes ID del recurso de icono (alternativa a leadingIcon)
- * @param gradientColors Colores del gradiente para estilo PRIMARY
- * @param textColor Color del texto
- * @param borderColor Color del borde para estilos con borde
- * @param cornerRadius Radio de las esquinas
- * @param contentPadding Padding interno del contenido
+ * @param text Text to display on the button
+ * @param onClick Action to perform when the button is clicked
+ * @param modifier Modifier
+ * @param style Button style (PRIMARY, SECONDARY, OUTLINED, TEXT)
+ * @param leadingIcon Icon to display before the text
+ * @param trailingIcon Icon to display after the text
+ * @param iconRes ID of the resource of the icon
  */
 @Composable
 fun WACButton(
@@ -72,11 +74,11 @@ fun WACButton(
     cornerRadius: Dp = 8.dp,
     contentPadding: PaddingValues = PaddingValues(horizontal = 24.dp, vertical = 12.dp)
 ) {
-    // Estados de interacción
+    // Interaction state
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
-    
-    // Animaciones
+
+    // Animations
     val scale by animateFloatAsState(
         targetValue = if (isPressed && enabled) 0.95f else 1f,
         animationSpec = tween(150),
@@ -87,8 +89,8 @@ fun WACButton(
         targetValue = if (enabled) textColor else textColor.copy(alpha = 0.6f),
         label = "text_color"
     )
-    
-    // Configuración del fondo según el estilo
+
+    // Background config
     val backgroundModifier = when (style) {
         WACButtonStyle.PRIMARY -> {
             if (enabled) {
@@ -141,39 +143,32 @@ fun WACButton(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            // Icono inicial
+            // Leading icon
             leadingIcon?.let {
                 Icon(
                     imageVector = it,
+                    tint = PrimaryRed,
                     contentDescription = null,
-                    tint = animatedTextColor,
                     modifier = Modifier.size(20.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
             }
-            
-            // Icono de recurso
+
             iconRes?.let {
                 Icon(
                     painter = painterResource(id = it),
                     contentDescription = null,
-                    tint = animatedTextColor,
+                    tint = Color.Unspecified,
                     modifier = Modifier.size(20.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
             }
-            
-            // Texto
+
             Text(
                 text = text,
-                style = AlataTypography.bodyLarge.copy(
-                    color = animatedTextColor,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 16.sp
-                )
+                fontFamily = LEXENDBOLD
             )
-            
-            // Icono final
+
             trailingIcon?.let {
                 Spacer(modifier = Modifier.width(8.dp))
                 Icon(

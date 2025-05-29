@@ -1,4 +1,4 @@
-package com.emi.wac.ui.components.category_details.overview
+package com.emi.wac.ui.components.category_details.overview.leader
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

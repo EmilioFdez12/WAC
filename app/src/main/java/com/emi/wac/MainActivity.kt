@@ -52,7 +52,8 @@ class MainActivity : ComponentActivity() {
                 }
             }
         } else {
-            keepSplashScreen = false // No data to load for LoginScreen
+            // No data to load for LoginScreen
+            keepSplashScreen = false
         }
 
         splashScreen.setKeepOnScreenCondition { keepSplashScreen }
@@ -91,7 +92,9 @@ class MainActivity : ComponentActivity() {
                 } else {
                     MainScreen(
                         authRepository = authRepository,
-                        onLogout = { recreate() }
+                        onLogout = {
+                            authRepository.signOut()
+                            recreate() }
                     )
                 }
             }

@@ -16,8 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.unit.dp
 import com.emi.wac.ui.components.category_details.overview.CircuitInfo
-import com.emi.wac.ui.components.category_details.overview.ConstructorLeaderCard
-import com.emi.wac.ui.components.category_details.overview.LeaderDriverCard
+import com.emi.wac.ui.components.category_details.overview.leader.ConstructorLeaderCard
+import com.emi.wac.ui.components.category_details.overview.leader.LeaderDriverCard
 import com.emi.wac.ui.components.category_details.overview.schedule.RaceWeekendSchedule
 import com.emi.wac.ui.components.category_details.weather.WeatherRow
 import com.emi.wac.viewmodel.DataState
