@@ -4,13 +4,14 @@ import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.emi.wac.common.Constants.ASSETS
 import com.emi.wac.data.model.contructor.Constructor
 
 /**
- * Displays a card for the leading constructor in a racing category.
+ * Displays a card for the leading constructor in a racing category with adaptive image sizing.
  *
  * @param modifier Modifier to customize the composable layout.
  * @param constructor The [Constructor] data to display.
@@ -32,7 +33,21 @@ fun ConstructorLeaderCard(
     rotation: Float = 0f,
     category: String
 ) {
-    Log.d("ConstructorLeaderCard", "Constructor: $constructor")
+    // Get screen configuration for adaptive sizing
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
+    // Adaptive image size based on screen width
+    val imageSize = when {
+        screenWidth < 360.dp -> 100.dp
+        screenWidth < 400.dp -> 140.dp
+        screenWidth < 600.dp -> 160.dp
+        screenWidth < 840.dp -> 180.dp
+        else -> 200.dp
+    }
+
+    Log.d("ConstructorLeaderCard", "Constructor: $constructor, ImageSize: $imageSize")
+
     BaseLeaderCard(
         modifier = modifier,
         title = constructor.team,
@@ -44,7 +59,7 @@ fun ConstructorLeaderCard(
         offsetX = offsetX,
         offsetY = offsetY,
         imageScale = imageScale,
-        imageSize = 200.dp,
+        imageSize = imageSize,
         rotation = rotation,
         imageAlignment = Alignment.CenterEnd
     )

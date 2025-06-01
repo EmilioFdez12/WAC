@@ -1,5 +1,6 @@
 package com.emi.wac.ui.components.category_details.overview
 
+import android.R.attr.bottom
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,7 +13,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.emi.wac.ui.theme.AlataTypography
 import com.emi.wac.ui.theme.PrimaryBlack
 import com.emi.wac.ui.theme.getPrimaryColorForCategory
@@ -34,6 +37,31 @@ fun CategoryTabs(
 ) {
     val primaryColor = getPrimaryColorForCategory(category)
 
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
+    // Adaptive font size for the 'name' text
+    val bodyLargeFont = when {
+        screenWidth < 360.dp -> 10.sp
+        screenWidth < 400.dp -> 12.sp
+        screenWidth < 600.dp -> 16.sp
+        else -> 18.sp
+    }
+
+    val verticalPadding = when {
+        screenWidth < 360.dp -> 12.dp
+        screenWidth < 400.dp -> 14.dp
+        screenWidth < 600.dp -> 16.dp
+        else -> 18.dp
+    }
+
+    val margin = when {
+        screenWidth < 360.dp -> 0.dp
+        screenWidth < 400.dp -> 4.dp
+        screenWidth < 600.dp -> 12.dp
+        else -> 18.dp
+    }
+
     Row(modifier = modifier) {
         listOf("OVERVIEW", "STANDINGS", "SCHEDULE").forEachIndexed { index, title ->
             Button(
@@ -45,12 +73,12 @@ fun CategoryTabs(
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier
                     .weight(1f)
-                    .padding(bottom = 12.dp),
-                contentPadding = PaddingValues(vertical = 16.dp, horizontal = 0.dp)
+                    .padding(bottom = margin),
+                contentPadding = PaddingValues(vertical = verticalPadding, horizontal = 0.dp)
             ) {
                 Text(
                     text = title,
-                    style = AlataTypography.bodyLarge
+                    style = AlataTypography.bodyLarge.copy(fontSize = bodyLargeFont)
                 )
             }
             if (index < 2) {

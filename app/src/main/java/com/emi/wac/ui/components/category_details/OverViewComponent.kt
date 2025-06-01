@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Red
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import com.emi.wac.ui.components.category_details.overview.CircuitInfo
 import com.emi.wac.ui.components.category_details.overview.leader.ConstructorLeaderCard
@@ -38,6 +39,16 @@ fun OverViewComponent(
     val circuitInfo by viewModel.circuitInfo.collectAsState()
     val weatherInfo by viewModel.weatherInfo.collectAsState()
     val imageScale = if (category == "indycar") 1.5f else if (category == "motogp") 2f else 1f
+    // Get screen width for adaptive font sizing
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
+    val weatherWidth = when {
+        screenWidth < 360.dp -> 120.dp
+        screenWidth < 400.dp -> 140.dp
+        screenWidth < 600.dp -> 160.dp
+        else -> 180.dp
+    }
 
     Column(
         modifier = modifier.fillMaxWidth()
@@ -118,7 +129,7 @@ fun OverViewComponent(
                                 temperature = temperature,
                                 weatherCode = weatherCode,
                                 category = category,
-                                modifier = Modifier.width(160.dp)
+                                modifier = Modifier.width(weatherWidth)
                             )
                         } ?: ""
 
@@ -128,7 +139,7 @@ fun OverViewComponent(
                                 temperature = temperature,
                                 weatherCode = weatherCode,
                                 category = category,
-                                modifier = Modifier.width(160.dp)
+                                modifier = Modifier.width(weatherWidth)
                             )
                         } ?: ""
                     }
@@ -141,7 +152,7 @@ fun OverViewComponent(
                             weatherCode = weatherCode,
                             category = category,
                             modifier = Modifier
-                                .width(160.dp)
+                                .width(weatherWidth)
                                 .padding(top = 8.dp)
                         )
                     }

@@ -15,9 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
@@ -29,7 +31,7 @@ import com.emi.wac.ui.theme.PrimaryWhite
 import com.emi.wac.ui.theme.getPrimaryColorForCategory
 
 /**
- * Composable function to display an item(driver) inside the drivers list.
+ * Composable function to display an item (driver) inside the drivers list with adaptive sizing.
  */
 @Composable
 fun DriverStandingItem(
@@ -41,6 +43,56 @@ fun DriverStandingItem(
     val primaryColor = getPrimaryColorForCategory(category)
     val context = LocalContext.current
 
+    // Get screen width for adaptive sizing
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
+    // Adaptive font sizes
+    val positionFontSize = when {
+        screenWidth < 360.dp -> 8.sp
+        screenWidth < 400.dp -> 10.sp
+        screenWidth < 600.dp -> 16.sp
+        else -> 18.sp
+    }
+
+    val nameFontSize = when {
+        screenWidth < 360.dp -> 10.sp
+        screenWidth < 400.dp -> 12.sp
+        screenWidth < 600.dp -> 16.sp
+        else -> 16.sp
+    }
+
+    val pointsFontSize = when {
+        screenWidth < 360.dp -> 8.sp
+        screenWidth < 400.dp -> 10.sp
+        screenWidth < 600.dp -> 16.sp
+        else -> 18.sp
+    }
+
+    // Adaptive team logo size
+    val teamLogoSize = when {
+        screenWidth < 360.dp -> 16.dp
+        screenWidth < 400.dp -> 20.dp
+        screenWidth < 600.dp -> 32.dp
+        else -> 40.dp
+    }
+
+    // Adaptive padding
+    val verticalPadding = when {
+        screenWidth < 360.dp -> 2.dp
+        screenWidth < 400.dp -> 4.dp
+        screenWidth < 600.dp -> 8.dp
+        else -> 10.dp
+    }
+
+    // Adaptive padding
+    val horizontalPadding = when {
+        screenWidth < 360.dp -> 4.dp
+        screenWidth < 400.dp -> 8.dp
+        screenWidth < 600.dp -> 12.dp
+        else -> 16.dp
+    }
+
     // Search the driver and the team logo
     val driver = drivers?.find { it.name.contains(standing.name, ignoreCase = true) }
     val teamLogo = driver?.teamId?.let { teamId ->
@@ -50,7 +102,7 @@ fun DriverStandingItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .padding(vertical = verticalPadding),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
@@ -58,12 +110,12 @@ fun DriverStandingItem(
         Box(
             modifier = Modifier
                 .background(primaryColor, RoundedCornerShape(4.dp))
-                .padding(horizontal = 12.dp, vertical = 4.dp),
+                .padding(horizontalPadding, vertical = 4.dp),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 text = standing.position.toString(),
-                style = AlataTypography.bodyLarge,
+                style = AlataTypography.bodyLarge.copy(fontSize = positionFontSize),
                 fontWeight = FontWeight.Bold,
                 color = PrimaryWhite
             )
@@ -72,7 +124,7 @@ fun DriverStandingItem(
         // Driver name
         Text(
             text = standing.name,
-            style = AlataTypography.titleSmall,
+            style = AlataTypography.titleSmall.copy(fontSize = nameFontSize),
             color = Color.White,
             modifier = Modifier.weight(1f)
         )
@@ -80,7 +132,7 @@ fun DriverStandingItem(
         // Points
         Text(
             text = "${standing.points} pts",
-            style = AlataTypography.bodyLarge,
+            style = AlataTypography.bodyLarge.copy(fontSize = pointsFontSize),
             fontWeight = FontWeight.Bold,
             color = Color.White
         )
@@ -94,7 +146,7 @@ fun DriverStandingItem(
                     .build(),
                 contentDescription = "${driver?.team} Logo",
                 modifier = Modifier
-                    .size(32.dp)
+                    .size(teamLogoSize)
                     .clip(RoundedCornerShape(8.dp)),
                 contentScale = ContentScale.Fit
             )

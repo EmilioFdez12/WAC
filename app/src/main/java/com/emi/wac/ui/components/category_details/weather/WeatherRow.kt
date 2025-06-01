@@ -13,9 +13,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.emi.wac.utils.WeatherUtils
 import com.emi.wac.ui.theme.AlataTypography
 import com.emi.wac.ui.theme.getPrimaryColorForCategory
@@ -37,6 +39,32 @@ fun WeatherRow(
     modifier: Modifier = Modifier,
     category: String
 ) {
+    // Get screen width for adaptive font sizing
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
+    // Adaptive font size for the 'name' text
+    val fontSize = when {
+        screenWidth < 360.dp -> 12.sp
+        screenWidth < 400.dp -> 14.sp
+        screenWidth < 600.dp -> 20.sp
+        else -> 22.sp
+    }
+
+    val paddingVertical = when {
+        screenWidth < 360.dp -> 4.dp
+        screenWidth < 400.dp -> 8.dp
+        screenWidth < 600.dp -> 10.dp
+        else -> 12.dp
+    }
+
+    val paddingHorizontal = when {
+        screenWidth < 360.dp -> 6.dp
+        screenWidth < 400.dp -> 10.dp
+        screenWidth < 600.dp -> 12.dp
+        else -> 16.dp
+    }
+
     // Gets weather description based on the weather code
     val weatherDescription = WeatherUtils.getWeatherDescription(weatherCode)
     Box(
@@ -45,7 +73,7 @@ fun WeatherRow(
                 color = Color.Black,
                 shape = RoundedCornerShape(50.dp)
             )
-            .padding(horizontal = 12.dp, vertical = 10.dp)
+            .padding(paddingHorizontal,paddingVertical)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -55,18 +83,18 @@ fun WeatherRow(
             Text(
                 text = sessionName,
                 color = getPrimaryColorForCategory(category),
-                style = AlataTypography.titleMedium,
+                style = AlataTypography.titleMedium.copy(fontSize = fontSize),
             )
 
             // Temp on the center
             Text(
                 text = "${temperature.toInt()}°",
                 color = Color.White,
-                style = AlataTypography.titleMedium,
+                style = AlataTypography.titleMedium.copy(fontSize = fontSize),
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .weight(1f)
-                    .padding(end = 4.dp)
+                    .padding(end = 2.dp)
             )
 
             // Icon on the right

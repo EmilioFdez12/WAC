@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,7 +23,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.emi.wac.ui.components.category_details.standings.ConstructorStandingsList
 import com.emi.wac.ui.components.category_details.standings.DriverStandingsList
 import com.emi.wac.ui.components.category_details.standings.TopThreeDrivers
@@ -46,6 +49,54 @@ fun StandingsComponent(
 
     LaunchedEffect(category) {
         viewModel.loadAllStandings(category)
+    }
+
+    // Get screen width for adaptive sizing
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
+    // Adaptive card height
+    val buttonHeight = when {
+        screenWidth < 360.dp -> 20.dp
+        screenWidth < 400.dp -> 32.dp
+        screenWidth < 600.dp -> 48.dp
+        else -> 64.dp
+    }
+
+    val verticalContentPadding = when {
+        screenWidth < 360.dp -> 0.dp
+        screenWidth < 400.dp -> 0.dp
+        screenWidth < 600.dp -> 12.dp
+        else -> 20.dp
+    }
+
+    val horizontalContentPadding = when {
+        screenWidth < 360.dp -> 2.dp
+        screenWidth < 400.dp -> 4.dp
+        screenWidth < 600.dp -> 8.dp
+        else -> 12.dp
+    }
+
+    // Adaptive font sizes
+    val titleMediumFont = when {
+        screenWidth < 360.dp -> 10.sp
+        screenWidth < 400.dp -> 14.sp
+        screenWidth < 600.dp -> 16.sp
+        else -> 18.sp
+    }
+
+    val tabsHorizontalPadding = when {
+        screenWidth < 360.dp -> 12.dp
+        screenWidth < 400.dp -> 10.dp
+        screenWidth < 600.dp -> 8.dp
+        else -> 4.dp
+    }
+
+    val spacer = when {
+        screenWidth < 360.dp -> 10.dp
+        screenWidth < 400.dp -> 6.dp
+        screenWidth < 600.dp -> 0.dp
+        else -> 0.dp
     }
 
     Column(
@@ -90,6 +141,8 @@ fun StandingsComponent(
                                         )
                                     }
                                 }
+                                Spacer(modifier = Modifier.height(spacer))
+
                                 DriverStandingsList(
                                     standings = if (standings.size > 3) standings.drop(3) else emptyList(),
                                     category = category
@@ -133,6 +186,7 @@ fun StandingsComponent(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(horizontal = tabsHorizontalPadding)
         ) {
             listOf("DRIVERS", "CONSTRUCTORS").forEachIndexed { index, title ->
                 Button(
@@ -151,12 +205,12 @@ fun StandingsComponent(
                     },
                     modifier = Modifier
                         .weight(1f)
-                        .height(56.dp),
-                    contentPadding = PaddingValues(vertical = 12.dp, horizontal = 8.dp)
+                        .height(buttonHeight),
+                    contentPadding = PaddingValues(verticalContentPadding, horizontalContentPadding)
                 ) {
                     Text(
                         text = title,
-                        style = AlataTypography.titleMedium
+                        style = AlataTypography.titleMedium.copy(fontSize = titleMediumFont)
                     )
                 }
             }

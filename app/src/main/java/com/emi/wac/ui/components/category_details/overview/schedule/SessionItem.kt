@@ -13,8 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.emi.wac.ui.theme.AlataTypography
 import com.emi.wac.ui.theme.PrimaryBlack
 import com.emi.wac.ui.theme.PrimaryWhite
@@ -43,6 +45,18 @@ fun SessionItem(
     val (dayNumber, monthName) = parseDay(day)
     val localTime = DateUtils.convertToLocalTime(time).takeIf { it.isNotEmpty() } ?: "TBD"
 
+    // Get screen width for adaptive font sizing
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
+    // Adaptive font size for the 'name' text
+    val nameFontSize = when {
+        screenWidth < 360.dp -> 14.sp
+        screenWidth < 400.dp -> 16.sp
+        screenWidth < 600.dp -> 18.sp
+        else -> 18.sp
+    }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -55,7 +69,6 @@ fun SessionItem(
             modifier = Modifier.width(100.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-
             Spacer(modifier = Modifier.width(16.dp))
 
             Text(
@@ -78,7 +91,7 @@ fun SessionItem(
 
         Text(
             text = name,
-            style = AlataTypography.titleMedium,
+            style = AlataTypography.titleMedium.copy(fontSize = nameFontSize),
             color = Color.White,
             modifier = Modifier
                 .weight(1f)
@@ -88,7 +101,7 @@ fun SessionItem(
 
         Text(
             text = localTime,
-            style = AlataTypography.titleMedium,
+            style = AlataTypography.titleMedium.copy(fontSize = nameFontSize),
             color = Color.White,
             modifier = Modifier.padding(end = 16.dp)
         )
