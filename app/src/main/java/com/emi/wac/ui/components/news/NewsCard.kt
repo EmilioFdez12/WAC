@@ -19,9 +19,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
@@ -50,6 +52,18 @@ fun NewsCard(
         "NewsCard",
         "Rendering NewsCard for article: ${article.title}, URL: ${article.urlToImage}"
     )
+
+    // Get screen width for adaptive sizing
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
+    // Adaptive card height
+    val titleFontSize = when {
+        screenWidth < 360.dp -> 16.sp
+        screenWidth < 400.dp -> 18.sp
+        screenWidth < 600.dp -> 20.sp
+        else -> 22.sp
+    }
 
     // Card container for the news article
     Card(
@@ -129,7 +143,7 @@ fun NewsCard(
                     // Title
                     Text(
                         text = article.title,
-                        style = AlataTypography.titleMedium,
+                        style = AlataTypography.titleMedium.copy(fontSize = titleFontSize),
                         color = Color.White,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis

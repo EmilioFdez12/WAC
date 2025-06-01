@@ -1,6 +1,5 @@
 package com.emi.wac.ui.components.home
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -30,8 +29,10 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
@@ -65,6 +66,18 @@ fun RaceCard(
     imageOffset: Offset = Offset(0f, 0f),
     imageScale: Float = 1f,
 ) {
+    // Get screen width for adaptive sizing
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
+    // Adaptive card height
+    val titleLarge = when {
+        screenWidth < 360.dp -> 16.sp
+        screenWidth < 400.dp -> 20.sp
+        screenWidth < 600.dp -> 24.sp
+        else -> 28.sp
+    }
+
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -102,7 +115,6 @@ fun RaceCard(
                     .padding(horizontal = 8.dp, vertical = 4.dp),
             )
 
-            Log.d("RaceCard", "Leader image path: ${raceInfo.leaderImagePath}")
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data("$ASSETS${raceInfo.leaderImagePath}")
@@ -160,7 +172,7 @@ fun RaceCard(
                         text = raceInfo.timeRemaining,
                         color = PrimaryWhite,
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                        style = MaterialTheme.typography.titleLarge
+                        style = MaterialTheme.typography.titleLarge.copy(fontSize = titleLarge)
                     )
                 }
 

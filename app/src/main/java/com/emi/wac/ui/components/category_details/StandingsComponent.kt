@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -101,88 +102,105 @@ fun StandingsComponent(
 
     Column(
         modifier = modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(16.dp)
     ) {
-        // Only the content of the standings is animated with Crossfade
-        Crossfade(targetState = selectedTabIndex) { tabIndex ->
-            when (tabIndex) {
-                0 -> {
-                    when (val state = driversStandingsState) {
-                        is StandingsViewModel.StandingsState.Loading -> {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(200.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text("Loading drivers...", color = PrimaryRed)
+        // Content takes most of the space
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f) // This makes the content take available space
+        ) {
+            // Only the content of the standings is animated with Crossfade
+            Crossfade(targetState = selectedTabIndex) { tabIndex ->
+                when (tabIndex) {
+                    0 -> {
+                        when (val state = driversStandingsState) {
+                            is StandingsViewModel.StandingsState.Loading -> {
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text("Loading drivers...", color = PrimaryRed)
+                                }
                             }
-                        }
 
-                        is StandingsViewModel.StandingsState.Success -> {
-                            val standings = state.data
-                            Column {
-                                if (standings.size >= 3) {
-                                    TopThreeDrivers(
-                                        standings = standings.take(3),
-                                        category = category
-                                    )
-                                } else {
+                            is StandingsViewModel.StandingsState.Success -> {
+                                val standings = state.data
+                                Column(
+                                    modifier = Modifier.fillMaxSize()
+                                ) {
+                                    if (standings.size >= 3) {
+                                        TopThreeDrivers(
+                                            standings = standings.take(3),
+                                            category = category
+                                        )
+                                    } else {
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(100.dp),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Text(
+                                                text = "Not enough standings: ${standings.size}",
+                                                color = Color.Yellow
+                                            )
+                                        }
+                                    }
+                                    Spacer(modifier = Modifier.height(spacer))
+
+                                    // The list now takes remaining space
                                     Box(
                                         modifier = Modifier
                                             .fillMaxWidth()
-                                            .height(100.dp),
-                                        contentAlignment = Alignment.Center
+                                            .weight(1f) // Takes remaining space
                                     ) {
-                                        Text(
-                                            text = "Not enough standings: ${standings.size}",
-                                            color = Color.Yellow
+                                        DriverStandingsList(
+                                            standings = if (standings.size > 3) standings.drop(3) else emptyList(),
+                                            category = category
                                         )
                                     }
                                 }
-                                Spacer(modifier = Modifier.height(spacer))
-
-                                DriverStandingsList(
-                                    standings = if (standings.size > 3) standings.drop(3) else emptyList(),
-                                    category = category
-                                )
                             }
-                        }
 
-                        is StandingsViewModel.StandingsState.Error -> {
+                            is StandingsViewModel.StandingsState.Error -> {
+                            }
                         }
                     }
-                }
 
-                1 -> {
-                    when (val state = constructorsStandingsState) {
-                        is StandingsViewModel.StandingsState.Loading -> {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(200.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text("Loading constructors...", color = Color.White)
+                    1 -> {
+                        when (val state = constructorsStandingsState) {
+                            is StandingsViewModel.StandingsState.Loading -> {
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text("Loading constructors...", color = Color.White)
+                                }
                             }
-                        }
 
-                        is StandingsViewModel.StandingsState.Success -> {
-                            ConstructorStandingsList(
-                                standings = state.data,
-                                category = category
-                            )
-                        }
+                            is StandingsViewModel.StandingsState.Success -> {
+                                // The constructor list now takes all available space
+                                Box(
+                                    modifier = Modifier.fillMaxSize()
+                                ) {
+                                    ConstructorStandingsList(
+                                        standings = state.data,
+                                        category = category
+                                    )
+                                }
+                            }
 
-                        is StandingsViewModel.StandingsState.Error -> {
+                            is StandingsViewModel.StandingsState.Error -> {
+                            }
                         }
                     }
                 }
             }
         }
 
-        // Tabs to change between drivers and constructors standings
+        // Tabs are always visible at the bottom
         Row(
             modifier = Modifier
                 .fillMaxWidth()

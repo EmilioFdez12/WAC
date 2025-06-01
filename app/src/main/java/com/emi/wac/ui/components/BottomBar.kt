@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import com.emi.wac.ui.theme.PrimaryBlack
 import com.emi.wac.ui.theme.PrimaryRed
@@ -33,6 +34,18 @@ fun BottomBar(
     selectedItem: Int = 0,
     onItemSelected: (Int) -> Unit = {}
 ) {
+    // Get screen width for adaptive sizing
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
+    // Adaptive card height
+    val bottomBarHeight = when {
+        screenWidth < 360.dp -> 76.dp
+        screenWidth < 400.dp -> 96.dp
+        screenWidth < 600.dp -> 110.dp
+        else -> 126.dp
+    }
+
     val items = listOf(
         NavigationItem("Home", Icons.Filled.Home),
         NavigationItem("News", Icons.Filled.Notifications),
@@ -42,7 +55,7 @@ fun BottomBar(
     NavigationBar(
         containerColor = Color.Transparent,
         modifier = Modifier.padding(bottom = 0.dp)
-            .height(110.dp),
+            .height(bottomBarHeight),
     ) {
         items.forEachIndexed { index, item ->
             NavigationBarItem(
