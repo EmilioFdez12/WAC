@@ -80,6 +80,7 @@ dependencies {
     implementation (libs.androidx.credentials)
     implementation (libs.androidx.credentials.play.services.auth)
     implementation (libs.googleid)
+    // Coroutines
     implementation (libs.kotlinx.coroutines.android)
 
     // Hilt
@@ -87,7 +88,7 @@ dependencies {
     kapt (libs.hilt.compiler)
     implementation (libs.androidx.hilt.navigation.compose)
 
-    // Otras Dependencias
+    // Otras dependencias, Moshi, Gson, Coil, Retrofit
     implementation(libs.moshi)
     implementation(libs.moshi.kotlin)
     implementation(libs.androidx.lifecycle.viewmodel.compose)

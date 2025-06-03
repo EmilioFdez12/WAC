@@ -33,21 +33,6 @@ class RacingRepository(
     private val circuitsClass = Circuits::class.java
 
     /**
-     * Safely casts an Any? type to a specified reified type T.
-     * @return The casted object of type T, or null if the cast fails.
-     */
-    private inline fun <reified T> Any?.safeCastTo(): T? = this as? T
-
-    /**
-     * Converts a Map<*, *> to a Map<String, Any> if all keys are Strings and values are non-null.
-     * @return A Map<String, Any> or null if conversion is not possible.
-     */
-    private fun Map<*, *>.toStringAnyMap(): Map<String, Any>? =
-        this.entries.associate { (key, value) ->
-            (key as? String ?: return null) to (value ?: return null)
-        }
-
-    /**
      * Fetches the schedule for a given category from Firebase.
      *
      * @param category The category of the race (e.g., F1, MotoGP).
@@ -57,6 +42,7 @@ class RacingRepository(
         val collectionRef = Firebase.firestore.collection("${category}_schedule")
         val documents = collectionRef.get().await()
 
+        // Convert documents to a list of Grand Prix objects
         val scheduleList = documents.mapNotNull { scheduleDocument ->
             try {
                 val data = scheduleDocument.data
@@ -267,3 +253,18 @@ class RacingRepository(
         )
     }
 }
+
+/**
+ * Converts a Map<*, *> to a Map<String, Any> if all keys are Strings and values are non-null.
+ * @return A Map<String, Any> or null if conversion is not possible.
+ */
+private fun Map<*, *>.toStringAnyMap(): Map<String, Any>? =
+    this.entries.associate { (key, value) ->
+        (key as? String ?: return null) to (value ?: return null)
+    }
+
+/**
+ * Safely casts an Any? type to a specified reified type T.
+ * @return The casted object of type T, or null if the cast fails.
+ */
+private inline fun <reified T> Any?.safeCastTo(): T? = this as? T

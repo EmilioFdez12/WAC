@@ -42,7 +42,7 @@ async function checkCategoryStandingsChanges(db, category) {
   try {
     // Obtener standings actuales
     const currentStandingsSnapshot = await db.collection(`${category}_standings`).get();
-    
+
     if (currentStandingsSnapshot.empty) {
       logger.log(`⚠️ No hay standings para ${category}`);
       return;
@@ -56,12 +56,18 @@ async function checkCategoryStandingsChanges(db, category) {
     const currentStandings = [];
     currentStandingsSnapshot.forEach(doc => {
       const driverData = doc.data();
-      currentStandings.push({
-        id: doc.id,
-        name: driverData.name,
-        points: driverData.points || 0,
-        position: driverData.position || 999
-      });
+
+      // Validate that required fields exist and are not undefined
+      if (driverData.name && driverData.name !== undefined) {
+        currentStandings.push({
+          id: doc.id,
+          name: driverData.name,
+          points: driverData.points || 0,
+          position: driverData.position || 999
+        });
+      } else {
+        logger.warn(`⚠️ Skipping driver with undefined name in ${category}: ${doc.id}`);
+      }
     });
 
     // Ordenar por puntos (descendente)
@@ -71,10 +77,21 @@ async function checkCategoryStandingsChanges(db, category) {
     await detectAndNotifyChanges(db, category, previousStandings, currentStandings);
 
     // Guardar standings actuales como anteriores
-    await db.collection("previous_standings").doc(category).set({
-      drivers: currentStandings,
-      lastUpdate: admin.firestore.FieldValue.serverTimestamp()
-    });
+    const validStandings = currentStandings.filter(driver =>
+      driver.name &&
+      driver.name !== undefined &&
+      driver.points !== undefined &&
+      driver.position !== undefined
+    );
+
+    if (validStandings.length > 0) {
+      await db.collection("previous_standings").doc(category).set({
+        drivers: validStandings,
+        lastUpdate: admin.firestore.FieldValue.serverTimestamp()
+      });
+    } else {
+      logger.warn(`⚠️ No valid standings to save for ${category}`);
+    }
 
   } catch (error) {
     logger.error(`❌ Error verificando standings de ${category}:`, error);
@@ -103,15 +120,15 @@ async function detectAndNotifyChanges(db, category, previousStandings, currentSt
       if (!fcmToken) continue;
 
       const pref = preferences.find(
-        (p) => p.category.toLowerCase() === category.toLowerCase() && 
-               p.notificationsEnabled && 
-               p.favoriteDriver
+        (p) => p.category.toLowerCase() === category.toLowerCase() &&
+          p.notificationsEnabled &&
+          p.favoriteDriver
       );
 
       if (!pref) continue;
 
       const favoriteDriver = pref.favoriteDriver;
-      
+
       // Buscar el piloto en standings actuales y anteriores
       const currentDriver = currentStandings.find(d => d.name === favoriteDriver);
       const previousDriver = previousStandings.find(d => d.name === favoriteDriver);
@@ -119,7 +136,7 @@ async function detectAndNotifyChanges(db, category, previousStandings, currentSt
       if (!currentDriver) continue;
 
       // Calcular cambios
-      const pointsChange = previousDriver ? 
+      const pointsChange = previousDriver ?
         currentDriver.points - previousDriver.points : 0;
 
       if (pointsChange > 0) {

@@ -57,6 +57,13 @@ fun SessionItem(
         else -> 18.sp
     }
 
+    val bodyMediumFontSize = when {
+        screenWidth < 360.dp -> 12.sp
+        screenWidth < 400.dp -> 14.sp
+        screenWidth < 600.dp -> 16.sp
+        else -> 18.sp
+    }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -81,7 +88,7 @@ fun SessionItem(
 
             Text(
                 text = monthName,
-                style = AlataTypography.bodyMedium,
+                style = AlataTypography.bodyMedium.copy(fontSize = bodyMediumFontSize),
                 color = PrimaryWhite,
                 modifier = Modifier
                     .background(Color.White.copy(alpha = 0.30f), RoundedCornerShape(50.dp))
