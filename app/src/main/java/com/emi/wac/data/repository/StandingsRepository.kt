@@ -16,20 +16,6 @@ class StandingsRepository(private val db: FirebaseFirestore) {
     private val tag = "StandingsRepository"
 
     /**
-     * Safely converts an Any? value to an Int. Handles Long, Int, and Double types.
-     * Returns 0 for null or other unsupported types.
-     *
-     * @param value The value to convert.
-     * @return The converted Int, or 0 if conversion fails.
-     */
-    private fun safeIntConversion(value: Any?): Int = when (value) {
-        is Long -> value.toInt()
-        is Int -> value
-        is Double -> value.toInt()
-        else -> 0
-    }
-
-    /**
      * Fetches current driver standings for a specific racing category.
      *
      * @param category Racing category (e.g., "f1", "motogp").
@@ -116,13 +102,7 @@ class StandingsRepository(private val db: FirebaseFirestore) {
         Result.failure(e)
     }
 
-    /**
-     * Extracts a Driver object from a map of data.
-     * Handles different numeric data types that may come from Firebase.
-     *
-     * @param data The map containing driver data.
-     * @return A Driver object.
-     */
+    // Extracts a Driver object from a map of data.
     private fun extractDriverFromData(data: Map<String, Any>): Driver {
         return Driver(
             id = safeIntConversion(data["id"]),
@@ -138,13 +118,7 @@ class StandingsRepository(private val db: FirebaseFirestore) {
         )
     }
 
-    /**
-     * Extracts a Constructor object from a map of data.
-     * Handles different numeric data types that may come from Firebase.
-     *
-     * @param data The map containing constructor data.
-     * @return A Constructor object.
-     */
+    // Extracts a Constructor object from a map of data.
     private fun extractConstructorFromData(data: Map<String, Any>): Constructor {
         return Constructor(
             car = (data["car"] as? String) ?: "",
@@ -155,5 +129,20 @@ class StandingsRepository(private val db: FirebaseFirestore) {
             team = (data["team"] as? String) ?: "",
             teamId = safeIntConversion(data["teamId"])
         )
+    }
+
+    /**
+     * Safely converts an Any? value to an Int. Handles Long, Int, and Double types.
+     * Returns 0 for null or other unsupported types.
+     *
+     * @param value The value to convert.
+     * @return The converted Int, or 0 if conversion fails.
+     */
+    // Converts Any to an Int safely
+    private fun safeIntConversion(value: Any?): Int = when (value) {
+        is Long -> value.toInt()
+        is Int -> value
+        is Double -> value.toInt()
+        else -> 0
     }
 }

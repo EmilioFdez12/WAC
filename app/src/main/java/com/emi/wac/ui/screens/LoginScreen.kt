@@ -2,20 +2,36 @@ package com.emi.wac.ui.screens
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.emi.wac.R
-import com.emi.wac.common.Constants.LEXENDREGULAR
 import com.emi.wac.data.repository.AuthRepository
-import com.emi.wac.ui.components.auth.*
+import com.emi.wac.ui.components.auth.AdaptiveSpacer
+import com.emi.wac.ui.components.auth.AdaptiveText
+import com.emi.wac.ui.components.auth.AuthBackground
+import com.emi.wac.ui.components.auth.AuthFormContainer
+import com.emi.wac.ui.components.auth.AuthHeader
+import com.emi.wac.ui.components.auth.AuthSeparator
+import com.emi.wac.ui.components.auth.EmailField
+import com.emi.wac.ui.components.auth.ErrorMessage
+import com.emi.wac.ui.components.auth.PasswordField
+import com.emi.wac.ui.components.auth.PasswordResetDialog
 import com.emi.wac.ui.components.common.WACButton
 import com.emi.wac.ui.components.common.WACButtonStyle
 import com.emi.wac.ui.theme.PrimaryRed
@@ -49,6 +65,30 @@ fun LoginScreen(
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
 
     var showPasswordResetDialog by remember { mutableStateOf(false) }
+    
+    // Get screen configuration for adaptive layout
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp.dp
+    val screenWidth = configuration.screenWidthDp.dp
+    
+    // Adaptive padding and spacing
+    val verticalPadding = when {
+        screenHeight < 600.dp -> 16.dp
+        screenHeight < 700.dp -> 24.dp
+        else -> 40.dp
+    }
+    
+    val horizontalPadding = when {
+        screenWidth < 360.dp -> 16.dp
+        else -> 24.dp
+    }
+
+    val maxWidth = when {
+        screenWidth < 360.dp -> 0.88f
+        screenWidth < 400.dp -> 0.92f
+        screenWidth < 600.dp -> 0.96f
+        else -> 0.98f
+    }
 
     // Validation function
     fun validateInputs(): String? {
@@ -62,12 +102,17 @@ fun LoginScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 24.dp, vertical = 40.dp),
-            verticalArrangement = Arrangement.SpaceBetween,
+                .padding(horizontal = horizontalPadding, vertical = verticalPadding),
+            verticalArrangement = if (screenHeight < 600.dp) Arrangement.Top else Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Header
             AuthHeader(primaryColor = PrimaryRed)
+            
+            // Add adaptive spacer for small screens
+            if (screenHeight < 600.dp) {
+                AdaptiveSpacer()
+            }
 
             // Form
             AuthFormContainer {
@@ -78,7 +123,7 @@ fun LoginScreen(
                     accentColor = PrimaryRed
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                AdaptiveSpacer()
 
                 // Password field
                 PasswordField(
@@ -92,7 +137,7 @@ fun LoginScreen(
                 // Error message
                 ErrorMessage(errorMessage)
 
-                Spacer(modifier = Modifier.height(32.dp))
+                AdaptiveSpacer()
 
                 // Login button
                 WACButton(
@@ -106,20 +151,20 @@ fun LoginScreen(
                                     onLoginSuccess()
                                 }.onFailure { e ->
                                     errorMessage = when (e) {
-                                        is FirebaseAuthInvalidUserException -> "No existe una cuenta con este correo electrónico"
-                                        is FirebaseAuthInvalidCredentialsException -> "Contraseña incorrecta"
-                                        else -> "Error al iniciar sesión: ${e.message}"
+                                        is FirebaseAuthInvalidUserException -> "This account does not exist"
+                                        is FirebaseAuthInvalidCredentialsException -> "Incorrect password"
+                                        else -> e.message
                                     }
                                 }
                             } catch (e: Exception) {
-                                errorMessage = "Error al iniciar sesión: ${e.message}"
+                                errorMessage = e.message
                             }
                         }
                     },
                     style = WACButtonStyle.PRIMARY,
                     gradientColors = listOf(PrimaryRed, PrimaryRed),
                     textColor = Color.White,
-                    modifier = Modifier.fillMaxWidth(0.96f)
+                    modifier = Modifier.fillMaxWidth(maxWidth)
                 )
 
                 AuthSeparator()
@@ -145,7 +190,7 @@ fun LoginScreen(
                     modifier = Modifier.fillMaxWidth(0.96f)
                 )
 
-                Spacer(modifier = Modifier.height(28.dp))
+                AdaptiveSpacer()
 
                 // Links
                 Column(
@@ -154,35 +199,27 @@ fun LoginScreen(
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Text(
+                        AdaptiveText(
                             text = "Don't have an account? ",
                             color = PrimaryWhite,
-                            fontFamily = LEXENDREGULAR,
-                            fontSize = 16.sp,
-                            modifier = Modifier
-                                .clickable { onNavigateToRegister() }
+                            onClick = { onNavigateToRegister() }
                         )
-                        Text(
+                        AdaptiveText(
                             text = "Sign Up",
                             color = PrimaryRed,
-                            fontFamily = LEXENDREGULAR,
-                            fontSize = 16.sp,
-                            modifier = Modifier
-                                .clickable { onNavigateToRegister() }
+                            onClick = { onNavigateToRegister() }
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    AdaptiveSpacer()
 
-                    Text(
+                    AdaptiveText(
                         text = "Forgot your password?",
-                        fontFamily = LEXENDREGULAR,
                         color = PrimaryRed,
-                        fontSize = 16.sp,
-                        modifier = Modifier.clickable { showPasswordResetDialog = true }
+                        onClick = { showPasswordResetDialog = true }
                     )
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                    AdaptiveSpacer()
 
                     PasswordResetDialog(
                         authRepository,

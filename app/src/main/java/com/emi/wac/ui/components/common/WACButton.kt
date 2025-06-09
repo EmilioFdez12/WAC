@@ -30,9 +30,11 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.emi.wac.common.Constants.LEXENDBOLD
 import com.emi.wac.ui.theme.PrimaryRed
 
@@ -49,7 +51,7 @@ enum class WACButtonStyle {
 /**
  *
  * Button component that provides consistent styles and animations for all WAC buttons.
- * 
+ *
  * @param text Text to display on the button
  * @param onClick Action to perform when the button is clicked
  * @param modifier Modifier
@@ -74,6 +76,37 @@ fun WACButton(
     cornerRadius: Dp = 8.dp,
     contentPadding: PaddingValues = PaddingValues(horizontal = 24.dp, vertical = 12.dp)
 ) {
+    // Get screen configuration for adaptive sizing
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
+    // Adaptive sizing based on screen width
+    val adaptiveContentPadding = when {
+        screenWidth < 360.dp -> PaddingValues(horizontal = 4.dp, vertical = 2.dp)
+        screenWidth < 400.dp -> PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+        screenWidth < 600.dp -> contentPadding
+        else -> PaddingValues(horizontal = 28.dp, vertical = 14.dp)
+    }
+
+    val adaptiveIconSize = when {
+        screenWidth < 360.dp -> 16.dp
+        screenWidth < 400.dp -> 18.dp
+        else -> 20.dp
+    }
+
+    val adaptiveSpacing = when {
+        screenWidth < 360.dp -> 4.dp
+        screenWidth < 400.dp -> 6.dp
+        else -> 8.dp
+    }
+
+    val adaptiveFontSize = when {
+        screenWidth < 360.dp  -> 8.sp
+        screenWidth < 400.dp -> 10.sp
+        screenWidth < 600.dp -> 14.sp
+        else -> 16.sp
+    }
+
     // Interaction state
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
@@ -84,7 +117,7 @@ fun WACButton(
         animationSpec = tween(150),
         label = "button_scale"
     )
-    
+
     val animatedTextColor by animateColorAsState(
         targetValue = if (enabled) textColor else textColor.copy(alpha = 0.6f),
         label = "text_color"
@@ -105,16 +138,20 @@ fun WACButton(
                 )
             }
         }
+
         WACButtonStyle.SECONDARY -> {
-            Modifier.background(
-                color = Color.Transparent,
-                shape = RoundedCornerShape(cornerRadius)
-            ).border(
-                width = 2.dp,
-                color = borderColor ?: gradientColors.first(),
-                shape = RoundedCornerShape(cornerRadius)
-            )
+            Modifier
+                .background(
+                    color = Color.Transparent,
+                    shape = RoundedCornerShape(cornerRadius)
+                )
+                .border(
+                    width = 2.dp,
+                    color = borderColor ?: gradientColors.first(),
+                    shape = RoundedCornerShape(cornerRadius)
+                )
         }
+
         WACButtonStyle.OUTLINED -> {
             Modifier.border(
                 width = 1.dp,
@@ -122,9 +159,10 @@ fun WACButton(
                 shape = RoundedCornerShape(cornerRadius)
             )
         }
+
         WACButtonStyle.TEXT -> Modifier
     }
-    
+
     Box(
         modifier = modifier
             .scale(scale)
@@ -135,7 +173,7 @@ fun WACButton(
                 indication = null,
                 enabled = enabled
             ) { onClick() }
-            .padding(contentPadding),
+            .padding(adaptiveContentPadding),
         contentAlignment = Alignment.Center
     ) {
         Row(
@@ -149,9 +187,9 @@ fun WACButton(
                     imageVector = it,
                     tint = PrimaryRed,
                     contentDescription = null,
-                    modifier = Modifier.size(20.dp)
+                    modifier = Modifier.size(adaptiveIconSize)
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(adaptiveSpacing))
             }
 
             iconRes?.let {
@@ -159,23 +197,25 @@ fun WACButton(
                     painter = painterResource(id = it),
                     contentDescription = null,
                     tint = Color.Unspecified,
-                    modifier = Modifier.size(20.dp)
+                    modifier = Modifier.size(adaptiveIconSize)
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(adaptiveSpacing))
             }
 
             Text(
                 text = text,
-                fontFamily = LEXENDBOLD
+                fontFamily = LEXENDBOLD,
+                fontSize = adaptiveFontSize,
+                color = animatedTextColor
             )
 
             trailingIcon?.let {
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(adaptiveSpacing))
                 Icon(
                     imageVector = it,
                     contentDescription = null,
                     tint = animatedTextColor,
-                    modifier = Modifier.size(20.dp)
+                    modifier = Modifier.size(adaptiveIconSize)
                 )
             }
         }

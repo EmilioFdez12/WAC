@@ -175,12 +175,13 @@ class HomeViewModel(application: Application) :
      */
     private fun updateTimeRemaining() {
         val currentTime =
-            Calendar.getInstance(TimeZone.getTimeZone("UTC")).time // Current time in UTC
+            Calendar.getInstance(TimeZone.getTimeZone("UTC")).time
         listOf(
             _f1RaceData to CATEGORY_F1,
             _motoGPRaceData to CATEGORY_MOTOGP,
             _indycarRaceData to CATEGORY_INDYCAR
         ).forEach { (flow, category) ->
+            // If data is already loaded, update the time remaining
             (flow.value as? DataState.Success)?.let { state ->
                 val (sessionName, timeRemaining) = calculateSessionAndTimeRemaining(
                     state.data.sessions,
@@ -204,7 +205,6 @@ class HomeViewModel(application: Application) :
         }
     }
 
-
     /**
      * Calculates the current session and time remaining based on the provided list of sessions.
      * It determines if a session is currently live, or calculates the time until the next upcoming session.
@@ -216,7 +216,7 @@ class HomeViewModel(application: Application) :
         sessions: List<SessionData>,
         currentTime: Date = Calendar.getInstance(TimeZone.getTimeZone("UTC")).time
     ): Pair<String?, String> {
-        // Check if any session is currently live
+        // Checks if any session is currently live
         val currentSession =
             sessions.find { currentTime in it.dateTime..Date(it.dateTime.time + it.duration) }
         if (currentSession != null) return currentSession.name to "● LIVE"

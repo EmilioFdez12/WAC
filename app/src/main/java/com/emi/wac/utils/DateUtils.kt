@@ -121,20 +121,12 @@ object DateUtils {
 
     /**
      * Parses a session date from day and time strings, using the current year.
-     * If inputs are invalid or "TBD", returns a far-future date for sorting purposes.
+     *
      * @param day The day part of the date
      * @param time The time part of the date
      * @return Parsed Date object or a far-future date if inputs are invalid
      */
     fun parseSessionDate(day: String, time: String): Date {
-        // Check for invalid or TBD inputs
-        if (day.trim().isEmpty() || time.trim().isEmpty() ||
-            day.equals("TBD", ignoreCase = true) || time.equals("TBD", ignoreCase = true)
-        ) {
-            // Return far-future date for sorting
-            return Date(Long.MAX_VALUE)
-        }
-
         val year = getCurrentYear()
         // Parse date or return far-future date
         return parseDate(day.trim(), time.trim(), year) ?: Date(Long.MAX_VALUE)
@@ -149,7 +141,7 @@ object DateUtils {
         try {
             // Parse the input time string
             val originalTime = LocalTime.parse(timeString, DateTimeFormatter.ofPattern("HH:mm"))
-            val now = ZonedDateTime.now() // Get current date-time
+            val now = ZonedDateTime.now()
 
             // Create ZonedDateTime for Madrid timezone
             val madridTime = ZonedDateTime.of(

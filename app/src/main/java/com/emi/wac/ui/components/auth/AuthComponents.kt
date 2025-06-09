@@ -2,17 +2,33 @@ package com.emi.wac.ui.components.auth
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -27,13 +43,14 @@ import com.emi.wac.common.Constants.LEXENDREGULAR
 import com.emi.wac.common.Constants.backgroundImages
 import com.emi.wac.ui.theme.PrimaryWhite
 
+
 @Composable
 fun AuthBackground(
     content: @Composable () -> Unit
 ) {
     val randomImage by remember { mutableIntStateOf(backgroundImages.random()) }
     val backgroundPainter = rememberAsyncImagePainter(model = randomImage)
-    
+
     Box(modifier = Modifier.fillMaxSize()) {
         // Background image
         Image(
@@ -42,7 +59,7 @@ fun AuthBackground(
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
-        
+
         content()
     }
 }
@@ -54,13 +71,51 @@ fun AuthBackground(
 fun AuthHeader(
     primaryColor: Color
 ) {
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
+    val headerFontSize = when {
+        screenWidth < 360.dp -> 28.sp
+        screenWidth < 400.dp -> 36.sp
+        screenWidth < 600.dp -> 44.sp
+        else -> 56.sp
+    }
+
+    val wacFontSize = when {
+        screenWidth < 360.dp -> 32.sp
+        screenWidth < 400.dp -> 44.sp
+        screenWidth < 600.dp -> 56.sp
+        else -> 64.sp
+    }
+
+    val bodyLargeFont = when {
+        screenWidth < 360.dp -> 10.sp
+        screenWidth < 400.dp -> 12.sp
+        screenWidth < 600.dp -> 18.sp
+        else -> 20.sp
+    }
+
+    val padding = when {
+        screenWidth < 360.dp -> 0.dp
+        screenWidth < 400.dp -> 2.dp
+        screenWidth < 600.dp -> 4.dp
+        else -> 8.dp
+    }
+
+    val paddingHorizontal = when {
+        screenWidth < 360.dp -> 2.dp
+        screenWidth < 400.dp -> 4.dp
+        screenWidth < 600.dp -> 8.dp
+        else -> 12.dp
+    }
+
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.Start
     ) {
         Text(
             text = "WELCOME TO",
-            fontSize = 44.sp,
+            fontSize = headerFontSize,
             fontFamily = LEXENDBLACK,
             color = Color.White,
             modifier = Modifier
@@ -80,7 +135,7 @@ fun AuthHeader(
         ) {
             Text(
                 text = "WAC",
-                fontSize = 56.sp,
+                fontSize = wacFontSize,
                 fontFamily = LEXENDBLACK,
                 color = primaryColor
             )
@@ -89,13 +144,13 @@ fun AuthHeader(
 
         Text(
             text = "WE ARE CHECKING",
-            fontSize = 18.sp,
+            fontSize = bodyLargeFont,
             color = PrimaryWhite,
             fontFamily = LEXENDBLACK,
             modifier = Modifier
                 .padding(top = 16.dp)
                 .background(primaryColor, RoundedCornerShape(8.dp))
-                .padding(horizontal = 8.dp, vertical = 4.dp)
+                .padding(horizontal = paddingHorizontal, vertical = padding)
         )
     }
 }
@@ -107,6 +162,17 @@ fun AuthHeader(
 fun AuthFormContainer(
     content: @Composable () -> Unit
 ) {
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
+    // Adaptive padding based on screen height
+    val containerPadding = when {
+        screenWidth < 320.dp -> 4.dp
+        screenWidth < 400.dp -> 8.dp
+        screenWidth < 600.dp -> 16.dp
+        else -> 18.dp
+    }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -119,7 +185,7 @@ fun AuthFormContainer(
                     )
                 )
             )
-            .padding(16.dp)
+            .padding(containerPadding)
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -131,6 +197,54 @@ fun AuthFormContainer(
 }
 
 /**
+ * Adaptive spacer based on screen size
+ */
+@Composable
+fun AdaptiveSpacer() {
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
+    // Adaptive padding based on screen height
+    val height = when {
+        screenWidth < 320.dp -> 4.dp
+        screenWidth < 400.dp -> 8.dp
+        screenWidth < 600.dp -> 20.dp
+        else -> 24.dp
+    }
+
+    Spacer(modifier = Modifier.height(height))
+}
+
+/**
+ * Adaptive text for links
+ */
+@Composable
+fun AdaptiveText(
+    text: String,
+    color: Color,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
+    val fontSize = when {
+        screenWidth < 360.dp -> 10.sp
+        screenWidth < 400.dp -> 12.sp
+        screenWidth < 600.dp -> 16.sp
+        else -> 18.sp
+    }
+
+    Text(
+        text = text,
+        color = color,
+        fontFamily = LEXENDREGULAR,
+        fontSize = fontSize,
+        modifier = modifier.clickable { onClick() }
+    )
+}
+
+/**
  * Text field for email
  */
 @Composable
@@ -139,18 +253,39 @@ fun EmailField(
     onEmailChange: (String) -> Unit,
     accentColor: Color
 ) {
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
+    val bodyLargeFont = when {
+        screenWidth < 360.dp -> 8.sp
+        screenWidth < 400.dp -> 10.sp
+        screenWidth < 600.dp -> 16.sp
+        else -> 18.sp
+    }
+
+    // Adaptive height for text fields
+    val textFieldHeight = when {
+        screenWidth < 360.dp -> 48.dp
+        screenWidth < 400.dp -> 52.dp
+        screenWidth < 600.dp -> 56.dp
+        else -> 60.dp
+    }
+
     TextField(
         value = email,
         onValueChange = onEmailChange,
         label = {
             Text(
                 "Email",
-                fontSize = 18.sp,
+                fontSize = bodyLargeFont,
                 fontFamily = LEXENDREGULAR
             )
         },
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(textFieldHeight),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+        singleLine = true,
         colors = TextFieldDefaults.colors(
             focusedTextColor = PrimaryWhite,
             unfocusedTextColor = PrimaryWhite,
@@ -173,14 +308,35 @@ fun UsernameField(
     onUsernameChange: (String) -> Unit,
     accentColor: Color
 ) {
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
+    val bodyLargeFont = when {
+        screenWidth < 360.dp -> 8.sp
+        screenWidth < 400.dp -> 10.sp
+        screenWidth < 600.dp -> 16.sp
+        else -> 18.sp
+    }
+
+    // Adaptive height for text fields
+    val textFieldHeight = when {
+        screenWidth < 360.dp -> 48.dp
+        screenWidth < 400.dp -> 52.dp
+        screenWidth < 600.dp -> 56.dp
+        else -> 60.dp
+    }
+
     TextField(
         value = username,
         onValueChange = onUsernameChange,
         label = {
-            Text("Username", fontSize = 18.sp, fontFamily = LEXENDREGULAR)
+            Text("Username", fontSize = bodyLargeFont, fontFamily = LEXENDREGULAR)
         },
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(textFieldHeight),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+        singleLine = true,
         colors = TextFieldDefaults.colors(
             focusedTextColor = PrimaryWhite,
             unfocusedTextColor = PrimaryWhite,
@@ -206,21 +362,53 @@ fun PasswordField(
     label: String = "Password",
     accentColor: Color
 ) {
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
+    val bodyLargeFont = when {
+        screenWidth < 360.dp -> 8.sp
+        screenWidth < 400.dp -> 10.sp
+        screenWidth < 600.dp -> 16.sp
+        else -> 18.sp
+    }
+
+    // Adaptive height for text fields
+    val textFieldHeight = when {
+        screenWidth < 360.dp -> 48.dp
+        screenWidth < 400.dp -> 52.dp
+        screenWidth < 600.dp -> 56.dp
+        else -> 60.dp
+    }
+
+    // Adaptive icon size
+    val iconSize = when {
+        screenWidth < 360.dp -> 18.dp
+        screenWidth < 400.dp -> 20.dp
+        else -> 24.dp
+    }
+
     TextField(
         value = password,
         onValueChange = onPasswordChange,
         label = {
-            Text(label, fontSize = 18.sp, fontFamily = LEXENDREGULAR)
+            Text(label, fontSize = bodyLargeFont, fontFamily = LEXENDREGULAR)
         },
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(textFieldHeight),
         visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        singleLine = true,
         trailingIcon = {
-            IconButton(onClick = onTogglePasswordVisibility) {
+            IconButton(
+                onClick = onTogglePasswordVisibility,
+                modifier = Modifier.size(iconSize + 8.dp)
+            ) {
                 Icon(
                     painter = painterResource(if (showPassword) R.drawable.eye_closed else R.drawable.eye),
                     contentDescription = if (showPassword) "Hide password" else "Show password",
-                    tint = Color.White
+                    tint = Color.White,
+                    modifier = Modifier.size(iconSize)
                 )
             }
         },
@@ -242,12 +430,29 @@ fun PasswordField(
  */
 @Composable
 fun AuthSeparator() {
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
+    val padding = when {
+        screenWidth < 360.dp -> 2.dp
+        screenWidth < 400.dp -> 4.dp
+        screenWidth < 600.dp -> 12.dp
+        else -> 20.dp
+    }
+
+    val fontSize = when {
+        screenWidth < 360.dp -> 8.sp
+        screenWidth < 400.dp -> 10.sp
+        screenWidth < 600.dp -> 14.sp
+        else -> 20.sp
+    }
+
     Text(
         text = "or",
         color = Color.White,
         fontFamily = LEXENDBOLD,
-        fontSize = 16.sp,
-        modifier = Modifier.padding(vertical = 16.dp)
+        fontSize = fontSize,
+        modifier = Modifier.padding(vertical = padding)
     )
 }
 

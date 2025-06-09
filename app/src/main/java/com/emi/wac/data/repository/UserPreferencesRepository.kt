@@ -15,13 +15,6 @@ import kotlin.collections.map
  */
 class UserPreferencesRepository(private val db: FirebaseFirestore) {
 
-    private companion object {
-        const val TAG = "UserPreferencesRepository"
-        const val COLLECTION_NAME = "user_preferences"
-        const val PREFERENCES_FIELD = "preferences"
-        const val FCM_TOKEN_FIELD = "fcmToken"
-    }
-
     /**
      * Saves user preferences to Firestore.
      * Uses merge option to preserve other fields in the document.
@@ -106,5 +99,12 @@ class UserPreferencesRepository(private val db: FirebaseFirestore) {
             .addOnFailureListener { e ->
                 Log.e(TAG, "Failed to update FCM token", e)
             }
+    }
+
+    private companion object {
+        const val TAG = "UserPreferencesRepository"
+        const val COLLECTION_NAME = "user_preferences"
+        const val PREFERENCES_FIELD = "preferences"
+        const val FCM_TOKEN_FIELD = "fcmToken"
     }
 }

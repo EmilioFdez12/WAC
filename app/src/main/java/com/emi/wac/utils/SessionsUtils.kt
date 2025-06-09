@@ -112,7 +112,6 @@ object SessionsUtils {
                 time = if (time.isEmpty()) "TBD" else time
             )
         }
-
         return Session(day.trim(), time)
     }
 }

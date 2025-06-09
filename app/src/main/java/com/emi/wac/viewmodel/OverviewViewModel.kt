@@ -24,19 +24,21 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
 
     private val _leaderInfo =
         MutableStateFlow<DataState<Driver>>(DataState.Loading)
-    val leaderInfo = _leaderInfo.asStateFlow()
-
     private val _constructorLeaderInfo =
         MutableStateFlow<DataState<Constructor>>(DataState.Loading)
-    val constructorLeaderInfo = _constructorLeaderInfo.asStateFlow()
-
-    private val _circuitInfo = MutableStateFlow<DataState<Circuit?>>(DataState.Loading)
-    val circuitInfo = _circuitInfo.asStateFlow()
-
     private val _weatherInfo =
         MutableStateFlow<DataState<WeatherData>>(DataState.Loading)
-    val weatherInfo = _weatherInfo.asStateFlow()
+    private val _circuitInfo = MutableStateFlow<DataState<Circuit?>>(DataState.Loading)
 
+    val leaderInfo = _leaderInfo.asStateFlow()
+    val constructorLeaderInfo = _constructorLeaderInfo.asStateFlow()
+    val weatherInfo = _weatherInfo.asStateFlow()
+    val circuitInfo = _circuitInfo.asStateFlow()
+
+    /**
+     * Loads category-specific details for the overview screen.
+     * @param category The category for which to load details.
+     */
     fun loadCategoryDetails(category: String) {
         viewModelScope.launch {
             _leaderInfo.value = DataState.Loading
@@ -45,11 +47,11 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
             _weatherInfo.value = DataState.Loading
 
             try {
+                // Gets leader info
                 val leaderStandingResult = standingsRepository.getLeaderDriver(category)
                 if (leaderStandingResult.isSuccess) {
                     val leaderStanding = leaderStandingResult.getOrNull()
                     if (leaderStanding != null) {
-                        // Ya no necesitamos buscar el piloto en otra lista, toda la info está en leaderStanding
                         _leaderInfo.value = DataState.Success(leaderStanding)
                     } else {
                         _leaderInfo.value = DataState.Error("No leader standing found")
@@ -62,13 +64,14 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
                 Log.e("OverviewViewModel", "Error loading leader info", e)
                 _leaderInfo.value = DataState.Error("Error loading leader: ${e.message}")
             }
-            
+
             try {
-                val constructorLeaderStandingResult = standingsRepository.getLeaderConstructor(category)
+                // Gets constructor info
+                val constructorLeaderStandingResult =
+                    standingsRepository.getLeaderConstructor(category)
                 if (constructorLeaderStandingResult.isSuccess) {
                     val constructorLeaderStanding = constructorLeaderStandingResult.getOrNull()
                     if (constructorLeaderStanding != null) {
-                        // Ya no necesitamos buscar el piloto en otra lista, toda la info está en leaderStanding
                         _constructorLeaderInfo.value = DataState.Success(constructorLeaderStanding)
                     } else {
                         _constructorLeaderInfo.value = DataState.Error("No leader standing found")
@@ -119,12 +122,7 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
                             val result = weatherRepository.getWeatherForSession(category, "race")
                             Log.d("OverviewViewModel", "Race weather result: $result")
                             result
-                        } catch (e: Exception) {
-                            Log.e(
-                                "OverviewViewModel",
-                                "Error loading race weather: ${e.message}",
-                                e
-                            )
+                        } catch (_: Exception) {
                             null
                         }
                     } else {
@@ -142,19 +140,10 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
                                     weatherRepository.getWeatherForSession(category, "qualifying")
                                 Log.d("OverviewViewModel", "Qualifying weather result: $result")
                                 result
-                            } catch (e: Exception) {
-                                Log.e(
-                                    "OverviewViewModel",
-                                    "Error loading qualifying weather: ${e.message}",
-                                    e
-                                )
+                            } catch (_: Exception) {
                                 null
                             }
                         } else {
-                            Log.e(
-                                "OverviewViewModel",
-                                "Qualifying session invalid or missing: day=${nextRace.sessions.qualifying?.day}, time=${nextRace.sessions.qualifying?.time}"
-                            )
                             null
                         }
 
@@ -167,26 +156,13 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
                             val result = weatherRepository.getWeatherForSession(category, "sprint")
                             Log.d("OverviewViewModel", "Sprint weather result: $result")
                             result
-                        } catch (e: Exception) {
-                            Log.e(
-                                "OverviewViewModel",
-                                "Error loading sprint weather: ${e.message}",
-                                e
-                            )
+                        } catch (_: Exception) {
                             null
                         }
                     } else {
-                        Log.e(
-                            "OverviewViewModel",
-                            "Sprint session invalid or missing: day=${nextRace.sessions.sprint?.day}, time=${nextRace.sessions.sprint?.time}"
-                        )
                         null
                     }
 
-                    Log.d(
-                        "OverviewViewModel",
-                        "Weather data compiled: race=$weatherRace, qualy=$weatherQualy, sprint=$weatherSprint"
-                    )
                     _weatherInfo.value = DataState.Success(
                         WeatherData(
                             qualifying = weatherQualy,
@@ -194,17 +170,13 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
                             sprint = weatherSprint
                         )
                     )
-                } else {
-                    Log.e("OverviewViewModel", "No next race found for weather info")
-                    _weatherInfo.value = DataState.Error("No next race found")
                 }
-            } catch (e: Exception) {
-                Log.e("OverviewViewModel", "Error loading weather info: ${e.message}", e)
-                _weatherInfo.value = DataState.Error("Error loading weather: ${e.message}")
+            } catch (_: Exception) {
             }
         }
     }
 
+    // Finds the circuit based on the provided name
     private fun findCircuit(circuits: List<Circuit>?, gpName: String): Circuit? {
         return circuits?.find {
             it.gp.contains(gpName, ignoreCase = true) ||

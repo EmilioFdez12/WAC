@@ -3,16 +3,12 @@ package com.emi.wac.ui.screens
 import android.util.Patterns
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,12 +18,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.emi.wac.R
-import com.emi.wac.common.Constants.LEXENDREGULAR
 import com.emi.wac.data.repository.AuthRepository
+import com.emi.wac.ui.components.auth.AdaptiveSpacer
+import com.emi.wac.ui.components.auth.AdaptiveText
 import com.emi.wac.ui.components.auth.AuthBackground
 import com.emi.wac.ui.components.auth.AuthFormContainer
 import com.emi.wac.ui.components.auth.AuthHeader
@@ -73,6 +70,30 @@ fun RegisterScreen(
     val launcher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
 
+    // Get screen configuration for adaptive layout
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp.dp
+    val screenWidth = configuration.screenWidthDp.dp
+
+    // Adaptive padding and spacing - similar to LoginScreen
+    val verticalPadding = when {
+        screenHeight < 600.dp -> 16.dp
+        screenHeight < 700.dp -> 24.dp
+        else -> 40.dp
+    }
+
+    val horizontalPadding = when {
+        screenWidth < 360.dp -> 16.dp
+        else -> 24.dp
+    }
+
+    val maxWidth = when {
+        screenWidth < 360.dp -> 0.88f
+        screenWidth < 400.dp -> 0.92f
+        screenWidth < 600.dp -> 0.96f
+        else -> 0.98f
+    }
+
     // Validation function
     fun validateInputs(): String? {
         return when {
@@ -90,12 +111,17 @@ fun RegisterScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 24.dp, vertical = 40.dp),
-            verticalArrangement = Arrangement.SpaceBetween,
+                .padding(horizontal = horizontalPadding, vertical = verticalPadding),
+            verticalArrangement = if (screenHeight < 600.dp) Arrangement.Top else Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Header
             AuthHeader(primaryColor = PrimaryBlue)
+
+            // Add adaptive spacer for small screens
+            if (screenHeight < 600.dp) {
+                AdaptiveSpacer()
+            }
 
             // Form
             AuthFormContainer {
@@ -106,16 +132,12 @@ fun RegisterScreen(
                     accentColor = PrimaryBlue
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
-
                 // Email field
                 EmailField(
                     email = email,
                     onEmailChange = { email = it },
                     accentColor = PrimaryBlue
                 )
-
-                Spacer(modifier = Modifier.height(12.dp))
 
                 // Password field
                 PasswordField(
@@ -125,8 +147,6 @@ fun RegisterScreen(
                     onTogglePasswordVisibility = { showPassword = !showPassword },
                     accentColor = PrimaryBlue
                 )
-
-                Spacer(modifier = Modifier.height(12.dp))
 
                 // Confirm Password field
                 PasswordField(
@@ -138,10 +158,10 @@ fun RegisterScreen(
                     accentColor = PrimaryBlue
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
-
                 // Error message
                 ErrorMessage(errorMessage)
+
+                AdaptiveSpacer()
 
                 // Register button
                 WACButton(
@@ -185,7 +205,7 @@ fun RegisterScreen(
                     style = WACButtonStyle.PRIMARY,
                     gradientColors = listOf(PrimaryBlue, PrimaryBlue),
                     textColor = Color.White,
-                    modifier = Modifier.fillMaxWidth(0.96f)
+                    modifier = Modifier.fillMaxWidth(maxWidth)
                 )
 
                 AuthSeparator()
@@ -206,33 +226,27 @@ fun RegisterScreen(
                     gradientColors = listOf(Color.White, Color.White),
                     textColor = Color.Black,
                     iconRes = R.drawable.google,
-                    modifier = Modifier.fillMaxWidth(0.96f)
+                    modifier = Modifier.fillMaxWidth(maxWidth)
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                AdaptiveSpacer()
 
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                // Links
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(bottom = 8.dp)
                     ) {
-                        Text(
+                        AdaptiveText(
                             text = "Already have an account? ",
                             color = PrimaryWhite,
-                            fontFamily = LEXENDREGULAR,
-                            fontSize = 16.sp,
-                            modifier = Modifier
-                                .clickable { onNavigateToLogin() }
-                                .padding(bottom = 4.dp)
+                            onClick = { onNavigateToLogin() }
                         )
-                        Text(
+                        AdaptiveText(
                             text = "Log In",
                             color = PrimaryBlue,
-                            fontFamily = LEXENDREGULAR,
-                            fontSize = 16.sp,
-                            modifier = Modifier
-                                .clickable { onNavigateToLogin() }
-                                .padding(bottom = 4.dp)
+                            onClick = { onNavigateToLogin() }
                         )
                     }
                 }

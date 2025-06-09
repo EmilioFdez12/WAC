@@ -25,11 +25,20 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.UUID
 
+/**
+ * Utility class for Google Sign In.
+ */
 class GoogleSignInUtils {
 
     companion object {
         /**
          * Launches the Google Sign In flow.
+         * @param context The application context.
+         * @param scope The coroutine scope.
+         * @param launcher The activity result launcher.
+         * @param login The callback to be invoked after successful login.
+         * @throws NoCredentialException If no credential is available.
+         * @throws GetCredentialException If there is an error getting the credential.
          */
         fun doGoogleSignIn(
             context: Context,
@@ -38,15 +47,16 @@ class GoogleSignInUtils {
             login: () -> Unit
         ) {
             val credentialManager = CredentialManager.create(context)
-
             val request = GetCredentialRequest.Builder()
                 .addCredentialOption(getCredentialOptions(context))
                 .build()
             scope.launch {
                 try {
+                    // Get the credential
                     val result = credentialManager.getCredential(context, request)
                     when (result.credential) {
                         is CustomCredential -> {
+                            // If the credential is a Google ID token, sign in with it
                             if (result.credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
                                 val googleIdTokenCredential =
                                     GoogleIdTokenCredential.createFrom(result.credential.data)
@@ -56,6 +66,7 @@ class GoogleSignInUtils {
                                 val user =
                                     Firebase.auth.signInWithCredential(authCredential).await().user
                                 user?.let {
+                                    // If the user is not anonymous, save their information in Firestore
                                     if (it.isAnonymous.not()) {
                                         saveUserToFirestore(it)
                                         login.invoke()
@@ -89,6 +100,7 @@ class GoogleSignInUtils {
                 .build()
         }
 
+        // Generates a nonce for the credential manager
         private fun getNonce(): String? {
             return UUID.randomUUID().toString()
         }
@@ -99,7 +111,6 @@ class GoogleSignInUtils {
         private suspend fun saveUserToFirestore(firebaseUser: FirebaseUser) {
             try {
                 val userRef = Firebase.firestore.collection("users").document(firebaseUser.uid)
-
                 // Verify if user exists
                 val existingUser = userRef.get().await()
 
@@ -126,7 +137,7 @@ class GoogleSignInUtils {
             } catch (e: Exception) {
                 android.util.Log.e(
                     "GoogleSignInUtils",
-                    "Error al guardar usuario en Firestore: ${e.message}",
+                    "Error saving user to Firestore: ${e.message}",
                 )
             }
         }

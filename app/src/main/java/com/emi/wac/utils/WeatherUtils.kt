@@ -4,10 +4,9 @@ import com.emi.wac.R
 
 object WeatherUtils {
     /**
-     * Devuelve el ID del recurso de ícono correspondiente al weathercode de Open-Meteo.
-     *
-     * @param weatherCode Código del clima según la API de Open-Meteo
-     * @return ID del recurso de ícono en R.drawable
+     * Returns the ID of the corresponding icon resource for the Open-Meteo weathercode.
+     * @param weatherCode Climate code as returned by the Open-Meteo API
+     * @return ID of the corresponding icon resource for the Open-Meteo weathercode.
      */
     fun getWeatherIcon(weatherCode: Int): Int {
         return when (weatherCode) {
@@ -21,10 +20,9 @@ object WeatherUtils {
     }
 
     /**
-     * Devuelve una descripción legible del clima según el weathercode.
-     *
-     * @param weatherCode Código del clima según la API de Open-Meteo
-     * @return Descripción del clima en español
+     * Returns a legible description of the weather based on the weathercode.
+     * @param weatherCode Climate code as returned by the Open-Meteo API
+     * @return Description of the weather based on the weathercode.
      */
     fun getWeatherDescription(weatherCode: Int): String {
         return when (weatherCode) {

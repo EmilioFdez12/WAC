@@ -18,6 +18,9 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
         loadNews()
     }
 
+    /**
+     * Loads news articles from the repository and updates the state accordingly.
+     */
     fun loadNews() {
         viewModelScope.launch {
             _newsState.value = NewsState.Loading
@@ -28,12 +31,14 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
                     if (newsResponse != null && newsResponse.articles.isNotEmpty()) {
                         // Deduplicate articles by URL
                         val uniqueArticle = newsResponse.articles.distinctBy { it.url }
+                        // Update the state with the unique articles
                         _newsState.value = NewsState.Success(uniqueArticle)
                     } else {
                         _newsState.value = NewsState.Error("No news found")
                     }
                 } else {
-                    _newsState.value = NewsState.Error("Error loading news: ${result.exceptionOrNull()?.message}")
+                    _newsState.value =
+                        NewsState.Error("Error loading news: ${result.exceptionOrNull()?.message}")
                 }
             } catch (e: Exception) {
                 _newsState.value = NewsState.Error("Error loading news: ${e.message}")

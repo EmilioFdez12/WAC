@@ -29,11 +29,11 @@ class StandingsViewModel(application: Application) : AndroidViewModel(applicatio
     // StateFlow for driver standings
     private val _driversStandings =
         MutableStateFlow<StandingsState<List<Driver>>>(StandingsState.Loading)
-    val driversStandings = _driversStandings.asStateFlow()
-
     // StateFlow for constructor standings
     private val _constructorsStandings =
         MutableStateFlow<StandingsState<List<Constructor>>>(StandingsState.Loading)
+
+    val driversStandings = _driversStandings.asStateFlow()
     val constructorsStandings = _constructorsStandings.asStateFlow()
 
     /**

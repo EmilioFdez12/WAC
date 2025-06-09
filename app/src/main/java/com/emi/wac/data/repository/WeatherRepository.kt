@@ -91,12 +91,13 @@ class WeatherRepository(private val racingRepository: RacingRepository) {
         sessionType: String
     ): WeatherParameters? {
         return try {
+            // Get the next race for the given category
             val nextRace = racingRepository.getNextGrandPrixObject(category)
             if (nextRace == null) {
                 Log.w(tag, "No upcoming race found for category: $category")
                 return null
             }
-
+            // Get the circuit information for the next race
             val circuits = racingRepository.getCircuits(category)
             val circuit = circuits?.circuits?.find {
                 it.gp.contains(
@@ -108,7 +109,7 @@ class WeatherRepository(private val racingRepository: RacingRepository) {
                 Log.w(tag, "No circuit found for GP: ${nextRace.gp} in category: $category")
                 return null
             }
-
+            // Parse the localization string to get latitude and longitude
             val locParts = circuit.localization.split(",").map { it.trim() }
             if (locParts.size < 2) {
                 Log.e(
@@ -127,7 +128,7 @@ class WeatherRepository(private val racingRepository: RacingRepository) {
                 )
                 return null
             }
-
+            // Get the session details for the specified session type
             val session = getSessionByType(nextRace, sessionType)
             if (session == null || session.day.isEmpty() || session.time.isEmpty()) {
                 Log.w(
@@ -136,7 +137,6 @@ class WeatherRepository(private val racingRepository: RacingRepository) {
                 )
                 return null
             }
-
             val currentYear = DateUtils.getCurrentYear()
             val dateTime = DateUtils.parseDate(session.day, session.time, currentYear)
             if (dateTime == null) {
@@ -146,8 +146,8 @@ class WeatherRepository(private val racingRepository: RacingRepository) {
 
             val isoFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
             val targetFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:00", Locale.getDefault())
-
-            WeatherParameters(
+            // Prepare the parameters for the weather API request
+            return WeatherParameters(
                 latitude = lat,
                 longitude = lon,
                 date = isoFormat.format(dateTime.time),

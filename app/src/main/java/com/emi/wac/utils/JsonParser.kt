@@ -12,6 +12,12 @@ import java.io.IOException
 class JsonParser(private val context: Context) {
     private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 
+    /**
+     * Parses a JSON file into a Kotlin object.
+     * @param fileName The name of the JSON file.
+     * @param adapterClass The class of the Kotlin object to be created.
+     * @return The Kotlin object created from the JSON file.
+     */
     fun <T> parseJson(fileName: String, adapterClass: Class<T>): T? {
         return try {
             val jsonString = context.assets

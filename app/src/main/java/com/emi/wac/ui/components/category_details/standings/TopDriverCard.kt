@@ -33,6 +33,7 @@ import coil3.compose.rememberAsyncImagePainter
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.emi.wac.common.Constants.ASSETS
+import com.emi.wac.common.Constants.CATEGORY_INDYCAR
 import com.emi.wac.common.Constants.CATEGORY_MOTOGP
 import com.emi.wac.data.model.contructor.Constructor
 import com.emi.wac.data.model.drivers.Driver
@@ -122,9 +123,9 @@ fun TopDriverCard(
     }
 
     val portraitOffsetY = when {
-        screenWidth < 360.dp -> if (category == CATEGORY_MOTOGP) 8.dp else 14.dp
-        screenWidth < 400.dp -> if (category == CATEGORY_MOTOGP) 10.dp else 12.dp
-        screenWidth < 600.dp -> if (category == CATEGORY_MOTOGP) 10.dp else 0.dp
+        screenWidth < 360.dp -> if (category == CATEGORY_MOTOGP || category == CATEGORY_INDYCAR) 8.dp else 14.dp
+        screenWidth < 400.dp -> if (category == CATEGORY_MOTOGP || category == CATEGORY_INDYCAR) 10.dp else 12.dp
+        screenWidth < 600.dp -> if (category == CATEGORY_MOTOGP || category == CATEGORY_INDYCAR) 10.dp else 0.dp
         else -> if (category == CATEGORY_MOTOGP) 12.dp else 0.dp
     }
 
