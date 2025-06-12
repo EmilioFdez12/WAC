@@ -23,6 +23,8 @@ object Constants {
     const val HOME_ROUTE = "home"
     const val PROFILE_ROUTE = "profile"
     const val NEWS_ROUTE = "news"
+    const val LOGIN_ROUTE = "login"
+    const val REGISTER_ROUTE = "register"
 
 
     const val CAT_DETAILS = "category_details"

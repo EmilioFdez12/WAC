@@ -39,7 +39,6 @@ fun TopThreeDrivers(
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
 
-    // Adaptive horizontal padding for the Row (space to screen edges)
     val rowHorizontalPadding = when {
         screenWidth < 360.dp -> 12.dp
         screenWidth < 400.dp -> 10.dp

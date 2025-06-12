@@ -38,7 +38,6 @@ fun BottomBar(
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
 
-    // Adaptive card height
     val bottomBarHeight = when {
         screenWidth < 360.dp -> 76.dp
         screenWidth < 400.dp -> 96.dp

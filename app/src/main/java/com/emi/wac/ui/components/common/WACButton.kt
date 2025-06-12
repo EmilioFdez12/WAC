@@ -80,7 +80,6 @@ fun WACButton(
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
 
-    // Adaptive sizing based on screen width
     val adaptiveContentPadding = when {
         screenWidth < 360.dp -> PaddingValues(horizontal = 4.dp, vertical = 2.dp)
         screenWidth < 400.dp -> PaddingValues(horizontal = 12.dp, vertical = 6.dp)

@@ -11,12 +11,15 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.emi.wac.common.Constants.LOGIN_ROUTE
+import com.emi.wac.common.Constants.REGISTER_ROUTE
 import com.emi.wac.data.repository.AuthRepository
 import com.emi.wac.ui.screens.LoginScreen
 import com.emi.wac.ui.screens.MainScreen
 import com.emi.wac.ui.screens.RegisterScreen
 import com.emi.wac.ui.theme.WACTheme
-import com.emi.wac.utils.TransitionsUtils
+import com.emi.wac.utils.TransitionsUtils.enterTransition
+import com.emi.wac.utils.TransitionsUtils.exitTransition
 import com.emi.wac.viewmodel.DataState
 import com.emi.wac.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -60,16 +63,17 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             WACTheme {
+                // Check if user is logged in
                 if (authRepository.getCurrentUser() == null) {
                     // Use NavController to navigate between login and register
                     val navController = rememberNavController()
 
 
-                    NavHost(navController = navController, startDestination = "login") {
+                    NavHost(navController = navController, startDestination = LOGIN_ROUTE) {
                         composable(
-                            route = "login",
-                            enterTransition = { TransitionsUtils.enterTransition() },
-                            exitTransition = { TransitionsUtils.exitTransition() },
+                            route = LOGIN_ROUTE,
+                            enterTransition = { enterTransition() },
+                            exitTransition = { exitTransition() },
                         ) {
                             LoginScreen(
                                 authRepository = authRepository,
@@ -78,9 +82,9 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable(
-                            route = "register",
-                            enterTransition = { TransitionsUtils.enterTransition() },
-                            exitTransition = { TransitionsUtils.exitTransition() },
+                            route = REGISTER_ROUTE,
+                            enterTransition = { enterTransition() },
+                            exitTransition = { exitTransition() },
                         ) {
                             RegisterScreen(
                                 authRepository = authRepository,
@@ -90,6 +94,7 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 } else {
+                    // User is logged in, show MainScreen
                     MainScreen(
                         authRepository = authRepository,
                         onLogout = {

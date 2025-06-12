@@ -56,7 +56,6 @@ fun StandingsComponent(
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
 
-    // Adaptive card height
     val buttonHeight = when {
         screenWidth < 360.dp -> 20.dp
         screenWidth < 400.dp -> 32.dp
@@ -78,7 +77,6 @@ fun StandingsComponent(
         else -> 12.dp
     }
 
-    // Adaptive font sizes
     val titleMediumFont = when {
         screenWidth < 360.dp -> 10.sp
         screenWidth < 400.dp -> 14.sp
@@ -105,11 +103,10 @@ fun StandingsComponent(
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        // Content takes most of the space
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f) // This makes the content take available space
+                .weight(1f)
         ) {
             // Only the content of the standings is animated with Crossfade
             Crossfade(targetState = selectedTabIndex) { tabIndex ->
@@ -150,11 +147,10 @@ fun StandingsComponent(
                                     }
                                     Spacer(modifier = Modifier.height(spacer))
 
-                                    // The list now takes remaining space
                                     Box(
                                         modifier = Modifier
                                             .fillMaxWidth()
-                                            .weight(1f) // Takes remaining space
+                                            .weight(1f)
                                     ) {
                                         DriverStandingsList(
                                             standings = if (standings.size > 3) standings.drop(3) else emptyList(),
@@ -181,7 +177,6 @@ fun StandingsComponent(
                             }
 
                             is StandingsViewModel.StandingsState.Success -> {
-                                // The constructor list now takes all available space
                                 Box(
                                     modifier = Modifier.fillMaxSize()
                                 ) {
@@ -200,7 +195,7 @@ fun StandingsComponent(
             }
         }
 
-        // Tabs are always visible at the bottom
+        // Tabs always visible at the bottom
         Row(
             modifier = Modifier
                 .fillMaxWidth()

@@ -75,7 +75,6 @@ fun RegisterScreen(
     val screenHeight = configuration.screenHeightDp.dp
     val screenWidth = configuration.screenWidthDp.dp
 
-    // Adaptive padding and spacing - similar to LoginScreen
     val verticalPadding = when {
         screenHeight < 600.dp -> 16.dp
         screenHeight < 700.dp -> 24.dp
@@ -260,9 +259,7 @@ fun RegisterScreen(
             verificationErrorMessage = verificationErrorMessage,
             onDismiss = {
                 showVerificationDialog = false
-                if (verificationSent) {
-                    onRegisterSuccess()
-                }
+                onNavigateToLogin()
             }
         )
     }

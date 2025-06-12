@@ -65,19 +65,19 @@ fun LoginScreen(
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
 
     var showPasswordResetDialog by remember { mutableStateOf(false) }
-    
+
     // Get screen configuration for adaptive layout
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     val screenWidth = configuration.screenWidthDp.dp
-    
+
     // Adaptive padding and spacing
     val verticalPadding = when {
         screenHeight < 600.dp -> 16.dp
         screenHeight < 700.dp -> 24.dp
         else -> 40.dp
     }
-    
+
     val horizontalPadding = when {
         screenWidth < 360.dp -> 16.dp
         else -> 24.dp
@@ -108,7 +108,7 @@ fun LoginScreen(
         ) {
             // Header
             AuthHeader(primaryColor = PrimaryRed)
-            
+
             // Add adaptive spacer for small screens
             if (screenHeight < 600.dp) {
                 AdaptiveSpacer()
@@ -148,7 +148,12 @@ fun LoginScreen(
                             try {
                                 val result = authRepository.signInWithEmail(email, password)
                                 result.onSuccess {
-                                    onLoginSuccess()
+                                    if (authRepository.isEmailVerified()) {
+                                        onLoginSuccess()
+                                    } else {
+                                        errorMessage =
+                                            "Please verify your email address before logging in. Check your inbox for the verification email."
+                                    }
                                 }.onFailure { e ->
                                     errorMessage = when (e) {
                                         is FirebaseAuthInvalidUserException -> "This account does not exist"

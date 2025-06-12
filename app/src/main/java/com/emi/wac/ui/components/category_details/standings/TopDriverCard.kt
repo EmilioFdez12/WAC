@@ -62,7 +62,6 @@ fun TopDriverCard(
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
 
-    // Adaptive sizing for team logo
     val teamLogoWidth = when {
         screenWidth < 360.dp -> 72.dp
         screenWidth < 400.dp -> 86.dp
@@ -91,7 +90,6 @@ fun TopDriverCard(
         else -> 16.dp
     }
 
-    // Adaptive font size for driver number
     val driverNumberFontSize = when {
         screenWidth < 360.dp -> 16.sp
         screenWidth < 400.dp -> 20.sp
@@ -99,7 +97,6 @@ fun TopDriverCard(
         else -> 28.sp
     }
 
-    // Adaptive font size for position
     val positionFontSize = when {
         screenWidth < 360.dp -> 8.sp
         screenWidth < 400.dp -> 12.sp
@@ -107,7 +104,6 @@ fun TopDriverCard(
         else -> 18.sp
     }
 
-    // Adaptive font size for points text
     val pointsFontSize = when {
         screenWidth < 360.dp -> 8.sp
         screenWidth < 400.dp -> 12.sp

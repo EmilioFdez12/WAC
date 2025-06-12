@@ -159,7 +159,6 @@ fun OverViewComponent(
                 }
             }
             is DataState.Error -> {
-            // If there is an error, don't show anything
             }
             is DataState.Loading -> {
             }

@@ -46,7 +46,6 @@ fun DriverStandingsList(
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
 
-    // Adaptive padding
     val listPadding = when {
         screenWidth < 360.dp -> 8.dp
         screenWidth < 400.dp -> 12.dp
@@ -61,7 +60,6 @@ fun DriverStandingsList(
         else -> 4.dp
     }
 
-    // Adaptive padding
     val verticalPadding = when {
         screenWidth < 360.dp -> 2.dp
         screenWidth < 400.dp -> 4.dp
@@ -69,7 +67,6 @@ fun DriverStandingsList(
         else -> 10.dp
     }
 
-    // Adaptive divider thickness
     val dividerThickness = when {
         screenWidth < 360.dp -> 0.8.dp
         screenWidth < 400.dp -> 0.9.dp
@@ -86,7 +83,7 @@ fun DriverStandingsList(
 
     Card(
         modifier = Modifier
-            .fillMaxSize() // Use fillMaxSize instead of fixed height
+            .fillMaxSize()
             .padding(horizontal = horizontalPadding),
         colors = CardDefaults.cardColors(
             containerColor = Color.Transparent

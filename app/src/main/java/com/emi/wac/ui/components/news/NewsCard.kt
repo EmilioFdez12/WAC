@@ -47,17 +47,10 @@ fun NewsCard(
     onCardClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // Log rendering for debugging
-    Log.d(
-        "NewsCard",
-        "Rendering NewsCard for article: ${article.title}, URL: ${article.urlToImage}"
-    )
-
     // Get screen width for adaptive sizing
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
 
-    // Adaptive card height
     val titleFontSize = when {
         screenWidth < 360.dp -> 16.sp
         screenWidth < 400.dp -> 18.sp

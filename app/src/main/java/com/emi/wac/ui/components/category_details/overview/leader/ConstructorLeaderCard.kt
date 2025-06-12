@@ -47,7 +47,6 @@ fun ConstructorLeaderCard(
     }
 
     Log.d("ConstructorLeaderCard", "Constructor: $constructor, ImageSize: $imageSize")
-
     BaseLeaderCard(
         modifier = modifier,
         title = constructor.team,

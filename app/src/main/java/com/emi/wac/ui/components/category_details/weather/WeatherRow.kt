@@ -43,7 +43,6 @@ fun WeatherRow(
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
 
-    // Adaptive font size for the 'name' text
     val fontSize = when {
         screenWidth < 360.dp -> 12.sp
         screenWidth < 400.dp -> 14.sp
@@ -73,7 +72,7 @@ fun WeatherRow(
                 color = Color.Black,
                 shape = RoundedCornerShape(50.dp)
             )
-            .padding(paddingHorizontal,paddingVertical)
+            .padding(paddingHorizontal, paddingVertical)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
